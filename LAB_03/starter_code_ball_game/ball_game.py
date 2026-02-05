@@ -132,6 +132,8 @@ class Game:
         draw_fps(20, 20)
 
         if (self.visible):
+            draw_line(WINDOW_WIDTH // 2, 0,
+                      WINDOW_WIDTH // 2, WINDOW_HEIGHT, LIGHTGRAY)
             self.ball.draw()
             self.player_paddle.draw()
             self.enemy_paddle.draw()
