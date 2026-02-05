@@ -2,61 +2,41 @@ from pyray import *
 from os.path import join
 from settings import * 
 
-class Paddle():
-    def __init__(self):
-        self.speed = 300
-        self.pos = Vector2(20, WINDOW_HEIGHT / 2)
-        # self.rectangle = 
-        self.size = Vector2(20, 100)
-        
-        
+class Paddle:
+    def __init__(self, position):
+        self.position = position
+        self.score = 0
+        self.color = BLUE
+        self.width = 20
+        self.height = 100
+        self.speed = 200 # pixels per second
+        self.rect = Rectangle(self.position.x, self.position.y, self.width, self.height)
+
+    def draw(self):
+        draw_rectangle_rec(self.rect, self.color)
+
+
     def update(self):
+        '''Handles user input to move the paddle up and down'''
         motion = Vector2(0, 0)
         if is_key_down(KeyboardKey.KEY_UP):
-            motion.y += -1
-        if is_key_down(KeyboardKey.KEY_DOWN):
-            motion.y += 1   
+            motion.y -= 1
+        elif is_key_down(KeyboardKey.KEY_DOWN):
+            motion.y += 1
             
-        motion_this_frame = vector2_scale(motion, get_frame_time() * self.speed)
-        self.pos = vector2_add(self.pos, motion_this_frame)
+        motion_this_frame = vector2_scale(motion, get_frame_time() * self.speed) 
+        self.position = vector2_add(self.position, motion_this_frame)
+
+        if self.position.y < 0:
+            self.position.y = 0
+        elif self.position.y + self.height > WINDOW_HEIGHT:
+            self.position.y = WINDOW_HEIGHT - self.height
         
-    def draw(self):
-        paddle = Rectangle(self.pos.x, self.pos.y, self.size.x, self.size.y)
-        draw_rectangle_re(paddle, BLUE)
 
-
+        # Update rectangle position
+        self.rect.y = self.position.y
         
-class Cat():
-    def __init__(self):
-        self.pos = Vector2(640, 320)
-        self.speed = 200 # 200 pixels/sec
-        self.grounded = True # would jump
-
-    def startup(self):
-        # be careful path: how you run?>
-        self.texture = load_texture(join('assets', 'cat_one.png'))
-
-    def update(self):
-        motion = Vector2(0, 0)
-
-        if is_key_down(KeyboardKey.KEY_RIGHT):
-            motion.x += 1
-        if is_key_down(KeyboardKey.KEY_LEFT):
-            motion.x += -1 
-
-        if is_key_down(KeyboardKey.KEY_UP):
-            motion.y += -1
-        if is_key_down(KeyboardKey.KEY_DOWN):
-            motion.y += 1 
-
-        motion_this_frame = vector2_scale(motion, get_frame_time() * self.speed)
     
-        self.pos = vector2_add(self.pos, motion_this_frame)
- 
-   
-    def draw(self):
-        #draw_texture_v(self.texture, self.pos, WHITE)
-        draw_texture_ex(self.texture, self.pos, 0, 4, WHITE)
 
 
 class Ball():
@@ -65,12 +45,9 @@ class Ball():
         self.position = position
         self.velocity = velocity
 
-    def update(self):
+    def update(self, paddle):
         self.position.x += self.velocity.x
         self.position.y += self.velocity.y
-        
-            
-
 
         # Check walls collision for bouncing
         if (self.position.x > WINDOW_WIDTH or self.position.x <= 0):
@@ -79,6 +56,12 @@ class Ball():
 
         if (self.position.y >=  WINDOW_HEIGHT  or self.position.y <= self.radius):
             self.velocity.y =  self.velocity.y * - 1.0
+            
+        # check collision with the paddles
+        if (self.position.x - self.radius <= paddle.position.x + paddle.width):
+            if (self.position.y >= paddle.position.y and 
+                self.position.y <= paddle.position.y + paddle.height):
+                self.velocity.x = self.velocity.x * -1.0
 
     def draw(self):
         #draw_circle_lines_v(self.position, self.radius, BLACK)
@@ -93,14 +76,12 @@ class Game:
     def __init__(self):
         self.visible = True
         self.moving = False
-        self.ball = Ball(10, Vector2(100, 100),
-        Vector2(2.0, 2.5))
-        self.cat = Cat()
-        self.paddle = Paddle()
+        self.ball = Ball(10, Vector2(100, 100), Vector2(2.0, 2.5))
+        self.player_paddle = Paddle(Vector2(10, 200))
 
     # where game assets/resources will be initialized
     def startup(self):
-        self.cat.startup()
+        pass
         
 
 
@@ -112,19 +93,16 @@ class Game:
            
     
        
-       if self.visible and self.moving: 
-           
-           self.ball.update()#, self.screenWidth, 0, self.screenHeight)
-           self.cat.update()
-           self.paddle.update()
-           
-           if (check_collision_circle_rec(self.ball.position, self.ball.radius, self.paddle)):
-            self.velocity.x = self.velocity.x * -1.0
+       if self.visible and self.moving:
+        # # check for ball and paddle collision
+        # if (self.ball.position.x - self.ball.radius <= self.player_paddle.position.x + self.player_paddle.width):
+        #     if (self.ball.position.y >= self.player_paddle.position.y and 
+        #         self.ball.position.y <= self.player_paddle.position.y + self.player_paddle.height):
+        #         self.ball.velocity.x = self.ball.velocity.x * -1.0
+                   
+        self.ball.update(self.player_paddle) #, self.screenWidth, 0, self.screenHeight)
+        self.player_paddle.update()
             
-           if (is_key_down(KeyboardKey.KEY_RIGHT_BRACKET)):
-               self.cat.speed += 20
-           if (is_key_down(KeyboardKey.KEY_LEFT_BRACKET)):
-               self.cat.speed -= 20
 
 
         
@@ -133,8 +111,7 @@ class Game:
 
         if (self.visible):
             self.ball.draw()
-            ##self.cat.draw()
-            self.paddle.draw()
+            self.player_paddle.draw()
         else:      
             draw_text("Invisible!", 200, 200, 40, WHITE)
 

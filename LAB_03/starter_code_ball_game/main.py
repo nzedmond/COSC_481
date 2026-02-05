@@ -6,7 +6,7 @@ current_game = Game()
 if __name__ == '__main__':  
 
   init_window(WINDOW_WIDTH, WINDOW_HEIGHT, "Python Game")
-  set_target_fps(400)
+  set_target_fps(60)
 
   current_game.startup()
 
