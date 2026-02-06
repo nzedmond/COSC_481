@@ -95,7 +95,7 @@ class Game:
     def __init__(self):
         self.visible = True
         self.moving = False
-        self.ball = Ball(10, Vector2(100, 100), Vector2(2.0, 2.5))
+        self.ball = Ball(10, Vector2(400, 210), Vector2(2.0, 2.5))
         self.player_paddle = Paddle(Vector2(10, 200))
         self.enemy_paddle = Enemy_Paddle(Vector2(WINDOW_WIDTH - 30, 200))
 
