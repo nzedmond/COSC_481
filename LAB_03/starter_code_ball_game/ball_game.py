@@ -133,7 +133,7 @@ class Game:
 
         if (self.visible):
             draw_line(WINDOW_WIDTH // 2, 0,
-                      WINDOW_WIDTH // 2, WINDOW_HEIGHT, LIGHTGRAY)
+                      WINDOW_WIDTH // 2, WINDOW_HEIGHT, GRAY)
             self.ball.draw()
             self.player_paddle.draw()
             self.enemy_paddle.draw()
