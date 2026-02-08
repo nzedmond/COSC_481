@@ -1,4 +1,4 @@
-from raylib import *
+from pyray import *
 from ball_game import *
 from settings import * 
 current_game = Game()
