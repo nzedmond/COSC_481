@@ -3,6 +3,16 @@ from os.path import join
 from settings import *
 from paddle import Paddle
 
+def update_score(game):
+    '''check if the ball has gone past the left or right edge of the screen and update scores accordingly'''
+    if game.ball.position.x - game.ball.radius <= 0:
+        game.enemy_paddle.score += 1
+        # game.ball = Ball(10, Vector2(400, 210), Vector2(2.0, 2.5))
+    elif game.ball.position.x + game.ball.radius > WINDOW_WIDTH:
+        game.player_paddle.score += 1
+        # game.ball = Ball(10, Vector2(400, 210), Vector2(-2.0, -2.5))
+    
+
 class Ball():
     def __init__(self, radius, position, velocity):
         self.radius = radius
@@ -29,39 +39,6 @@ class Player_Paddle(Paddle):
     def __init__(self, position):
         super().__init__(position)
         self.color = BLUE
-# class Paddle:
-#     def __init__(self, position):
-#         self.position = position
-#         self.score = 0
-#         self.color = BLUE
-#         self.width = 20
-#         self.height = 100
-#         self.speed = 200  # pixels per second
-#         self.rect = Rectangle(
-#             self.position.x, self.position.y, self.width, self.height)
-
-#     def draw(self):
-#         draw_rectangle_rec(self.rect, self.color)
-
-#     def update(self):
-#         '''Handles user input to move the paddle up and down'''
-#         motion = Vector2(0, 0)
-#         if is_key_down(KeyboardKey.KEY_UP):
-#             motion.y -= 1
-#         elif is_key_down(KeyboardKey.KEY_DOWN):
-#             motion.y += 1
-
-#         motion_this_frame = vector2_scale(
-#             motion, get_frame_time() * self.speed)
-#         self.position = vector2_add(self.position, motion_this_frame)
-
-#         if self.position.y < 0:
-#             self.position.y = 0
-#         elif self.position.y + self.height > WINDOW_HEIGHT:
-#             self.position.y = WINDOW_HEIGHT - self.height
-
-#         # Update rectangle position
-#         self.rect.y = self.position.y
 
 
 class Enemy_Paddle(Paddle):
@@ -128,6 +105,7 @@ class Game:
 
             # , self.screenWidth, 0, self.screenHeight)
             self.ball.update(self.player_paddle)
+            update_score(self)
             self.player_paddle.update()
             self.enemy_paddle.update(self.ball)
 
@@ -135,6 +113,11 @@ class Game:
         draw_fps(20, 20)
 
         if (self.visible):
+            # draw score boards
+            draw_text(f"Player: {self.player_paddle.score}",
+                      120, 20, 20, BLUE)
+            draw_text(f"Enemy: {self.enemy_paddle.score}",
+                      WINDOW_WIDTH - 150, 20, 20, RED)
             draw_line(WINDOW_WIDTH // 2, 0,
                       WINDOW_WIDTH // 2, WINDOW_HEIGHT, GRAY)
             self.ball.draw()
