@@ -26,7 +26,7 @@ class Ball():
         self.position = position
         self.velocity = velocity
 
-    def update(self, paddle):
+    def update(self):
         self.position.x += self.velocity.x
         self.position.y += self.velocity.y
 
@@ -130,7 +130,7 @@ class Game:
                         self.ball.position.y <= self.enemy_paddle.position.y + self.enemy_paddle.height):
                     self.ball.velocity.x = self.ball.velocity.x * -1.0
 
-            self.ball.update(self.player_paddle)
+            self.ball.update()
             update_score(self)
             self.player_paddle.update()
             self.enemy_paddle.update(self.ball, self.enemy_vision_range)
