@@ -55,14 +55,17 @@ class Enemy_Paddle(Paddle):
         self.color = RED
         self.speed = 150  # pixels per second
 
-    def update(self, ball):
-        '''Simple AI to follow the ball'''
+    def update(self, ball, vision_range):
+        '''Simple AI to follow the ball only when it's within vision range'''
         # move the paddle down and up automatically
         motion = Vector2(0, 0)
-        if ball.position.y < self.position.y + self.height / 2:
-            motion.y -= 1
-        elif ball.position.y > self.position.y + self.height / 2:
-            motion.y += 1
+        
+        # Only track the ball if it's within the vision range
+        if ball.position.x > vision_range:
+            if ball.position.y < self.position.y + self.height / 2:
+                motion.y -= 1
+            elif ball.position.y > self.position.y + self.height / 2:
+                motion.y += 1
 
         motion_this_frame = vector2_scale(
             motion, get_frame_time() * self.speed)
@@ -86,6 +89,7 @@ class Game:
         self.ball = Ball(10, Vector2(400, 210), Vector2(2.0, 2.5))
         self.player_paddle = Player_Paddle(Vector2(10, 200))
         self.enemy_paddle = Enemy_Paddle(Vector2(WINDOW_WIDTH - 30, 200))
+        self.enemy_vision_range = WINDOW_WIDTH / 2  # Vertical line where enemy starts tracking the ball
 
     def startup(self):
         pass
@@ -129,7 +133,19 @@ class Game:
             self.ball.update(self.player_paddle)
             update_score(self)
             self.player_paddle.update()
-            self.enemy_paddle.update(self.ball)
+            self.enemy_paddle.update(self.ball, self.enemy_vision_range)
+            
+            # Adjust vision range with arrow keys (for difficulty tuning)
+            if is_key_down(KeyboardKey.KEY_RIGHT):
+                self.enemy_vision_range += 50 * get_frame_time()
+            elif is_key_down(KeyboardKey.KEY_LEFT):
+                self.enemy_vision_range -= 50 * get_frame_time()
+            
+            # Keep vision range within reasonable bounds
+            if self.enemy_vision_range < 0:
+                self.enemy_vision_range = 0
+            elif self.enemy_vision_range > WINDOW_WIDTH:
+                self.enemy_vision_range = WINDOW_WIDTH
 
         # check for game over condition (first to 10 points wins)
         if self.player_paddle.score >= 10 or self.enemy_paddle.score >= 10:
@@ -163,6 +179,9 @@ class Game:
                       WINDOW_WIDTH - 150, 20, 20, RED)
             draw_line(WINDOW_WIDTH // 2, 0,
                       WINDOW_WIDTH // 2, WINDOW_HEIGHT, GRAY)
+            # Draw the enemy vision range line
+            draw_line(int(self.enemy_vision_range), 0,
+                      int(self.enemy_vision_range), WINDOW_HEIGHT, Color(128, 128, 128, 128))
             self.ball.draw()
             self.player_paddle.draw()
             self.enemy_paddle.draw()
