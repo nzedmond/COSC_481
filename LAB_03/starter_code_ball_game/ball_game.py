@@ -7,12 +7,18 @@ def update_score(game):
     '''check if the ball has gone past the left or right edge of the screen and update scores accordingly'''
     if game.ball.position.x - game.ball.radius <= 0:
         game.enemy_paddle.score += 1
-        # game.ball = Ball(10, Vector2(400, 210), Vector2(2.0, 2.5))
+        game.ball = Ball(10, Vector2(400, 210), Vector2(2.0, 2.5))
     elif game.ball.position.x + game.ball.radius > WINDOW_WIDTH:
         game.player_paddle.score += 1
-        # game.ball = Ball(10, Vector2(400, 210), Vector2(-2.0, -2.5))
+        game.ball = Ball(10, Vector2(400, 210), Vector2(-2.0, -2.5))
     
-
+    
+# class GameState:
+#     MENU = 0
+#     GAMEPLAY = 1
+#     GAME_OVER = 2
+    
+    
 class Ball():
     def __init__(self, radius, position, velocity):
         self.radius = radius
@@ -124,7 +130,7 @@ class Game:
             self.player_paddle.draw()
             self.enemy_paddle.draw()
         else:
-            draw_text("Invisible!", 200, 200, 40, WHITE)
+            draw_text("Invisible!", 200, 200, 40, RED)
 
     def shutdown(self):
         pass
