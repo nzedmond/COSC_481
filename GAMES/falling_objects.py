@@ -62,4 +62,7 @@ class Game:
         draw_rectangle(self.player.x, self.player.y, self.player.width, self.player.height, BLUE)
         draw_rectangle(self.falling_object.x, self.falling_object.y, self.falling_object.width, self.falling_object.height, RED)
         draw_text(f"Score: {self.player.score}", 10, 10, 20, BLACK)
+        
+    def shutdown(self):
+        pass
 
