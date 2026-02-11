@@ -21,6 +21,9 @@ class Player:
         self.speed = 7
         self.score = 0
         
+    def draw(self):
+        draw_rectangle(self.x, self.y, self.width, self.height, BLUE)
+        
 # create falling objects
 class FallingObject:
     def __init__(self):
@@ -29,6 +32,9 @@ class FallingObject:
         self.x = random.randint(0, screen_width - self.width)
         self.y = 0
         self.speed = 5
+    
+    def draw(self):
+        draw_rectangle(self.x, self.y, self.width, self.height, RED)
 
 # Game loop
 
@@ -59,8 +65,8 @@ class Game:
             self.falling_object.x = random.randint(0, screen_width - self.falling_object.width)
             
     def draw(self):
-        draw_rectangle(self.player.x, self.player.y, self.player.width, self.player.height, BLUE)
-        draw_rectangle(self.falling_object.x, self.falling_object.y, self.falling_object.width, self.falling_object.height, RED)
+        self.player.draw()
+        self.falling_object.draw()
         draw_text(f"Score: {self.player.score}", 10, 10, 20, BLACK)
         
     def shutdown(self):
