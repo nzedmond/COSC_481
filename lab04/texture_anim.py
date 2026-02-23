@@ -69,6 +69,42 @@ framesSpeed = 8  # Number of spritesheet frames shown by second
 
 set_target_fps(60)  # Set our game to run at 60 frames-per-second
 
+# HELPER FUNCTIONS
+def control_scale(sprite_scale: float):
+    if is_key_pressed(KEY_UP):
+        sprite_scale += 0.1
+    elif is_key_pressed(KEY_DOWN):
+        sprite_scale -= 0.1
+
+    if sprite_scale < 0.1:
+        sprite_scale = 0.1
+    elif sprite_scale > 3.0:
+        sprite_scale = 3.0
+        
+    return sprite_scale
+
+
+def draw_sprite_animation(texture, frame_rec, position, scale=1.0):
+    if abs(scale - 1.0) < 0.01:  # Use draw_texture_rec for scale ≈ 1.0
+        draw_texture_rec(texture, frame_rec, position, WHITE)
+    else:  # Use draw_texture_pro for scaling
+        dest_rect = Rectangle(
+            position.x,
+            position.y,
+            frame_rec.width * scale,
+            frame_rec.height * scale
+        )
+        origin = Vector2(0, 0)
+        draw_texture_pro(texture, frame_rec, dest_rect, origin, 0.0, WHITE)
+      
+        
+def draw_sprite_animation_with_rectangle(texture, frame_rec, position, scale=1.0, sprite_color=WHITE):
+    draw_texture_ex(texture, position, 0.0, scale, sprite_color)
+    # Draw rectangle lines with the scaled size of the texture and the frame
+    draw_rectangle_lines(15, 40, int(texture.width*scale), int(texture.height*scale), LIME)
+    draw_rectangle_lines(15 + int(frame_rec.x), 40 + int(frame_rec.y), 
+                           int(frame_rec.width*scale), int(frame_rec.height*scale), RED)
+
 # Main game loop
 while not window_should_close():  # Detect window close button or ESC key
     # Update
@@ -98,15 +134,7 @@ while not window_should_close():  # Detect window close button or ESC key
         framesSpeed = MIN_FRAME_SPEED
 
     # Control scale
-    if is_key_pressed(KEY_UP):
-        scale += 0.1
-    elif is_key_pressed(KEY_DOWN):
-        scale -= 0.1
-
-    if scale < 0.1:
-        scale = 0.1
-    elif scale > 3.0:
-        scale = 3.0
+    scale = control_scale(scale)
 
     # Draw
     begin_drawing()
@@ -138,11 +166,8 @@ while not window_should_close():  # Detect window close button or ESC key
     #                        int(frameRec3.width*cat_scale), int(frameRec3.height*cat_scale), RED)
     
     # Draw karate girl texture and frame rectangle
-    draw_texture_ex(karate_girl, Vector2(15, 40), 0.0, scale, WHITE)
-    # Draw rectangle lines with the scaled size of the KARATE   GIRL texture and the frame
-    draw_rectangle_lines(15, 40, int(karate_girl.width*scale), int(karate_girl.height*scale), ORANGE)
-    draw_rectangle_lines(15 + int(frameRec4.x), 40 + int(frameRec4.y), 
-                           int(frameRec4.width*scale), int(frameRec4.height*scale), RED)
+    draw_sprite_animation_with_rectangle(karate_girl, frameRec4, Vector2(15, 40), scale)
+    
     
     
     draw_text("FRAME SPEED: ", 165, 210, 10, DARKGRAY)
@@ -159,19 +184,8 @@ while not window_should_close():  # Detect window close button or ESC key
     # draw_texture_rec(scarfy, frameRec, position, WHITE) 
     # draw_texture_rec(girl, frameRec2, position2, WHITE)
     # draw_texture_rec(cat, frameRec3, position3, WHITE)
-    if abs(scale - 1.0) < 0.01:  # Use draw_texture_rec for scale ≈ 1.0
-        draw_texture_rec(karate_girl, frameRec4, position4, WHITE)
-    else:  # Use draw_texture_pro for scaling
-        # Create destination rectangle with scaled size
-        dest_rect = Rectangle(
-            position4.x,
-            position4.y,
-            frameRec4.width * scale,
-            frameRec4.height * scale
-        )
-        # Origin is top-left (0, 0) for simple scaling
-        origin = Vector2(0, 0)
-        draw_texture_pro(karate_girl, frameRec4, dest_rect, origin, 0.0, WHITE)
+    draw_sprite_animation(karate_girl, frameRec4, position4, scale)
+        
     draw_text("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200,
                screenHeight - 20, 10, GRAY)
     end_drawing()
