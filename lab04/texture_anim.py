@@ -32,7 +32,7 @@ num_cats = 5
 
 # constants for karate girl sprite animation
 karate_girl_filename = str(THIS_DIR/"resources/karate_girl.png")
-karate_girl_scale = 1.5
+scale = 1.5
 num_karate_girls = 14
 
 # Initialization
@@ -97,6 +97,17 @@ while not window_should_close():  # Detect window close button or ESC key
     elif framesSpeed < MIN_FRAME_SPEED:
         framesSpeed = MIN_FRAME_SPEED
 
+    # Control scale
+    if is_key_pressed(KEY_UP):
+        scale += 0.1
+    elif is_key_pressed(KEY_DOWN):
+        scale -= 0.1
+
+    if scale < 0.1:
+        scale = 0.1
+    elif scale > 3.0:
+        scale = 3.0
+
     # Draw
     begin_drawing()
     
@@ -127,11 +138,11 @@ while not window_should_close():  # Detect window close button or ESC key
     #                        int(frameRec3.width*cat_scale), int(frameRec3.height*cat_scale), RED)
     
     # Draw karate girl texture and frame rectangle
-    draw_texture_ex(karate_girl, Vector2(15, 40), 0.0, karate_girl_scale, WHITE)
+    draw_texture_ex(karate_girl, Vector2(15, 40), 0.0, scale, WHITE)
     # Draw rectangle lines with the scaled size of the KARATE   GIRL texture and the frame
-    draw_rectangle_lines(15, 40, int(karate_girl.width*karate_girl_scale), int(karate_girl.height*karate_girl_scale), ORANGE)
+    draw_rectangle_lines(15, 40, int(karate_girl.width*scale), int(karate_girl.height*scale), ORANGE)
     draw_rectangle_lines(15 + int(frameRec4.x), 40 + int(frameRec4.y), 
-                           int(frameRec4.width*karate_girl_scale), int(frameRec4.height*karate_girl_scale), RED)
+                           int(frameRec4.width*scale), int(frameRec4.height*scale), RED)
     
     
     draw_text("FRAME SPEED: ", 165, 210, 10, DARKGRAY)
@@ -148,7 +159,19 @@ while not window_should_close():  # Detect window close button or ESC key
     # draw_texture_rec(scarfy, frameRec, position, WHITE) 
     # draw_texture_rec(girl, frameRec2, position2, WHITE)
     # draw_texture_rec(cat, frameRec3, position3, WHITE)
-    draw_texture_rec(karate_girl, frameRec4, position4, WHITE)
+    if abs(scale - 1.0) < 0.01:  # Use draw_texture_rec for scale ≈ 1.0
+        draw_texture_rec(karate_girl, frameRec4, position4, WHITE)
+    else:  # Use draw_texture_pro for scaling
+        # Create destination rectangle with scaled size
+        dest_rect = Rectangle(
+            position4.x,
+            position4.y,
+            frameRec4.width * scale,
+            frameRec4.height * scale
+        )
+        # Origin is top-left (0, 0) for simple scaling
+        origin = Vector2(0, 0)
+        draw_texture_pro(karate_girl, frameRec4, dest_rect, origin, 0.0, WHITE)
     draw_text("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200,
                screenHeight - 20, 10, GRAY)
     end_drawing()
