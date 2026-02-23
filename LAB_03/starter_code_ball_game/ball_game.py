@@ -1,5 +1,6 @@
 from pyray import *
 from os.path import join
+from cat import Cat
 from settings import *
 from paddle import Paddle
 
@@ -8,10 +9,10 @@ def update_score(game):
     '''check if the ball has gone past the left or right edge of the screen and update scores accordingly'''
     if game.ball.position.x - game.ball.radius <= 0:
         game.enemy_paddle.score += 1
-        game.ball = Ball(10, Vector2(400, 210), Vector2(2.0, 2.5))
+        game.ball = Ball(10, Vector2(400, 210), Vector2(120, 150))
     elif game.ball.position.x + game.ball.radius > WINDOW_WIDTH:
         game.player_paddle.score += 1
-        game.ball = Ball(10, Vector2(400, 210), Vector2(-2.0, -2.5))
+        game.ball = Ball(10, Vector2(400, 210), Vector2(-120, -150))
 
 
 class GameState:
@@ -27,8 +28,9 @@ class Ball():
         self.velocity = velocity
 
     def update(self):
-        self.position.x += self.velocity.x
-        self.position.y += self.velocity.y
+        dt = get_frame_time()
+        self.position.x += self.velocity.x * dt
+        self.position.y += self.velocity.y * dt
 
         # Check walls collision for bouncing
         if (self.position.x > WINDOW_WIDTH or self.position.x <= 0):
@@ -86,13 +88,14 @@ class Game:
         self.state = GameState.MENU
         self.visible = True
         self.moving = False
-        self.ball = Ball(10, Vector2(400, 210), Vector2(2.0, 2.5))
+        self.ball = Ball(10, Vector2(400, 210), Vector2(120, 150))
         self.player_paddle = Player_Paddle(Vector2(10, 200))
         self.enemy_paddle = Enemy_Paddle(Vector2(WINDOW_WIDTH - 30, 200))
         self.enemy_vision_range = WINDOW_WIDTH / 2  # Vertical line where enemy starts tracking the ball
+        self.cat = Cat()
 
     def startup(self):
-        pass
+        self.cat.startup()
 
     def update(self):
         if self.state == GameState.MENU:
@@ -134,6 +137,7 @@ class Game:
             update_score(self)
             self.player_paddle.update()
             self.enemy_paddle.update(self.ball, self.enemy_vision_range)
+            self.cat.update()
             
             # Adjust vision range with arrow keys (for difficulty tuning)
             if is_key_down(KeyboardKey.KEY_RIGHT):
@@ -146,7 +150,12 @@ class Game:
                 self.enemy_vision_range = 0
             elif self.enemy_vision_range > WINDOW_WIDTH:
                 self.enemy_vision_range = WINDOW_WIDTH
-
+                
+            # Speed adjustment logic for the cat
+            if (is_key_down(KeyboardKey.KEY_RIGHT_BRACKET)):
+                self.cat.speed += 20
+            if (is_key_down(KeyboardKey.KEY_LEFT_BRACKET)):
+                self.cat.speed -= 20
         # check for game over condition (first to 10 points wins)
         if self.player_paddle.score >= 10 or self.enemy_paddle.score >= 10:
             self.state = GameState.GAME_OVER
@@ -185,6 +194,7 @@ class Game:
             self.ball.draw()
             self.player_paddle.draw()
             self.enemy_paddle.draw()
+            self.cat.draw()
         else:
             draw_text("Invisible!", 200, 200, 40, RED)
 
