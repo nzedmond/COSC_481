@@ -16,94 +16,57 @@ THIS_DIR = Path(__file__).resolve().parent
 MAX_FRAME_SPEED = 15
 MIN_FRAME_SPEED = 1
 
-# constants for the scarfy sprite animation
-scarfy_file_name = str(THIS_DIR/"resources/scarfy.png")
-num_scarfy = 6
-
-# constants for the girl sprite animation
-girl_file_name = str(THIS_DIR/"resources/girl_running.png")
-girl_scale = 0.75
-num_girls = 8
-
-# constants for cat sprite animation
-cat_filename = str(THIS_DIR/"resources/myCat01.png")
-cat_scale = 0.5
-num_cats = 5
-
-# constants for karate girl sprite animation
-karate_girl_filename = str(THIS_DIR/"resources/karate_girl.png")
-scale = 1.5
-num_karate_girls = 14
-
 # Initialization
 screenWidth = 800
 screenHeight = 450
 
+# # --------------SCARFY CONSTANTS------------
+# fname = "resources/scarfy.png"
+# scale = 0.99
+# num = 6
+
+# # --------------GIRL CONSTANTS------------  
+# fname = "resources/girl_running.png"
+# scale = 0.75
+# num = 8
+
+# # --------------CAT CONSTANTS------------
+# fname = "resources/myCat01.png"
+# scale = 0.529
+# num = 5
+
+# # --------------KILLER CONSTANTS------------
+fname = "resources/kkiller.png"
+scale = 1.32
+num = 8
+
+# --------------SPRITE CONSTANTS------------
+SPRITE_SOURCE = fname
+SPRITE_FNAME = str(THIS_DIR/SPRITE_SOURCE)
+SPRITE_POSITION = Vector2(350.0, 280.0)
+SPRITE_TEXTURE_POSITION = Vector2(15, 40)
+SPRITE_SCALE = scale
+NUM_SPRITES = num
+
+
+# --------------OTHER CONSTANTS------------
+currentFrame = 0
+framesCounter = 0
+framesSpeed = 8  # Number of spritesheet frames shown by second
 
 init_window(screenWidth, screenHeight, "raylib [texture] example - sprite anim")
 
 # Important NOTE: Textures MUST be loaded after Window initialization 
-# scarfy = load_texture(scarfy_file_name)  
-# position = Vector2(350.0, 280.0)
-# frameRec = Rectangle(0.0, 0.0, float(scarfy.width)/num_scarfy, float(scarfy.height))
+# (OpenGL context is required)
+# Texture loading: one step vs. two steps (see other example)
 
-# LOADING GIRL SPRITE
-girl = load_texture(girl_file_name)
-position2 = Vector2(350.0, 280.0)
-frameRec2 = Rectangle(0.0, 0.0, float(girl.width)/num_girls, float(girl.height))
+# -----------------LOADING SPRITE-------------------------------
+SPRITE = load_texture(SPRITE_FNAME) 
+frameRec = Rectangle(0.0, 0.0, float(SPRITE.width)/NUM_SPRITES, float(SPRITE.height)) 
 
-# LOADING CAT SPRITE
-cat = load_texture(cat_filename)
-position3 = Vector2(350.0, 280.0)
-frameRec3 = Rectangle(0.0, 0.0, float(cat.width)/num_cats, float(cat.height))
 
-# LOADING KARATE GIRL SPRITE
-karate_girl = load_texture(karate_girl_filename)
-position4 = Vector2(350.0, 280.0)
-frameRec4 = Rectangle(0.0, 0.0, float(karate_girl.width)/num_karate_girls, float(karate_girl.height))
-
-currentFrame = 0
-
-framesCounter = 0
-framesSpeed = 8  # Number of spritesheet frames shown by second
 
 set_target_fps(60)  # Set our game to run at 60 frames-per-second
-
-# HELPER FUNCTIONS
-def control_scale(sprite_scale: float):
-    if is_key_pressed(KEY_UP):
-        sprite_scale += 0.1
-    elif is_key_pressed(KEY_DOWN):
-        sprite_scale -= 0.1
-
-    if sprite_scale < 0.1:
-        sprite_scale = 0.1
-    elif sprite_scale > 3.0:
-        sprite_scale = 3.0
-        
-    return sprite_scale
-
-
-def draw_sprite_animation(texture, frame_rec, position, scale=1.0):
-    if abs(scale - 1.0) < 0.01:  # Use draw_texture_rec for scale ≈ 1.0
-        draw_texture_rec(texture, frame_rec, position, WHITE)
-    else:  # Use draw_texture_pro for scaling
-        dest_rect = Rectangle(
-            position.x,
-            position.y,
-            frame_rec.width * scale,
-            frame_rec.height * scale
-        )
-        origin = Vector2(0, 0)
-        draw_texture_pro(texture, frame_rec, dest_rect, origin, 0.0, WHITE)
-      
-        
-def draw_sprite_animation_with_rectangle(texture, frame_rec, position, scale=1.0, sprite_color=WHITE):
-    draw_texture_ex(texture, position, 0.0, scale, sprite_color)
-    # Draw rectangle lines with the scaled size of the texture and the frame
-    draw_rectangle_lines(15, 40, int(texture.width*scale), int(texture.height*scale), LIME)
-    draw_rectangle_lines(15 + int(frame_rec.x), 40 + int(frame_rec.y), 
-                           int(frame_rec.width*scale), int(frame_rec.height*scale), RED)
 
 # Main game loop
 while not window_should_close():  # Detect window close button or ESC key
@@ -114,13 +77,10 @@ while not window_should_close():  # Detect window close button or ESC key
         framesCounter = 0
         currentFrame += 1
 
-        if currentFrame > 7:
+        if currentFrame > NUM_SPRITES - 1:
             currentFrame = 0
 
-        # frameRec.x = float(currentFrame) * float(scarfy.width)/num_scarfy
-        frameRec2.x = float(currentFrame) * float(girl.width)/num_girls
-        frameRec3.x = float(currentFrame) * float(cat.width)/num_cats
-        frameRec4.x = float(currentFrame) * float(karate_girl.width)/num_karate_girls
+        frameRec.x = float(currentFrame) * float(SPRITE.width)/NUM_SPRITES
 
     # Control frames speed
     if is_key_pressed(KEY_RIGHT):
@@ -133,66 +93,36 @@ while not window_should_close():  # Detect window close button or ESC key
     elif framesSpeed < MIN_FRAME_SPEED:
         framesSpeed = MIN_FRAME_SPEED
 
-    # Control scale
-    scale = control_scale(scale)
-
     # Draw
     begin_drawing()
     
     clear_background(RAYWHITE)
     
-    # Draw scarfy texture and frame rectangle
-    # draw_texture(scarfy, 15, 40, WHITE)
-    # draw_rectangle_lines(15, 40, scarfy.width, scarfy.height, LIME)
-    # draw_rectangle_lines(15 + int(frameRec.x), 40 + int(frameRec.y), 
-    #                        int(frameRec.width), int(frameRec.height), RED)
-    
-    # Draw girl texture and frame rectangle
-    # draw_texture_ex(girl, Vector2(15, 40), 0.0, girl_scale, WHITE)
-    # # draw_texture(girl, 1, 40, WHITE)
-    
-
-    # Draw girl texture and frame rectangle
-    # # Draw rectangle lines with the scaled size of the GIRL texture and the frame
-    # draw_rectangle_lines(15, 40, int(girl.width*girl_scale), int(girl.height*girl_scale), LIME)
-    # draw_rectangle_lines(15 + int(frameRec2.x), 40 + int(frameRec2.y), 
-    #                        int(frameRec2.width*girl_scale), int(frameRec2.height*girl_scale), RED)
-    
-    # # Draw cat texture and frame rectangle
-    # draw_texture_ex(cat, Vector2(15, 40), 0.0, cat_scale, WHITE)
-    # # Draw rectangle lines with the scaled size of the CAT texture and the frame
-    # draw_rectangle_lines(15, 40, int(cat.width*cat_scale), int(cat.height*cat_scale), BLUE)
-    # draw_rectangle_lines(15 + int(frameRec3.x), 40 + int(frameRec3.y), 
-    #                        int(frameRec3.width*cat_scale), int(frameRec3.height*cat_scale), RED)
-    
-    # Draw karate girl texture and frame rectangle
-    draw_sprite_animation_with_rectangle(karate_girl, frameRec4, Vector2(15, 40), scale)
-    
+    # -------------------------DRAW SPRITE ----------------------------------
+    draw_texture_ex(SPRITE, SPRITE_TEXTURE_POSITION, 0.0, SPRITE_SCALE, WHITE)
+    draw_rectangle_lines(int(SPRITE_TEXTURE_POSITION.x), int(SPRITE_TEXTURE_POSITION.y), int(SPRITE.width * SPRITE_SCALE), int(SPRITE.height * SPRITE_SCALE), LIME)
+    draw_rectangle_lines(int(SPRITE_TEXTURE_POSITION.x + int(frameRec.x* SPRITE_SCALE)), int(SPRITE_TEXTURE_POSITION.y + int(frameRec.y * SPRITE_SCALE)), int(frameRec.width * SPRITE_SCALE), int(frameRec.height * SPRITE_SCALE), RED)
     
     
     draw_text("FRAME SPEED: ", 165, 210, 10, DARKGRAY)
     draw_text(f"{framesSpeed:02d} FPS", 575, 210, 10, DARKGRAY)
-    draw_text("PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 240, 10, 
-    DARKGRAY)
+    draw_text("PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 240, 10, DARKGRAY)
     
     for i in range(MAX_FRAME_SPEED):
         if i < framesSpeed:
             draw_rectangle(250 + 21*i, 205, 20, 20, RED)
         #draw_rectangle_lines(250 + 21*i, 205, 20, 20, MAROON)
-
-    # Draw part of the texture
-    # draw_texture_rec(scarfy, frameRec, position, WHITE) 
-    # draw_texture_rec(girl, frameRec2, position2, WHITE)
-    # draw_texture_rec(cat, frameRec3, position3, WHITE)
-    draw_sprite_animation(karate_girl, frameRec4, position4, scale)
         
+     
+    # Draw part of the texture 
+    draw_texture_rec(SPRITE, frameRec, SPRITE_POSITION, WHITE)
+    # draw_texture_rec(boy, boy_frameRec, boy_position, WHITE)
+    
     draw_text("(c) Scarfy sprite by Eiden Marsal", screenWidth - 200,
                screenHeight - 20, 10, GRAY)
     end_drawing()
 
 # De-Initialization
-# unload_texture(scarfy)  # Texture unloading
-unload_texture(girl)
-unload_texture(cat)
-unload_texture(karate_girl)
+# unload_texture(boy)
+unload_texture(SPRITE)  # Texture unloading
 close_window()  # Close window and OpenGL context
