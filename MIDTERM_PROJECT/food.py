@@ -11,3 +11,6 @@ class Food:
     
     def draw(self):
         draw_rectangle(int(self.position.x), int(self.position.y), self.size, self.size, self.color)
+        
+    def update(self):
+        pass

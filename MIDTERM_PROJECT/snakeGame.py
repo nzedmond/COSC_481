@@ -9,12 +9,21 @@ class Game:
     def __init__(self):
         self.snake = Snake()
         self.food = Food()
+        self.pause = False
         self.cell_size = SNAKE_SIZE
         self.offset_x = WINDOW_WIDTH % self.cell_size
         self.offset_y = WINDOW_HEIGHT % self.cell_size
     
     def update(self):
-        pass
+        if is_key_pressed(KEY_P):
+            self.pause = not self.pause
+
+        if self.pause:
+            return
+
+        self.snake.handle_input()
+        self.snake.update()
+        self.food.update()
     
     def draw(self):
         self.draw_grid()
