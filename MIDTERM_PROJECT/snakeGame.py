@@ -28,7 +28,7 @@ class Game:
         self.snake.handle_input()
         self.snake.update()
         self.check_wall_collision()
-        self.food.update()
+        self.food.update(self.snake)
 
     def check_wall_collision(self):
         head = self.snake.body[0]
@@ -44,7 +44,8 @@ class Game:
     def draw(self):
         self.draw_grid()
         self.snake.draw()
-        self.food.draw()
+        if self.food.isActive:
+            self.food.draw()
 
     def draw_grid(self):
         for i in range(WINDOW_WIDTH // self.cell_size + 1):

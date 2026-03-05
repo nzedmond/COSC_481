@@ -22,6 +22,7 @@ class CalibrationCircle:
             self.isVisible = not self.isVisible
         
         if is_mouse_button_pressed(0):
+            # draw_text("Calibration wrt to t_apex", 200, 200, 20, BLACK)
             self.position = get_mouse_position()
             global max_height
             max_height = self.position.y
