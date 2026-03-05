@@ -17,18 +17,18 @@ class Game:
     
     def update(self):
         if self.game_over:
-            return
+            draw_text("GAME OVER!", WINDOW_WIDTH//4, WINDOW_HEIGHT//2, 50, DARKBROWN)
+        else:
+            if is_key_pressed(KEY_P):
+                self.pause = not self.pause
 
-        if is_key_pressed(KEY_P):
-            self.pause = not self.pause
-
-        if self.pause:
-            return
-
-        self.snake.handle_input()
-        self.snake.update()
-        self.check_wall_collision()
-        self.food.update(self.snake)
+            if not self.pause:
+                self.snake.handle_input()
+                self.snake.update()
+                self.check_wall_collision()
+                self.food.update(self.snake)
+            else:
+                draw_text("GAME PAUSED!", WINDOW_WIDTH//4, WINDOW_HEIGHT//2, 50, BLACK)
 
     def check_wall_collision(self):
         head = self.snake.body[0]
@@ -72,4 +72,4 @@ class Game:
         pass
     
     def shutdown(self):
-        pass
+       pass

@@ -2,13 +2,11 @@ from raylib import *
 from pyray import *
 from settings import *
 
-
-
 class Snake:
     def __init__(self):
         self.length = SNAKE_LENGTH
         self.size = SNAKE_SIZE
-        self.speed = SNAKE_SIZE
+        self.speed = SNAKE_SPEED
         self.color = SNAKE_COLOR
         self.direction = Vector2(1, 0)  # Initial direction: right
         self.allow_move = True
