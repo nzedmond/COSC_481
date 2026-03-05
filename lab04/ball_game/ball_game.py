@@ -3,7 +3,7 @@ from os.path import join
 from settings import * 
 
 # ------ global variables -----
-max_height = 0
+max_height = None
 
 class CalibrationCircle:
     def __init__(self):
@@ -13,7 +13,8 @@ class CalibrationCircle:
         self.isVisible = False
     
     def draw(self):
-        draw_circle_v(self.position, self.radius, self.color)
+        if self.isVisible:
+            draw_circle_v(self.position, self.radius, self.color)
     
     def update(self):
         '''Listen for C Key to enter calibration mode. Listen for mouse click to draw the circle'''
@@ -22,8 +23,9 @@ class CalibrationCircle:
         
         if is_mouse_button_pressed(0):
             self.position = get_mouse_position()
+            global max_height
             max_height = self.position.y
-            print(f"max-height = {max_height}")
+            # print(f"max-height = {max_height}")
     
     
 class Cat():
@@ -31,21 +33,16 @@ class Cat():
         self.x = 40
         self.y = 550
         self.uy = 0
-        # Physics constants chosen for realistic jumping:
-        # Target: 0.6-1.0 second airtime, 150-200 pixel jump height
-        # Formulas: airtime ≈ (2 * -jump_force) / gravity
-        #          max_height ≈ (-jump_force)^2 / (2 * gravity)
-        # Selected: gravity=2000, jump_force=-800
-        # Calculation: airtime = (2 * 800) / 2000 = 1.6 / 2000 = 0.8 seconds
-        #            max_height = (800)^2 / (2 * 2000) = 640000 / 4000 = 160 pixels
-        # Reasoning: 0.8s airtime and 160px height are within target ranges (0.6-1.0s, 150-200px)
-        #           Provides smooth, game-feel jumping without being too floaty or snappy
+        '''FOR LAB 6:'''
+        
+        # ----------- JUMP CALIBRATION VARIABLES -------------
         self.gravity = 2000  # pixels/s^2
-        self.jump_force = -800  # upward velocity (pixels/s)
+        self.time_to_apex = 0.4  # seconds (time from jump start to max height)
         self.ground_y = self.y
         self.is_jumping = False
         self.speed = 200  # pixels/sec for horizontal movement
-        self.jump_height = max_height
+        self.jump_force = -800  # upward velocity (pixels/s)
+        #self.jump_force = -1 * sqrt(2*self.gravity*max_height)
     
     def update(self):
         dt = get_frame_time()
@@ -72,14 +69,35 @@ class Cat():
         self.apply_physics(dt)
 
     def start_jump(self):
+        self.gravity, self.jump_force = self.get_jump_profile_from_calibration_and_time()
         self.uy = self.jump_force
         self.is_jumping = True
+
+    def get_jump_profile_from_calibration_and_time(self):
+        global max_height
+
+        if max_height is None:
+            return self.gravity, -800
+
+        if self.time_to_apex <= 0:
+            return self.gravity, -800
+
+        target_y = max(0, min(max_height, self.ground_y))
+        jump_height = self.ground_y - target_y
+
+        if jump_height <= 0:
+            return self.gravity, 0
+
+        gravity = (2 * jump_height) / (self.time_to_apex * self.time_to_apex)
+        jump_force = -(gravity * self.time_to_apex)
+
+        return gravity, jump_force
 
     def apply_physics(self, dt):
         '''uy decreases(becomes more positive) as the ball goes up. It reaches 0 at the apex.'''
         self.uy += self.gravity * dt
         self.y += self.uy * dt
-        print(f"Y={self.y}")
+        # print(f"Y={self.y}")
         
         # Landing detection
         if self.y >= self.ground_y:
