@@ -9,12 +9,16 @@ class Game:
     def __init__(self):
         self.snake = Snake()
         self.food = Food()
+        self.game_over = False
         self.pause = False
         self.cell_size = SNAKE_SIZE
         self.offset_x = WINDOW_WIDTH % self.cell_size
         self.offset_y = WINDOW_HEIGHT % self.cell_size
     
     def update(self):
+        if self.game_over:
+            return
+
         if is_key_pressed(KEY_P):
             self.pause = not self.pause
 
@@ -23,7 +27,19 @@ class Game:
 
         self.snake.handle_input()
         self.snake.update()
+        self.check_wall_collision()
         self.food.update()
+
+    def check_wall_collision(self):
+        head = self.snake.body[0]
+
+        if (
+            head.x > (WINDOW_WIDTH - self.offset_x)
+            or head.y > (WINDOW_HEIGHT - self.offset_y)
+            or head.x < 0
+            or head.y < 0
+        ):
+            self.game_over = True
     
     def draw(self):
         self.draw_grid()

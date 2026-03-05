@@ -4,3 +4,6 @@ from random import randint, uniform
 from os.path import join
 
 WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600
+
+# -------------CONSTANTS FOR CALIBRATION CIRCLE ------------
+CAL_RADIUS = 10
