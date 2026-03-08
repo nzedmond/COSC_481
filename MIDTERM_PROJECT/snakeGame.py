@@ -25,8 +25,17 @@ class Game:
 
             if not self.pause:
                 self.snake.handle_input()
-                self.snake.update()
+                moved = self.snake.update()
+
+                if not moved:
+                    return  # Skip collision checks if the snake didn't move this frame
+
                 self.check_wall_collision()
+                self.check_self_collision()
+
+                if self.game_over:
+                    return
+
                 self.food.update(self.snake)
 
     def check_wall_collision(self):
@@ -39,6 +48,14 @@ class Game:
             or head.y < 0
         ):
             self.game_over = True
+
+    def check_self_collision(self):
+        head = self.snake.body[0]
+
+        for segment in self.snake.body[1:]:
+            if head.x == segment.x and head.y == segment.y:
+                self.game_over = True
+                break
     
     def draw(self):
         self.draw_grid()

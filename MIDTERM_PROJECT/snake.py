@@ -39,7 +39,7 @@ class Snake:
     def update(self):
         self.frames_counter += 1
         if (self.frames_counter % self.move_interval) != 0:
-            return
+            return False # Skip movement until the next interval
 
         # Move the snake's body segments
         for i in range(len(self.body) - 1, 0, -1):
@@ -49,4 +49,5 @@ class Snake:
         self.body[0].x += self.direction.x * self.speed
         self.body[0].y += self.direction.y * self.speed
         self.allow_move = True
+        return True # Indicate that the snake has moved this frame
         

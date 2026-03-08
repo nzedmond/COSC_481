@@ -28,10 +28,23 @@ class Food:
             self.isActive = False  # Deactivate the food after being eaten
             snake.length += 1  # Increase the snake's length when food is eaten
             snake.body.append(Vector2(snake.body[-1].x, snake.body[-1].y))  # Add a new segment to the snake's body
-            
-            # Generate a new food position in a random location
-            self.position = Vector2(
-                random.randint(0, (WINDOW_WIDTH - self.size) // snake.size) * snake.size,
-                random.randint(0, (WINDOW_HEIGHT - self.size) // snake.size) * snake.size
-            )
+
+            # Generate a new food position that does not overlap snake segments.
+            while True:
+                candidate = Vector2(
+                    random.randint(0, (WINDOW_WIDTH - self.size) // snake.size)
+                    * snake.size,
+                    random.randint(0, (WINDOW_HEIGHT - self.size) // snake.size)
+                    * snake.size,
+                )
+
+                overlaps_snake = any(
+                    segment.x == candidate.x and segment.y == candidate.y
+                    for segment in snake.body
+                )
+
+                if not overlaps_snake:
+                    self.position = candidate
+                    break
+
             self.isActive = True  # Reactivate the food at the new position
