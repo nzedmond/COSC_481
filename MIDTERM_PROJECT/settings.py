@@ -7,7 +7,7 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600
 # ------------------CONSTANTS FOR SNAKE--------------------
 SNAKE_LENGTH = 1
 SNAKE_SIZE = 20
-SNAKE_SPEED = 10
+SNAKE_SPEED_MIN = 5
 SNAKE_COLOR = GREEN
 
 # ------------------CONSTANTS FOR FOOD---------------------

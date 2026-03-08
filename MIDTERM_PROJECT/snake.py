@@ -6,7 +6,7 @@ class Snake:
     def __init__(self):
         self.length = SNAKE_LENGTH
         self.size = SNAKE_SIZE
-        self.speed = SNAKE_SPEED
+        self.speed = SNAKE_SPEED_MIN
         self.color = SNAKE_COLOR
         self.direction = Vector2(1, 0)  # Initial direction: right
         self.allow_move = True
@@ -27,6 +27,10 @@ class Snake:
         if is_key_pressed(KEY_DOWN) and self.direction.y == 0 and self.allow_move:
             self.direction = Vector2(0, 1)
             self.allow_move = False
+        if is_key_pressed(KEY_RIGHT_BRACKET):
+            self.speed += 1
+        if is_key_pressed(KEY_LEFT_BRACKET) and self.speed > SNAKE_SPEED_MIN:
+            self.speed -= 1
     
     def draw(self):
         for segment in self.body:
