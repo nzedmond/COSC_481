@@ -34,7 +34,7 @@ class Cat():
         self.x = 40
         self.y = 550
         self.uy = 0
-        '''FOR LAB 6:'''
+        '''FOR LAB 6: Implementing three different jump modes: The first mode is a fixed-time jump, where the jump height is determined by the time it takes to reach the apex. The second mode is a lateral-distance jump, where the jump height is determined by the horizontal distance traveled during the jump. The third mode is a restitution bounce jump, where the character bounces back up after landing based on a restitution coefficient.'''
         
         # ----------- JUMP CALIBRATION VARIABLES -------------
         self.gravity = 2000  # pixels/s^2
@@ -43,7 +43,14 @@ class Cat():
         self.is_jumping = False
         self.speed = 200  # pixels/sec for horizontal movement
         self.jump_force = -800  # upward velocity (pixels/s)
-        #self.jump_force = -1 * sqrt(2*self.gravity*max_height)
+        self.last_facing_dir = 1
+
+        # ----------- ADDITIONAL JUMP MODES -------------
+        self.target_lateral_distance = 220  # pixels
+        self.restitution_e = 0.6  # 0 < e < 1
+        self.min_bounce_speed = 90  # stop bouncing below this speed
+        self.active_jump_mode = "time"
+        self.locked_air_vx = 0  # For distance-based jump, we lock the horizontal velocity at jump start to calculate the jump profile and maintain it during the jump
     
     def update(self):
         dt = get_frame_time()
@@ -54,47 +61,103 @@ class Cat():
             vx += self.speed
         if is_key_down(KeyboardKey.KEY_LEFT):
             vx -= self.speed
+
+        if vx > 0:
+            self.last_facing_dir = 1
+        elif vx < 0:
+            self.last_facing_dir = -1
         
-        # screen bounds check for horizontal movement
-        new_x = self.x + vx * dt
-        self.x = max(0, min(new_x, WINDOW_WIDTH))
-        
-        self.x += vx * dt
-        
-        
-        # Jump input (using J key to avoid conflicts with SPACE)
+        # Jump input
         if is_key_pressed(KeyboardKey.KEY_J) and not self.is_jumping:
-            self.start_jump()
+            self.start_jump("time", vx)
+
+        if is_key_pressed(KeyboardKey.KEY_K) and not self.is_jumping:
+            self.start_jump("distance", vx)
+
+        if is_key_pressed(KeyboardKey.KEY_L) and not self.is_jumping:
+            self.start_jump("restitution", vx)
+
+        horizontal_vx = vx
+        if self.is_jumping and self.active_jump_mode == "distance":
+            horizontal_vx = self.locked_air_vx
         
         # Apply physics
-        self.apply_physics(dt)
+        self.apply_physics(dt, horizontal_vx)
 
-    def start_jump(self):
-        self.gravity, self.jump_force = self.get_jump_profile_from_calibration_and_time()
+    def start_jump(self, mode, current_vx):
+        if mode == "distance":
+            launch_vx = self.get_launch_vx(current_vx)
+            self.gravity, self.jump_force = self.get_jump_profile_from_lateral_distance(
+                launch_vx
+            )
+            self.locked_air_vx = launch_vx
+        else:
+            self.gravity, self.jump_force = self.get_jump_profile_from_calibration_and_time()
+            self.locked_air_vx = 0
+
+        self.active_jump_mode = mode
         self.uy = self.jump_force
         self.is_jumping = True
 
-    def get_jump_profile_from_calibration_and_time(self):
+    def get_launch_vx(self, current_vx):
+        '''Read key inputs to determine the direction of teh launch velocity. If no input, use the last facing direction.'''
+        if current_vx > 0:
+            return current_vx
+        if current_vx < 0:
+            return current_vx
+        return self.last_facing_dir * self.speed
+
+    def get_target_jump_height(self):
+        '''Determine the target jump height based on the calibrated max height. If no calibration, use a default value.'''
         global max_height
 
         if max_height is None:
-            return self.gravity, -800
-
-        if self.time_to_apex <= 0:
-            return self.gravity, -800
+            return 160
 
         target_y = max(0, min(max_height, self.ground_y))
         jump_height = self.ground_y - target_y
-
         if jump_height <= 0:
-            return self.gravity, 0
+            return 160
+
+        return jump_height
+
+    def get_jump_profile_from_calibration_and_time(self):
+        jump_height = self.get_target_jump_height()
+
+        if self.time_to_apex <= 0:
+            return self.gravity, -800
 
         gravity = (2 * jump_height) / (self.time_to_apex * self.time_to_apex)
         jump_force = -(gravity * self.time_to_apex)
 
         return gravity, jump_force
 
-    def apply_physics(self, dt):
+    def get_jump_profile_from_lateral_distance(self, launch_vx):
+        jump_height = self.get_target_jump_height()
+        speed_x = abs(launch_vx)
+
+        if speed_x <= 0:
+            speed_x = self.speed
+
+        total_flight_time = self.target_lateral_distance / speed_x
+        if total_flight_time <= 0:
+            total_flight_time = 0.4
+
+        time_to_apex = total_flight_time / 2
+        if time_to_apex <= 0:
+            time_to_apex = 0.2
+
+        gravity = (2 * jump_height) / (time_to_apex * time_to_apex)
+        jump_force = -(gravity * time_to_apex)
+        return gravity, jump_force
+
+    def apply_physics(self, dt, horizontal_vx):
+        new_x = self.x + horizontal_vx * dt
+        self.x = max(0, min(new_x, WINDOW_WIDTH))
+
+        if not self.is_jumping:
+            return
+
         '''uy decreases(becomes more positive) as the ball goes up. It reaches 0 at the apex.'''
         self.uy += self.gravity * dt
         self.y += self.uy * dt
@@ -103,8 +166,19 @@ class Cat():
         # Landing detection
         if self.y >= self.ground_y:
             self.y = self.ground_y
-            self.uy = 0
-            self.is_jumping = False
+
+            if self.active_jump_mode == "restitution":
+                impact_speed = self.uy
+                bounce_speed = -self.restitution_e * impact_speed
+
+                if abs(bounce_speed) < self.min_bounce_speed:
+                    self.uy = 0
+                    self.is_jumping = False
+                else:
+                    self.uy = bounce_speed
+            else:
+                self.uy = 0
+                self.is_jumping = False
 
     def draw(self):
         draw_circle_v(Vector2(self.x, self.y), 20, ORANGE)
@@ -167,8 +241,11 @@ class Game:
         draw_text("Press SPACE to toggle visibility", 20, 50, 10, DARKGRAY)
         draw_text("Press S to toggle movement", 20, 70, 10, DARKGRAY)
         draw_text("Use LEFT/RIGHT to move horizontally", 20, 90, 10, DARKGRAY)
-        draw_text("Press J to jump", 20, 110, 10, DARKGRAY)
-        draw_text("Use [ and ] to adjust speed", 20, 130, 10, DARKGRAY)
+        draw_text("J: fixed-time jump", 20, 110, 10, DARKGRAY)
+        draw_text("K: lateral-distance jump", 20, 130, 10, DARKGRAY)
+        draw_text("L: restitution bounce jump", 20, 150, 10, DARKGRAY)
+        draw_text("Use [ and ] to adjust speed", 20, 170, 10, DARKGRAY)
+        draw_text("e = -(vf/vi), current e = 0.6", 20, 190, 10, DARKGRAY)
         
         if (self.visible):
             self.ball.draw()
