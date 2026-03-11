@@ -9,8 +9,11 @@ class Food:
     def __init__(self):
         self.size = FOOD_SIZE
         self.color = FOOD_COLOR
-        self.position = Vector2(200, 200)  # Initial position of the food
         self.isActive = True  # Indicates whether the food is active (not eaten)
+        self.position = Vector2(
+            random.randint(0, (WINDOW_WIDTH - self.size) // self.size) * self.size,
+            random.randint(0, (WINDOW_HEIGHT - self.size) // self.size) * self.size,
+        )
     
     def draw(self):
         draw_rectangle(int(self.position.x), int(self.position.y), self.size, self.size, self.color)

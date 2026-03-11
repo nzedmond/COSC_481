@@ -6,12 +6,12 @@ class Snake:
     def __init__(self):
         self.length = SNAKE_LENGTH
         self.size = SNAKE_SIZE
-        self.speed = SNAKE_SPEED_MIN
+        self.speed = SNAKE_SIZE  # Always move exactly one cell per tick to stay grid-aligned
         self.color = SNAKE_COLOR
         self.direction = Vector2(1, 0)  # Initial direction: right
         self.allow_move = True
         self.frames_counter = 0
-        self.move_interval = 5
+        self.move_interval = 5  # Frames between moves; lower = faster
         self.body = [Vector2(100 - i * self.size, 100) for i in range(self.length)]  # Initial position of the snake's body segments
 
     def handle_input(self):
@@ -28,14 +28,12 @@ class Snake:
             self.direction = Vector2(0, 1)
             self.allow_move = False
         if is_key_pressed(KEY_RIGHT_BRACKET):
-            self.speed += 1
-        if is_key_pressed(KEY_LEFT_BRACKET) and self.speed > SNAKE_SPEED_MIN:
-            self.speed -= 1
+            self.move_interval = max(1, self.move_interval - 1)   # speed up
+        if is_key_pressed(KEY_LEFT_BRACKET):
+            self.move_interval = min(20, self.move_interval + 1)  # slow down
     
     def draw(self):
-        print("again")
         for segment in self.body:
-            print(segment.x, self.size)
             draw_rectangle(int(segment.x), int(segment.y), self.size, self.size, self.color)
     
     def update(self):
@@ -51,5 +49,6 @@ class Snake:
         self.body[0].x += self.direction.x * self.speed
         self.body[0].y += self.direction.y * self.speed
         self.allow_move = True
+        self.frames_counter = 0  # Reset to avoid unbounded growth
         return True # Indicate that the snake has moved this frame
         

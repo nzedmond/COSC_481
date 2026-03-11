@@ -71,8 +71,8 @@ class Game:
         if (
             head.x + self.cell_size >= WINDOW_WIDTH
             or head.y + self.cell_size >= WINDOW_HEIGHT
-            or head.x <= 0
-            or head.y <= 0
+            or head.x < 0
+            or head.y < 0
         ):
             self.screens.transition_to(Screen.GAME_OVER)
 
