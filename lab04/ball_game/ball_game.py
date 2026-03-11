@@ -100,7 +100,7 @@ class Cat():
         self.is_jumping = True
 
     def get_launch_vx(self, current_vx):
-        '''Read key inputs to determine the direction of teh launch velocity. If no input, use the last facing direction.'''
+        '''Determine the horizontal launch velocity based on the current input or the last facing direction. If the player is not providing horizontal input at the moment of the jump, we use the last facing direction to determine the launch velocity. (This is actually when the cat is at rest, it can still jump in the direction it is facing)'''
         if current_vx > 0:
             return current_vx
         if current_vx < 0:
@@ -133,6 +133,7 @@ class Cat():
         return gravity, jump_force
 
     def get_jump_profile_from_lateral_distance(self, launch_vx):
+        '''Calculate the gravity and jump force needed to achieve the target lateral distance based on the horizontal launch velocity. We first calculate the total flight time needed to cover the target lateral distance at the given horizontal speed, then we calculate the time to apex (which we can set as half of the total flight time for a symmetric jump), and finally we derive the gravity and jump force needed to reach the target jump height at that time to apex.'''
         jump_height = self.get_target_jump_height()
         speed_x = abs(launch_vx)
 
