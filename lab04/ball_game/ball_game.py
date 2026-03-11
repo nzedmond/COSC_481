@@ -258,4 +258,3 @@ class Game:
 
     def shutdown(self):
         pass
-

@@ -33,7 +33,9 @@ class Snake:
             self.speed -= 1
     
     def draw(self):
+        print("again")
         for segment in self.body:
+            print(segment.x, self.size)
             draw_rectangle(int(segment.x), int(segment.y), self.size, self.size, self.color)
     
     def update(self):
