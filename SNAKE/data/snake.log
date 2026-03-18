@@ -1,0 +1,50 @@
+2026-03-17 22:47:10,701  INFO  Game started
+2026-03-17 22:47:17,793  INFO  Food eaten — score: 1
+2026-03-17 22:47:21,169  INFO  Food eaten — score: 2
+2026-03-17 22:47:22,385  INFO  Food eaten — score: 3
+2026-03-17 22:47:26,031  INFO  Food eaten — score: 4
+2026-03-17 22:47:31,295  INFO  Food eaten — score: 5
+2026-03-17 22:47:39,129  INFO  Food eaten — score: 6
+2026-03-17 22:47:44,128  INFO  Game over — score: 6, best: 0
+2026-03-17 22:47:44,131  INFO  New high score: 6
+2026-03-17 22:47:53,817  INFO  Game over — score: 0, best: 6
+2026-03-17 22:48:03,388  INFO  Game over — score: 0, best: 6
+2026-03-17 22:48:08,319  INFO  Game over — score: 0, best: 6
+2026-03-17 22:48:11,578  INFO  Food eaten — score: 1
+2026-03-17 22:48:19,269  INFO  Food eaten — score: 2
+2026-03-17 22:48:21,027  INFO  Food eaten — score: 3
+2026-03-17 22:48:24,267  INFO  Food eaten — score: 4
+2026-03-17 22:48:25,888  INFO  Food eaten — score: 5
+2026-03-17 22:48:37,638  INFO  Food eaten — score: 6
+2026-03-17 22:48:41,825  INFO  Game over — score: 6, best: 6
+2026-03-17 22:48:57,621  INFO  Game closed
+2026-03-17 23:09:02,288  INFO  Game started
+2026-03-17 23:09:09,642  INFO  Food eaten — score: 1
+2026-03-17 23:09:21,002  INFO  Game over — score: 1, best: 6
+2026-03-17 23:09:29,576  INFO  Food eaten — score: 1
+2026-03-17 23:09:36,690  INFO  Game over — score: 1, best: 6
+2026-03-17 23:09:43,697  INFO  Game over — score: 0, best: 6
+2026-03-17 23:09:49,120  INFO  Game over — score: 0, best: 6
+2026-03-17 23:09:55,388  INFO  Game over — score: 0, best: 6
+2026-03-17 23:10:00,811  INFO  Game over — score: 0, best: 6
+2026-03-17 23:10:24,323  INFO  Game closed
+2026-03-17 23:18:48,365  INFO  Game started
+2026-03-17 23:18:59,811  INFO  Food eaten — score: 1
+2026-03-17 23:19:04,118  INFO  Food eaten — score: 2
+2026-03-17 23:19:13,668  INFO  Food eaten — score: 3
+2026-03-17 23:19:22,034  INFO  Food eaten — score: 4
+2026-03-17 23:19:28,369  INFO  Food eaten — score: 5
+2026-03-17 23:19:35,383  INFO  Food eaten — score: 6
+2026-03-17 23:19:38,763  INFO  Game over — score: 6, best: 6
+2026-03-17 23:19:54,388  INFO  Game closed
+2026-03-17 23:25:49,532  INFO  Food eaten — score: 1
+2026-03-17 23:25:51,728  INFO  Game over — score: 1, best: 6
+2026-03-17 23:25:54,687  INFO  Game over — score: 0, best: 6
+2026-03-17 23:25:58,291  INFO  Game over — score: 0, best: 6
+2026-03-17 23:26:01,767  INFO  Game over — score: 0, best: 6
+2026-03-17 23:26:05,590  INFO  Game over — score: 0, best: 6
+2026-03-17 23:28:48,070  INFO  Food eaten — score: 1
+2026-03-17 23:28:53,479  INFO  Food eaten — score: 2
+2026-03-17 23:28:56,857  INFO  Game over — score: 2, best: 6
+2026-03-17 23:34:36,788  INFO  Food eaten — score: 1
+2026-03-17 23:34:37,886  INFO  Game over — score: 1, best: 6
