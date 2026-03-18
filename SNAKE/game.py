@@ -107,7 +107,7 @@ class Game:
             head.x + SNAKE_SIZE >= WINDOW_WIDTH
             or head.y + SNAKE_SIZE >= WINDOW_HEIGHT
             or head.x <= 0
-            or head.y <= 0
+            or head.y <= HEADER_HEIGHT
         ):
             self._trigger_game_over()
 
