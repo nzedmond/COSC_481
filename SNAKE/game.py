@@ -138,6 +138,7 @@ class Game:
 
     def _draw_gameplay(self):
         self.ui.draw_instructions()
+        self.ui.draw_hud(self.score, self.high_score)
         self.ui.draw_grid()
         self.snake.draw()
         if self.food.isActive:
@@ -145,6 +146,7 @@ class Game:
 
     def _draw_paused(self):
         self.ui.draw_instructions()
+        self.ui.draw_hud(self.score, self.high_score)
         self.ui.draw_grid()
         self.snake.draw()
         if self.food.isActive:
