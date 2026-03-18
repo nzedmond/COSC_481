@@ -97,6 +97,9 @@ class Game:
     def _update_game_over(self):
         if is_key_pressed(KEY_ENTER):
             self.reset()
+        if is_key_pressed(KEY_M):
+            self.reset()
+            self.screens.transition_to(Screen.MENU)
 
     def check_wall_collision(self):
         head = self.snake.body[0]
