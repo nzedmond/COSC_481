@@ -2,9 +2,14 @@ from pyray import *
 from raylib import *
 from settings import *
 
-_CELL  = SNAKE_SIZE
+_CELL = SNAKE_SIZE
 _OFF_X = WINDOW_WIDTH  % _CELL
 _OFF_Y = WINDOW_HEIGHT % _CELL
+
+# HUD rectangle — all elements inside are positioned relative to (HUD_X, HUD_Y)
+HUD_X, HUD_Y = 10, 20
+HUD_W, HUD_H = 160, 50
+HUD_PAD      = 8   # inner padding
 
 
 class UI:
@@ -25,8 +30,12 @@ class UI:
         draw_text("Arrow keys to move  |  [ ] to change speed", WINDOW_WIDTH // 2 - 185, WINDOW_HEIGHT // 2 + 30, 18, GRAY)
 
     def draw_hud(self, score, high_score):
-        draw_text(f"Score: {score}", 10, 10, 20, BLACK)
-        draw_text(f"Best:  {high_score}", 10, 35, 20, DARKGRAY)
+        # Container
+        draw_rectangle(HUD_X, HUD_Y, HUD_W, HUD_H, LIGHTGRAY)
+        draw_rectangle_lines(HUD_X, HUD_Y, HUD_W, HUD_H, DARKGRAY)
+        # Elements — positioned relative to the container's top-left corner
+        draw_text(f"Score: {score}",      HUD_X + HUD_PAD, HUD_Y + HUD_PAD,      18, BLACK)
+        draw_text(f"Best:  {high_score}", HUD_X + HUD_PAD, HUD_Y + HUD_PAD + 22, 18, DARKGRAY)
 
     def draw_game_over(self, score, high_score):
         draw_text("GAME OVER", WINDOW_WIDTH // 2 - 115, WINDOW_HEIGHT // 3, 48, RED)
