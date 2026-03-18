@@ -12,7 +12,7 @@ class Food:
         self.isActive = True
         self.position = Vector2(
             random.randint(0, (WINDOW_WIDTH - self.size) // self.size) * self.size,
-            random.randint(0, (WINDOW_HEIGHT - self.size) // self.size) * self.size,
+            random.randint(HEADER_HEIGHT // self.size, (WINDOW_HEIGHT - self.size) // self.size) * self.size,
         )
 
     def draw(self):
@@ -37,7 +37,7 @@ class Food:
                 candidate = Vector2(
                     random.randint(0, (WINDOW_WIDTH - self.size) // snake.size)
                     * snake.size,
-                    random.randint(0, (WINDOW_HEIGHT - self.size) // snake.size)
+                    random.randint(HEADER_HEIGHT // snake.size, (WINDOW_HEIGHT - self.size) // snake.size)
                     * snake.size,
                 )
 

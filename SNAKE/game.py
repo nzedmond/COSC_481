@@ -137,16 +137,14 @@ class Game:
         self.ui.draw_menu()
 
     def _draw_gameplay(self):
-        self.ui.draw_instructions()
-        self.ui.draw_hud(self.score, self.high_score)
+        self.ui.draw_header(self.score, self.high_score)
         self.ui.draw_grid()
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
 
     def _draw_paused(self):
-        self.ui.draw_instructions()
-        self.ui.draw_hud(self.score, self.high_score)
+        self.ui.draw_header(self.score, self.high_score)
         self.ui.draw_grid()
         self.snake.draw()
         if self.food.isActive:
@@ -154,7 +152,7 @@ class Game:
         draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
 
     def _draw_game_over(self):
-        self.ui.draw_instructions()
+        self.ui.draw_header(self.score, self.high_score)
         self.ui.draw_grid()
         self.snake.draw()
         if self.food.isActive:

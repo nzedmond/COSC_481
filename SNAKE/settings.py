@@ -12,6 +12,9 @@ class Screen(Enum):
     GAME_OVER = 3
 
 
+# ------------------HEADER / PLAYABLE AREA-----------------
+HEADER_HEIGHT = 40   # px reserved at the top for HUD + instructions (2 grid cells)
+
 # ------------------CONSTANTS FOR SNAKE--------------------
 SNAKE_LENGTH   = 1
 SNAKE_SIZE     = 20
