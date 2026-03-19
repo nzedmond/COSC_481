@@ -49,3 +49,6 @@ FOOD_MOVING_CHANCE = 0.10
 
 # Moving food pixel speed per frame
 FOOD_MOVING_SPEED = 2
+
+# Poison food lifespan in frames (300 = 5 seconds at 60 fps)
+FOOD_POISON_LIFESPAN = 300

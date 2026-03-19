@@ -84,11 +84,10 @@ class Game:
         if self.screens.is_on(Screen.GAME_OVER):
             return
 
-        prev_length = self.snake.length
-        self.food.update(self.snake)
-        if self.snake.length > prev_length:
-            self.score += 1
-            log.info(f"Food eaten — score: {self.score}")
+        score_delta = self.food.update(self.snake)
+        if score_delta != 0:
+            self.score = max(0, self.score + score_delta)
+            log.info(f"Food eaten ({self.food.food_type.name}) — delta: {score_delta}, score: {self.score}")
 
     def _update_paused(self):
         if is_key_pressed(KEY_P):

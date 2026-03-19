@@ -178,3 +178,53 @@
 2026-03-18 21:47:53,258  INFO  Game over — score: 0, best: 10
 2026-03-18 21:47:55,739  INFO  Game over — score: 0, best: 10
 2026-03-18 21:47:58,913  INFO  Game over — score: 0, best: 10
+2026-03-18 22:01:19,921  INFO  Food eaten (POISON) — delta: 1, score: 1
+2026-03-18 22:01:24,651  INFO  Food eaten (NORMAL) — delta: -1, score: 0
+2026-03-18 22:01:31,153  INFO  Food eaten (MOVING) — delta: 1, score: 1
+2026-03-18 22:01:34,025  INFO  Food eaten (NORMAL) — delta: 2, score: 3
+2026-03-18 22:01:36,474  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-03-18 22:01:39,345  INFO  Food eaten (GOLDEN) — delta: 1, score: 5
+2026-03-18 22:01:44,411  INFO  Game over — score: 5, best: 10
+2026-03-18 22:01:51,368  INFO  Food eaten (NORMAL) — delta: 2, score: 2
+2026-03-18 22:01:58,544  INFO  Food eaten (POISON) — delta: 1, score: 3
+2026-03-18 22:02:15,676  INFO  Game over — score: 3, best: 10
+2026-03-18 22:02:20,629  INFO  Food eaten (GOLDEN) — delta: 1, score: 1
+2026-03-18 22:02:24,335  INFO  Game over — score: 1, best: 10
+2026-03-18 22:02:28,658  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-18 22:02:33,959  INFO  Food eaten (POISON) — delta: 1, score: 2
+2026-03-18 22:02:35,564  INFO  Game over — score: 2, best: 10
+2026-03-18 22:02:42,181  INFO  Game over — score: 0, best: 10
+2026-03-18 22:02:45,669  INFO  Game over — score: 0, best: 10
+2026-03-18 22:02:53,874  INFO  Game over — score: 0, best: 10
+2026-03-18 22:03:02,076  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-18 22:03:04,855  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-03-18 22:03:07,042  INFO  Food eaten (NORMAL) — delta: 1, score: 3
+2026-03-18 22:03:09,825  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-03-18 22:03:11,929  INFO  Food eaten (NORMAL) — delta: 1, score: 5
+2026-03-18 22:03:17,754  INFO  Game over — score: 5, best: 10
+2026-03-18 22:03:28,303  INFO  Food eaten (POISON) — delta: 1, score: 1
+2026-03-18 22:11:25,469  INFO  Food eaten (GOLDEN) — delta: 1, score: 1
+2026-03-18 22:11:26,904  INFO  Food eaten (NORMAL) — delta: 3, score: 4
+2026-03-18 22:11:29,098  INFO  Food eaten (NORMAL) — delta: 1, score: 5
+2026-03-18 22:11:31,715  INFO  Game over — score: 5, best: 10
+2026-03-18 22:11:36,275  INFO  Food eaten (GOLDEN) — delta: 1, score: 1
+2026-03-18 22:11:40,158  INFO  Food eaten (NORMAL) — delta: 3, score: 4
+2026-03-18 22:11:41,590  INFO  Food eaten (MOVING) — delta: 1, score: 5
+2026-03-18 22:11:43,617  INFO  Food eaten (MOVING) — delta: 2, score: 7
+2026-03-18 22:11:45,391  INFO  Food eaten (MOVING) — delta: 2, score: 9
+2026-03-18 22:11:54,346  INFO  Food eaten (GOLDEN) — delta: 2, score: 11
+2026-03-18 22:12:01,944  INFO  Game over — score: 11, best: 10
+2026-03-18 22:12:01,946  INFO  New high score: 11
+2026-03-18 22:12:30,792  INFO  Food eaten (NORMAL) — delta: -1, score: 0
+2026-03-18 22:12:32,566  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-18 22:12:35,435  INFO  Food eaten (MOVING) — delta: 1, score: 2
+2026-03-18 22:12:37,208  INFO  Food eaten (POISON) — delta: 2, score: 4
+2026-03-18 22:12:38,390  INFO  Food eaten (NORMAL) — delta: -1, score: 3
+2026-03-18 22:12:56,206  INFO  Food eaten (GOLDEN) — delta: 1, score: 4
+2026-03-18 22:12:58,909  INFO  Food eaten (MOVING) — delta: 3, score: 7
+2026-03-18 22:13:00,680  INFO  Food eaten (MOVING) — delta: 2, score: 9
+2026-03-18 22:13:02,623  INFO  Food eaten (POISON) — delta: 2, score: 11
+2026-03-18 22:13:08,615  INFO  Food eaten (MOVING) — delta: -1, score: 10
+2026-03-18 22:13:12,328  INFO  Food eaten (GOLDEN) — delta: 2, score: 12
+2026-03-18 22:13:12,413  INFO  Game over — score: 12, best: 11
+2026-03-18 22:13:12,416  INFO  New high score: 12
