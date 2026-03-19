@@ -75,3 +75,106 @@
 2026-03-18 07:23:48,193  INFO  Game over — score: 0, best: 6
 2026-03-18 07:23:52,077  INFO  Game over — score: 0, best: 6
 2026-03-18 07:23:54,778  INFO  Game over — score: 0, best: 6
+2026-03-18 07:25:29,582  INFO  Food eaten — score: 1
+2026-03-18 07:25:33,127  INFO  Food eaten — score: 2
+2026-03-18 07:25:35,155  INFO  Food eaten — score: 3
+2026-03-18 07:25:45,205  INFO  Food eaten — score: 4
+2026-03-18 07:25:47,996  INFO  Food eaten — score: 5
+2026-03-18 07:25:51,206  INFO  Food eaten — score: 6
+2026-03-18 07:25:56,016  INFO  Food eaten — score: 7
+2026-03-18 07:25:58,293  INFO  Food eaten — score: 8
+2026-03-18 07:26:01,673  INFO  Food eaten — score: 9
+2026-03-18 07:26:09,362  INFO  Food eaten — score: 10
+2026-03-18 07:26:12,400  INFO  Game over — score: 10, best: 6
+2026-03-18 07:26:12,402  INFO  New high score: 10
+2026-03-18 07:27:52,611  INFO  Game over — score: 0, best: 10
+2026-03-18 07:30:13,235  INFO  Game over — score: 0, best: 10
+2026-03-18 19:37:17,158  INFO  Food eaten — score: 1
+2026-03-18 19:37:19,270  INFO  Game over — score: 1, best: 10
+2026-03-18 19:37:28,386  INFO  Food eaten — score: 1
+2026-03-18 19:37:35,392  INFO  Food eaten — score: 2
+2026-03-18 19:37:36,994  INFO  Food eaten — score: 3
+2026-03-18 19:37:37,079  INFO  Game over — score: 3, best: 10
+2026-03-18 19:37:46,331  INFO  Game over — score: 0, best: 10
+2026-03-18 19:37:49,233  INFO  Game over — score: 0, best: 10
+2026-03-18 19:37:52,680  INFO  Game over — score: 0, best: 10
+2026-03-18 19:38:17,993  INFO  Food eaten — score: 1
+2026-03-18 19:38:19,514  INFO  Game over — score: 1, best: 10
+2026-03-18 19:42:28,031  INFO  Game over — score: 0, best: 10
+2026-03-18 19:42:33,290  INFO  Game over — score: 0, best: 10
+2026-03-18 19:43:11,052  INFO  Game over — score: 0, best: 10
+2026-03-18 19:43:16,029  INFO  Game over — score: 0, best: 10
+2026-03-18 19:43:19,197  INFO  Game over — score: 0, best: 10
+2026-03-18 19:43:23,770  INFO  Game over — score: 0, best: 10
+2026-03-18 19:43:59,379  INFO  Game over — score: 0, best: 10
+2026-03-18 19:44:04,241  INFO  Game over — score: 0, best: 10
+2026-03-18 19:44:08,459  INFO  Game over — score: 0, best: 10
+2026-03-18 19:44:38,904  INFO  Game over — score: 0, best: 10
+2026-03-18 19:44:42,144  INFO  Game over — score: 0, best: 10
+2026-03-18 19:45:26,062  INFO  Game over — score: 0, best: 10
+2026-03-18 19:45:30,619  INFO  Game over — score: 0, best: 10
+2026-03-18 19:45:36,414  INFO  Game over — score: 0, best: 10
+2026-03-18 19:45:57,807  INFO  Game over — score: 0, best: 10
+2026-03-18 19:46:14,561  INFO  Game over — score: 0, best: 10
+2026-03-18 19:50:36,890  INFO  Game over — score: 0, best: 10
+2026-03-18 19:50:40,858  INFO  Game over — score: 0, best: 10
+2026-03-18 19:50:44,626  INFO  Game over — score: 0, best: 10
+2026-03-18 19:50:47,782  INFO  Game over — score: 0, best: 10
+2026-03-18 19:57:44,970  INFO  Game over — score: 0, best: 10
+2026-03-18 20:02:29,377  INFO  Game over — score: 0, best: 10
+2026-03-18 20:02:34,202  INFO  Game over — score: 0, best: 10
+2026-03-18 20:02:37,782  INFO  Food eaten — score: 1
+2026-03-18 20:02:41,077  INFO  Food eaten — score: 2
+2026-03-18 20:02:44,961  INFO  Game over — score: 2, best: 10
+2026-03-18 20:04:35,209  INFO  Game over — score: 0, best: 10
+2026-03-18 20:05:17,595  INFO  Game over — score: 0, best: 10
+2026-03-18 20:06:20,219  INFO  Game over — score: 0, best: 10
+2026-03-18 20:06:26,634  INFO  Game over — score: 0, best: 10
+2026-03-18 20:06:30,884  INFO  Game over — score: 0, best: 10
+2026-03-18 20:06:37,319  INFO  Game over — score: 0, best: 10
+2026-03-18 20:06:57,286  INFO  Game over — score: 0, best: 10
+2026-03-18 20:07:55,404  INFO  Game over — score: 0, best: 10
+2026-03-18 20:07:59,369  INFO  Food eaten — score: 1
+2026-03-18 20:08:01,223  INFO  Game over — score: 1, best: 10
+2026-03-18 20:09:17,708  INFO  Game over — score: 0, best: 10
+2026-03-18 20:09:49,750  INFO  Game over — score: 0, best: 10
+2026-03-18 20:10:05,046  INFO  Game over — score: 0, best: 10
+2026-03-18 20:10:08,696  INFO  Game over — score: 0, best: 10
+2026-03-18 20:10:11,807  INFO  Game over — score: 0, best: 10
+2026-03-18 20:10:51,901  INFO  Game over — score: 0, best: 10
+2026-03-18 20:11:59,298  INFO  Game over — score: 0, best: 10
+2026-03-18 20:12:23,367  INFO  Game over — score: 0, best: 10
+2026-03-18 20:12:37,625  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:16,962  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:20,960  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:23,739  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:25,930  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:28,578  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:31,443  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:33,973  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:37,869  INFO  Game over — score: 0, best: 10
+2026-03-18 21:39:41,878  INFO  Game over — score: 0, best: 10
+2026-03-18 21:40:07,346  INFO  Game over — score: 0, best: 10
+2026-03-18 21:40:23,333  INFO  Game over — score: 0, best: 10
+2026-03-18 21:40:26,725  INFO  Game over — score: 0, best: 10
+2026-03-18 21:40:30,036  INFO  Game over — score: 0, best: 10
+2026-03-18 21:40:32,688  INFO  Game over — score: 0, best: 10
+2026-03-18 21:42:21,923  INFO  Game over — score: 0, best: 10
+2026-03-18 21:42:35,987  INFO  Game over — score: 0, best: 10
+2026-03-18 21:42:40,614  INFO  Game over — score: 0, best: 10
+2026-03-18 21:42:45,986  INFO  Game over — score: 0, best: 10
+2026-03-18 21:42:48,147  INFO  Game over — score: 0, best: 10
+2026-03-18 21:42:55,568  INFO  Game over — score: 0, best: 10
+2026-03-18 21:43:01,833  INFO  Game over — score: 0, best: 10
+2026-03-18 21:43:05,498  INFO  Game over — score: 0, best: 10
+2026-03-18 21:46:09,305  INFO  Game over — score: 0, best: 10
+2026-03-18 21:46:23,487  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:17,088  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:22,688  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:25,308  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:29,158  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:31,303  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:49,407  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:53,258  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:55,739  INFO  Game over — score: 0, best: 10
+2026-03-18 21:47:58,913  INFO  Game over — score: 0, best: 10
