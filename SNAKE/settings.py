@@ -52,3 +52,21 @@ FOOD_MOVING_SPEED = 2
 
 # Poison food lifespan in frames (300 = 5 seconds at 60 fps)
 FOOD_POISON_LIFESPAN = 300
+
+# ------------------POWER-UPS---------------------
+POWERUP_SIZE           = 20
+POWERUP_SPAWN_INTERVAL = 300   # frames between pickups (~5 s at 60 fps)
+
+class PowerupType(Enum):
+    SPEED_BOOST = 0
+    SHIELD      = 1
+    MAGNET      = 2
+    SHRINK      = 3
+
+POWERUP_SPEED_BOOST_DURATION = 300   # 5 s
+POWERUP_SHIELD_DURATION      = 600   # 10 s (or until a collision)
+POWERUP_MAGNET_DURATION      = 300   # 5 s
+POWERUP_SHRINK_DURATION      = 1     # instant
+
+POWERUP_SPEED_BOOST_AMOUNT   = 3     # frames subtracted from move_interval
+POWERUP_SHRINK_SEGMENTS      = 3     # tail segments removed instantly

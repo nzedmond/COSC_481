@@ -70,8 +70,6 @@ class Food:
             self.velocity.y *= -1
             self.position.y = max(float(HEADER_HEIGHT), min(self.position.y, float(WINDOW_HEIGHT - self.size)))
 
-    # ── Public API ─────────────────────────────────────────────────────────────
-
     def draw(self):
         draw_rectangle(int(self.position.x), int(self.position.y), self.size, self.size, self.color)
         # Small label for non-normal types so the player can read the field at a glance

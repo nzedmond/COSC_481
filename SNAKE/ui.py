@@ -38,6 +38,23 @@ class UI:
         draw_text("Press ENTER to play", WINDOW_WIDTH // 2 - 110, WINDOW_HEIGHT // 2, 20, DARKGRAY)
         draw_text("Arrow keys to move  |  [ ] to change speed", WINDOW_WIDTH // 2 - 185, WINDOW_HEIGHT // 2 + 30, 18, GRAY)
 
+    def draw_active_powerups(self, active_powerups):
+        """Draw a column of icons on the right edge of the play area."""
+        if not active_powerups:
+            return
+        x = WINDOW_WIDTH - 28
+        y = HEADER_HEIGHT + 6
+        for p in active_powerups:
+            # Icon
+            draw_rectangle(x, y, 18, 18, p.color)
+            draw_text(p.label, x + 4, y + 3, 12, BLACK)
+            # Vertical timer bar (shrinks downward as the effect expires)
+            draw_rectangle(x + 20, y, 4, 18, DARKGRAY)
+            bar_h = int(18 * p.ratio)
+            if bar_h > 0:
+                draw_rectangle(x + 20, y + (18 - bar_h), 4, bar_h, p.color)
+            y += 26
+
     def draw_game_over(self, score, high_score):
         draw_text("GAME OVER", WINDOW_WIDTH // 2 - 115, WINDOW_HEIGHT // 3, 48, RED)
         draw_text(f"Score: {score}", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 2, 24, BLACK)

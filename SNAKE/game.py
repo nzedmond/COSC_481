@@ -8,6 +8,7 @@ from settings import *
 from snake import Snake
 from food import Food
 from ui import UI
+from powerups import PowerupManager, Shield
 
 
 # ── Logging setup ──────────────────────────────────────────────────────────────
@@ -49,12 +50,13 @@ class ScreenManager:
 # ── Game ───────────────────────────────────────────────────────────────────────
 class Game:
     def __init__(self):
-        self.screens    = ScreenManager()
-        self.snake      = Snake()
-        self.food       = Food()
-        self.ui         = UI()
-        self.score      = 0
-        self.high_score = load_high_score()
+        self.screens      = ScreenManager()
+        self.snake        = Snake()
+        self.food         = Food()
+        self.ui           = UI()
+        self.powerup_mgr  = PowerupManager()
+        self.score        = 0
+        self.high_score   = load_high_score()
 
     def update(self):
         match self.screens.current:
@@ -84,10 +86,22 @@ class Game:
         if self.screens.is_on(Screen.GAME_OVER):
             return
 
+        self.powerup_mgr.update(self.snake, self.food)
+
         score_delta = self.food.update(self.snake)
         if score_delta != 0:
             self.score = max(0, self.score + score_delta)
             log.info(f"Food eaten ({self.food.food_type.name}) — delta: {score_delta}, score: {self.score}")
+
+        # Magnet: pull food toward the snake head every frame
+        if self.snake.magnet and self.food.isActive:
+            head = self.snake.body[0]
+            dx = head.x - self.food.position.x
+            dy = head.y - self.food.position.y
+            dist = (dx * dx + dy * dy) ** 0.5
+            if dist > 1:
+                self.food.position.x += dx / dist * 2
+                self.food.position.y += dy / dist * 2
 
     def _update_paused(self):
         if is_key_pressed(KEY_P):
@@ -118,6 +132,13 @@ class Game:
                 break
 
     def _trigger_game_over(self):
+        if self.snake.shielded:
+            self.snake.shielded = False
+            self.snake.active_powerups = [
+                p for p in self.snake.active_powerups if not isinstance(p, Shield)
+            ]
+            log.info("Shield absorbed a collision")
+            return
         log.info(f"Game over — score: {self.score}, best: {self.high_score}")
         if self.score > self.high_score:
             self.high_score = self.score
@@ -141,6 +162,8 @@ class Game:
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
+        self.powerup_mgr.draw()
+        self.ui.draw_active_powerups(self.snake.active_powerups)
 
     def _draw_paused(self):
         self.ui.draw_header(self.score, self.high_score)
@@ -148,6 +171,8 @@ class Game:
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
+        self.powerup_mgr.draw()
+        self.ui.draw_active_powerups(self.snake.active_powerups)
         draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
 
     def _draw_game_over(self):
@@ -156,6 +181,7 @@ class Game:
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
+        self.powerup_mgr.draw()
         self.ui.draw_game_over(self.score, self.high_score)
 
     def startup(self):
@@ -163,7 +189,8 @@ class Game:
 
     def reset(self):
         self.snake = Snake()
-        self.food = Food()
+        self.food  = Food()
+        self.powerup_mgr.reset()
         self.score = 0
         self.screens.transition_to(Screen.GAMEPLAY)
 
