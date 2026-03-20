@@ -9,7 +9,7 @@ from snake import Snake
 from food import Food
 from ui import UI
 from powerups import PowerupManager, Shield
-from obstacles import ObstacleManager
+from obstacles import ObstacleManager, generate_maze
 
 
 # ── Logging setup ──────────────────────────────────────────────────────────────
@@ -51,14 +51,17 @@ class ScreenManager:
 # ── Game ───────────────────────────────────────────────────────────────────────
 class Game:
     def __init__(self):
-        self.screens      = ScreenManager()
-        self.snake        = Snake()
-        self.food         = Food()
-        self.ui           = UI()
-        self.powerup_mgr  = PowerupManager()
-        self.obstacle_mgr = ObstacleManager()
-        self.score        = 0
-        self.high_score   = load_high_score()
+        self.screens       = ScreenManager()
+        self.snake         = Snake()
+        self.food          = Food()
+        self.ui            = UI()
+        self.powerup_mgr   = PowerupManager()
+        self.obstacle_mgr  = ObstacleManager()
+        self.score         = 0
+        self.high_score    = load_high_score()
+        self.mode          = Mode.CLASSIC
+        self.selected_mode = 0            # index into _MODES list
+        self.time_left     = 0            # frames remaining (Time Attack only)
 
     def update(self):
         match self.screens.current:
@@ -68,9 +71,16 @@ class Game:
             case Screen.GAME_OVER:    self._update_game_over()
             case Screen.INSTRUCTIONS: self._update_instructions()
 
+    _MODES = [Mode.CLASSIC, Mode.TIME_ATTACK, Mode.SURVIVAL, Mode.MAZE]
+
     def _update_menu(self):
+        if is_key_pressed(KEY_DOWN):
+            self.selected_mode = (self.selected_mode + 1) % len(self._MODES)
+        if is_key_pressed(KEY_UP):
+            self.selected_mode = (self.selected_mode - 1) % len(self._MODES)
         if is_key_pressed(KEY_ENTER):
-            self.screens.transition_to(Screen.GAMEPLAY)
+            self.mode = self._MODES[self.selected_mode]
+            self._start_game()
         if is_key_pressed(KEY_I):
             self.screens.transition_to(Screen.INSTRUCTIONS)
 
@@ -83,6 +93,19 @@ class Game:
             self.screens.transition_to(Screen.PAUSED)
             return
 
+        # Time Attack: count down every frame (not just on snake moves)
+        if self.mode == Mode.TIME_ATTACK:
+            self.time_left -= 1
+            if self.time_left <= 0:
+                self._trigger_game_over()
+                return
+
+        # Survival: override speed based on current score
+        if self.mode == Mode.SURVIVAL:
+            self.snake.move_interval = max(
+                1, SNAKE_MOVE_INTERVAL - self.score // SURVIVAL_SPEED_INTERVAL
+            )
+
         self.snake.handle_input()
         moved = self.snake.update()
 
@@ -91,15 +114,15 @@ class Game:
 
         self.check_wall_collision()
         self.check_self_collision()
-
         self.check_obstacle_collision()
 
         if self.screens.is_on(Screen.GAME_OVER):
             return
 
-        self.powerup_mgr.update(self.snake, self.food)
+        obs_positions = self.obstacle_mgr.positions
+        self.powerup_mgr.update(self.snake, self.food, obs_positions)
 
-        score_delta = self.food.update(self.snake, self.obstacle_mgr.positions)
+        score_delta = self.food.update(self.snake, obs_positions)
         if score_delta != 0:
             self.score = max(0, self.score + score_delta)
             log.info(f"Food eaten ({self.food.food_type.name}) — delta: {score_delta}, score: {self.score}")
@@ -172,13 +195,13 @@ class Game:
             case Screen.INSTRUCTIONS: self._draw_instructions()
 
     def _draw_menu(self):
-        self.ui.draw_menu()
+        self.ui.draw_menu(self.selected_mode)
 
     def _draw_instructions(self):
         self.ui.draw_instructions()
 
     def _draw_gameplay(self):
-        self.ui.draw_header(self.score, self.high_score)
+        self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
@@ -188,7 +211,7 @@ class Game:
         self.ui.draw_active_powerups(self.snake.active_powerups)
 
     def _draw_paused(self):
-        self.ui.draw_header(self.score, self.high_score)
+        self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
@@ -199,7 +222,7 @@ class Game:
         draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
 
     def _draw_game_over(self):
-        self.ui.draw_header(self.score, self.high_score)
+        self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
@@ -211,13 +234,45 @@ class Game:
     def startup(self):
         pass
 
-    def reset(self):
+    def _start_game(self):
+        """Set up a fresh round for the current mode and transition to gameplay."""
         self.snake = Snake()
         self.food  = Food()
-        self.powerup_mgr.reset()
-        self.obstacle_mgr.reset()
         self.score = 0
+
+        match self.mode:
+            case Mode.CLASSIC:
+                self.powerup_mgr.reset()
+                self.obstacle_mgr.reset()
+                self.time_left = 0
+
+            case Mode.TIME_ATTACK:
+                self.powerup_mgr.reset()
+                self.obstacle_mgr.reset()
+                self.time_left = TIME_ATTACK_DURATION
+
+            case Mode.SURVIVAL:
+                self.powerup_mgr.reset()
+                self.obstacle_mgr.reset(spawn_every=2)   # obstacles spawn faster
+                self.time_left = 0
+
+            case Mode.MAZE:
+                self.powerup_mgr.reset()
+                self.obstacle_mgr.reset(dynamic=False)
+                self.obstacle_mgr.preload(generate_maze())
+                self.time_left = 0
+                # Place snake at the maze start passage tile
+                sx = MAZE_START_CELL[0] * SNAKE_SIZE * 2
+                sy = HEADER_HEIGHT + MAZE_START_CELL[1] * SNAKE_SIZE * 2
+                self.snake.body   = [Vector2(float(sx), float(sy))]
+                self.snake.length = 1
+
         self.screens.transition_to(Screen.GAMEPLAY)
+        log.info(f"Game started — mode: {self.mode.name}")
+
+    def reset(self):
+        """Restart the current mode (called from game-over screen)."""
+        self._start_game()
 
     def shutdown(self):
         pass

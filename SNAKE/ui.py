@@ -2,6 +2,13 @@ from pyray import *
 from raylib import *
 from settings import *
 
+_MODE_LABELS = {
+    Mode.CLASSIC:     "CLASSIC",
+    Mode.TIME_ATTACK: "TIME ATTACK",
+    Mode.SURVIVAL:    "SURVIVAL",
+    Mode.MAZE:        "MAZE",
+}
+
 _CELL          = SNAKE_SIZE
 _OFF_X         = WINDOW_WIDTH % _CELL
 _PLAYABLE_H    = WINDOW_HEIGHT - HEADER_HEIGHT
@@ -22,21 +29,47 @@ class UI:
             y = HEADER_HEIGHT + int(_CELL * i + _OFF_Y / 2)
             draw_line(0, y, WINDOW_WIDTH, y, LIGHTGRAY)
 
-    def draw_header(self, score, high_score):
+    def draw_header(self, score, high_score, mode=None, time_left=0):
         # Background + bottom border
         draw_rectangle(0, 0, WINDOW_WIDTH, HEADER_HEIGHT, DARKGRAY)
         draw_line(0, HEADER_HEIGHT, WINDOW_WIDTH, HEADER_HEIGHT, BLACK)
         # Score on the left
         draw_text(f"Score: {score}",      HDR_PAD,       HDR_PAD, 18, WHITE)
         draw_text(f"Best:  {high_score}", HDR_PAD + 130, HDR_PAD, 18, LIGHTGRAY)
+        # Mode tag + timer (centre)
+        if mode is not None and mode != Mode.CLASSIC:
+            tag = _MODE_LABELS[mode]
+            if mode == Mode.TIME_ATTACK:
+                secs = max(0, time_left // 60)
+                tag += f"  {secs}s"
+                color = YELLOW if secs > 10 else RED
+            elif mode == Mode.SURVIVAL:
+                color = ORANGE
+            else:
+                color = SKYBLUE
+            draw_text(tag, WINDOW_WIDTH // 2 - 55, HDR_PAD, 16, color)
         # Controls hint on the right
         draw_text("Arrow Keys  |  [ ] Speed  |  P Pause",
                   WINDOW_WIDTH - 290, HDR_PAD + 2, 14, GRAY)
 
-    def draw_menu(self):
+    def draw_menu(self, selected_mode=0):
         draw_text("SNAKE", WINDOW_WIDTH // 2 - 60, WINDOW_HEIGHT // 3, 50, DARKGREEN)
-        draw_text("Press ENTER to play", WINDOW_WIDTH // 2 - 110, WINDOW_HEIGHT // 2, 20, DARKGRAY)
-        draw_text("I  -  How to play", WINDOW_WIDTH // 2 - 90, WINDOW_HEIGHT // 2 + 34, 20, DARKGRAY)
+
+        # Mode selector
+        modes      = list(_MODE_LABELS.values())
+        item_h     = 32
+        start_y    = WINDOW_HEIGHT // 2 - (len(modes) * item_h) // 2
+        for i, label in enumerate(modes):
+            y       = start_y + i * item_h
+            active  = (i == selected_mode)
+            color   = GREEN if active else DARKGRAY
+            prefix  = "> " if active else "  "
+            draw_text(prefix + label, WINDOW_WIDTH // 2 - 90, y, 22, color)
+
+        draw_text("Up/Down to select  |  ENTER to play",
+                  WINDOW_WIDTH // 2 - 175, WINDOW_HEIGHT - 70, 16, GRAY)
+        draw_text("I  -  How to play",
+                  WINDOW_WIDTH // 2 - 88, WINDOW_HEIGHT - 44, 16, DARKGRAY)
 
     def draw_instructions(self):
         # ── Background ────────────────────────────────────────────────────────

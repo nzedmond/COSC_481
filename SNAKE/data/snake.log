@@ -306,3 +306,63 @@
 2026-03-19 22:40:37,163  INFO  Food eaten (NORMAL) — delta: 3, score: 5
 2026-03-19 22:40:42,325  INFO  Food eaten (NORMAL) — delta: 1, score: 6
 2026-03-19 22:40:46,428  INFO  Game over — score: 6, best: 12
+2026-03-19 22:52:19,316  INFO  Game started — mode: TIME_ATTACK
+2026-03-19 22:52:22,608  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-19 22:52:30,292  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-03-19 22:52:50,051  INFO  Food eaten (MOVING) — delta: 1, score: 3
+2026-03-19 22:52:59,006  INFO  Food eaten (NORMAL) — delta: 2, score: 5
+2026-03-19 22:52:59,597  INFO  Game over — score: 5, best: 12
+2026-03-19 22:53:02,636  INFO  Game started — mode: TIME_ATTACK
+2026-03-19 22:53:06,357  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-19 22:53:10,248  INFO  Game over — score: 1, best: 12
+2026-03-19 22:53:11,904  INFO  Game started — mode: TIME_ATTACK
+2026-03-19 22:53:18,816  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-03-19 22:53:22,533  INFO  Food eaten (MOVING) — delta: 3, score: 6
+2026-03-19 22:53:25,236  INFO  Food eaten (NORMAL) — delta: 2, score: 8
+2026-03-19 22:54:12,714  INFO  Game over — score: 8, best: 12
+2026-03-19 22:54:23,527  INFO  Game started — mode: TIME_ATTACK
+2026-03-19 22:54:26,396  INFO  Game over — score: 0, best: 12
+2026-03-19 22:54:27,833  INFO  Game started — mode: TIME_ATTACK
+2026-03-19 22:54:30,514  INFO  Game started — mode: SURVIVAL
+2026-03-19 22:54:48,337  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-19 22:54:50,700  INFO  Game over — score: 1, best: 12
+2026-03-19 22:54:52,426  INFO  Game started — mode: SURVIVAL
+2026-03-19 22:55:15,203  INFO  Game over — score: 0, best: 12
+2026-03-19 22:55:16,421  INFO  Game started — mode: SURVIVAL
+2026-03-19 22:55:22,672  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-19 22:55:31,881  INFO  Food eaten (POISON) — delta: 1, score: 2
+2026-03-19 22:56:02,201  INFO  Food eaten (NORMAL) — delta: -1, score: 1
+2026-03-19 22:56:03,468  INFO  Food eaten (MOVING) — delta: 1, score: 2
+2026-03-19 22:56:05,749  INFO  Food eaten (MOVING) — delta: 2, score: 4
+2026-03-19 22:56:12,164  INFO  Food eaten (POISON) — delta: 2, score: 6
+2026-03-19 22:56:34,124  INFO  Food eaten (POISON) — delta: 2, score: 8
+2026-03-19 22:56:36,828  INFO  Food eaten (POISON) — delta: -1, score: 7
+2026-03-19 22:56:54,395  INFO  Shield absorbed a collision
+2026-03-19 22:56:56,959  INFO  Game over — score: 7, best: 12
+2026-03-19 22:57:08,126  INFO  Game started — mode: SURVIVAL
+2026-03-19 22:57:10,257  INFO  Game started — mode: MAZE
+2026-03-19 22:57:10,336  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:23,501  INFO  Game started — mode: MAZE
+2026-03-19 22:57:23,583  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:25,630  INFO  Game started — mode: MAZE
+2026-03-19 22:57:25,711  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:26,883  INFO  Game started — mode: MAZE
+2026-03-19 22:57:26,965  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:28,152  INFO  Game started — mode: MAZE
+2026-03-19 22:57:28,234  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:29,644  INFO  Game started — mode: MAZE
+2026-03-19 22:57:29,726  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:31,051  INFO  Game started — mode: MAZE
+2026-03-19 22:57:31,305  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:32,527  INFO  Game started — mode: MAZE
+2026-03-19 22:57:32,609  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:34,638  INFO  Game started — mode: MAZE
+2026-03-19 22:57:34,891  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:38,670  INFO  Game started — mode: MAZE
+2026-03-19 22:57:38,751  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:39,973  INFO  Game started — mode: MAZE
+2026-03-19 22:57:40,227  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:46,099  INFO  Game started — mode: MAZE
+2026-03-19 22:57:46,181  INFO  Game over — score: 0, best: 12
+2026-03-19 22:57:47,644  INFO  Game started — mode: MAZE
+2026-03-19 22:57:47,726  INFO  Game over — score: 0, best: 12

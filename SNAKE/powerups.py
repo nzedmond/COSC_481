@@ -121,12 +121,13 @@ class PowerupPickup:
         self.position = self._spawn(occupied)
 
     def _spawn(self, occupied):
+        occupied_set = {(s.x, s.y) for s in occupied}
         while True:
             candidate = Vector2(
                 random.randint(0, (WINDOW_WIDTH - self.size) // self.size) * self.size,
                 random.randint(HEADER_HEIGHT // self.size, (WINDOW_HEIGHT - self.size) // self.size) * self.size,
             )
-            if not any(s.x == candidate.x and s.y == candidate.y for s in occupied):
+            if (candidate.x, candidate.y) not in occupied_set:
                 return candidate
 
     def draw(self):
@@ -156,12 +157,12 @@ class PowerupManager:
         self.pickup      = None
         self.spawn_timer = 0
 
-    def update(self, snake, food):
+    def update(self, snake, food, extra_occupied=None):
         # Tick toward next spawn
         self.spawn_timer += 1
         if self.pickup is None and self.spawn_timer >= POWERUP_SPAWN_INTERVAL:
             self.spawn_timer = 0
-            occupied = list(snake.body) + [food.position]
+            occupied = list(snake.body) + [food.position] + (extra_occupied or [])
             self.pickup = PowerupPickup(occupied)
 
         # Check collection

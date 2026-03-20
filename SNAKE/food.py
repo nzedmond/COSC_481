@@ -51,12 +51,13 @@ class Food:
     # ── Helpers ────────────────────────────────────────────────────────────────
 
     def _spawn_position(self, occupied):
+        occupied_set = {(s.x, s.y) for s in occupied}
         while True:
             candidate = Vector2(
                 random.randint(0, (WINDOW_WIDTH - self.size) // self.size) * self.size,
                 random.randint(HEADER_HEIGHT // self.size, (WINDOW_HEIGHT - self.size) // self.size) * self.size,
             )
-            if not any(s.x == candidate.x and s.y == candidate.y for s in occupied):
+            if (candidate.x, candidate.y) not in occupied_set:
                 return candidate
 
     def _move(self):
