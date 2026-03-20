@@ -60,14 +60,21 @@ class Game:
 
     def update(self):
         match self.screens.current:
-            case Screen.MENU:      self._update_menu()
-            case Screen.GAMEPLAY:  self._update_gameplay()
-            case Screen.PAUSED:    self._update_paused()
-            case Screen.GAME_OVER: self._update_game_over()
+            case Screen.MENU:         self._update_menu()
+            case Screen.GAMEPLAY:     self._update_gameplay()
+            case Screen.PAUSED:       self._update_paused()
+            case Screen.GAME_OVER:    self._update_game_over()
+            case Screen.INSTRUCTIONS: self._update_instructions()
 
     def _update_menu(self):
         if is_key_pressed(KEY_ENTER):
             self.screens.transition_to(Screen.GAMEPLAY)
+        if is_key_pressed(KEY_I):
+            self.screens.transition_to(Screen.INSTRUCTIONS)
+
+    def _update_instructions(self):
+        if is_key_pressed(KEY_BACKSPACE) or is_key_pressed(KEY_I):
+            self.screens.transition_to(Screen.MENU)
 
     def _update_gameplay(self):
         if is_key_pressed(KEY_P):
@@ -148,13 +155,17 @@ class Game:
 
     def draw(self):
         match self.screens.current:
-            case Screen.MENU:      self._draw_menu()
-            case Screen.GAMEPLAY:  self._draw_gameplay()
-            case Screen.PAUSED:    self._draw_paused()
-            case Screen.GAME_OVER: self._draw_game_over()
+            case Screen.MENU:         self._draw_menu()
+            case Screen.GAMEPLAY:     self._draw_gameplay()
+            case Screen.PAUSED:       self._draw_paused()
+            case Screen.GAME_OVER:    self._draw_game_over()
+            case Screen.INSTRUCTIONS: self._draw_instructions()
 
     def _draw_menu(self):
         self.ui.draw_menu()
+
+    def _draw_instructions(self):
+        self.ui.draw_instructions()
 
     def _draw_gameplay(self):
         self.ui.draw_header(self.score, self.high_score)

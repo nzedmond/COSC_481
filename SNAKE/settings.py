@@ -6,10 +6,11 @@ WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600
 
 
 class Screen(Enum):
-    MENU      = 0
-    GAMEPLAY  = 1
-    PAUSED    = 2
-    GAME_OVER = 3
+    MENU         = 0
+    GAMEPLAY     = 1
+    PAUSED       = 2
+    GAME_OVER    = 3
+    INSTRUCTIONS = 4
 
 
 # ------------------HEADER / PLAYABLE AREA-----------------

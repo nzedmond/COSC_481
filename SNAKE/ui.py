@@ -36,7 +36,71 @@ class UI:
     def draw_menu(self):
         draw_text("SNAKE", WINDOW_WIDTH // 2 - 60, WINDOW_HEIGHT // 3, 50, DARKGREEN)
         draw_text("Press ENTER to play", WINDOW_WIDTH // 2 - 110, WINDOW_HEIGHT // 2, 20, DARKGRAY)
-        draw_text("Arrow keys to move  |  [ ] to change speed", WINDOW_WIDTH // 2 - 185, WINDOW_HEIGHT // 2 + 30, 18, GRAY)
+        draw_text("I  -  How to play", WINDOW_WIDTH // 2 - 90, WINDOW_HEIGHT // 2 + 34, 20, DARKGRAY)
+
+    def draw_instructions(self):
+        # ── Background ────────────────────────────────────────────────────────
+        draw_rectangle(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color(20, 20, 20, 255))
+
+        # ── Title ─────────────────────────────────────────────────────────────
+        draw_text("HOW TO PLAY", WINDOW_WIDTH // 2 - 120, 20, 36, GREEN)
+        draw_line(40, 64, WINDOW_WIDTH - 40, 64, DARKGRAY)
+
+        # ── Controls (left column) ────────────────────────────────────────────
+        cx, cy = 50, 80
+        draw_text("CONTROLS", cx, cy, 20, LIGHTGRAY)
+        rows = [
+            ("Arrow Keys",  "Move the snake"),
+            ("[ ]",         "Decrease / increase speed"),
+            ("P",           "Pause / resume"),
+            ("ENTER",       "Start / restart game"),
+            ("M",           "Return to menu (game over)"),
+            ("I / BACKSPACE", "Open / close this screen"),
+        ]
+        for i, (key, desc) in enumerate(rows):
+            y = cy + 28 + i * 26
+            draw_text(key,  cx,       y, 16, YELLOW)
+            draw_text(desc, cx + 160, y, 16, WHITE)
+
+        # ── Food types (right column) ─────────────────────────────────────────
+        fx, fy = 450, 80
+        draw_text("FOOD TYPES", fx, fy, 20, LIGHTGRAY)
+        foods = [
+            (RED,    "Normal",  "+1 score,  grow"),
+            (GOLD,   "Golden",  "+3 score,  grow  (rare)"),
+            (PURPLE, "Poison",  "-1 score,  shrink  (fades in 5 s)"),
+            (ORANGE, "Moving",  "+2 score,  bounces around"),
+        ]
+        for i, (color, name, effect) in enumerate(foods):
+            y = fy + 28 + i * 36
+            draw_rectangle(fx, y, 16, 16, color)
+            draw_text(name,   fx + 24, y,      16, color)
+            draw_text(effect, fx + 24, y + 18, 13, GRAY)
+
+        # ── Power-ups ─────────────────────────────────────────────────────────
+        draw_line(40, 290, WINDOW_WIDTH - 40, 290, DARKGRAY)
+        draw_text("POWER-UPS", 50, 298, 20, LIGHTGRAY)
+        draw_text("(white-bordered pickups — appear every 5 s)", 200, 300, 14, GRAY)
+
+        powerups = [
+            (SKYBLUE, "S  Speed Boost", "Move interval -3 for 5 s"),
+            (YELLOW,  "H  Shield",      "Absorbs the next lethal collision (10 s)"),
+            (PINK,    "M  Magnet",      "Pulls food toward your head for 5 s"),
+            (LIME,    "Z  Shrink",      "Instantly removes 3 tail segments"),
+        ]
+        cols = [(50, 322), (430, 322)]
+        for i, (color, name, effect) in enumerate(powerups):
+            px, py = cols[i % 2]
+            row_y  = py + (i // 2) * 72
+            draw_rectangle(px, row_y, 20, 20, WHITE)
+            draw_rectangle(px + 2, row_y + 2, 16, 16, color)
+            draw_text(name,   px + 28, row_y,      16, color)
+            draw_text(effect, px + 28, row_y + 20, 13, GRAY)
+
+        # ── Footer ────────────────────────────────────────────────────────────
+        draw_line(40, WINDOW_HEIGHT - 36, WINDOW_WIDTH - 40, WINDOW_HEIGHT - 36, DARKGRAY)
+        draw_text("I or BACKSPACE  -  Back to menu",
+                  WINDOW_WIDTH // 2 - 150, WINDOW_HEIGHT - 26, 16, DARKGRAY)
 
     def draw_active_powerups(self, active_powerups):
         """Draw a column of icons on the right edge of the play area."""
