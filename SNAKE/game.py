@@ -9,6 +9,7 @@ from snake import Snake
 from food import Food
 from ui import UI
 from powerups import PowerupManager, Shield
+from obstacles import ObstacleManager
 
 
 # ── Logging setup ──────────────────────────────────────────────────────────────
@@ -55,6 +56,7 @@ class Game:
         self.food         = Food()
         self.ui           = UI()
         self.powerup_mgr  = PowerupManager()
+        self.obstacle_mgr = ObstacleManager()
         self.score        = 0
         self.high_score   = load_high_score()
 
@@ -90,15 +92,19 @@ class Game:
         self.check_wall_collision()
         self.check_self_collision()
 
+        self.check_obstacle_collision()
+
         if self.screens.is_on(Screen.GAME_OVER):
             return
 
         self.powerup_mgr.update(self.snake, self.food)
 
-        score_delta = self.food.update(self.snake)
+        score_delta = self.food.update(self.snake, self.obstacle_mgr.positions)
         if score_delta != 0:
             self.score = max(0, self.score + score_delta)
             log.info(f"Food eaten ({self.food.food_type.name}) — delta: {score_delta}, score: {self.score}")
+
+        self.obstacle_mgr.update(self.score, self.snake, self.food)
 
         # Magnet: pull food toward the snake head every frame
         if self.snake.magnet and self.food.isActive:
@@ -129,6 +135,10 @@ class Game:
             or head.x <= 0
             or head.y <= HEADER_HEIGHT
         ):
+            self._trigger_game_over()
+
+    def check_obstacle_collision(self):
+        if self.obstacle_mgr.check_collision(self.snake):
             self._trigger_game_over()
 
     def check_self_collision(self):
@@ -170,6 +180,7 @@ class Game:
     def _draw_gameplay(self):
         self.ui.draw_header(self.score, self.high_score)
         self.ui.draw_grid()
+        self.obstacle_mgr.draw()
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
@@ -179,6 +190,7 @@ class Game:
     def _draw_paused(self):
         self.ui.draw_header(self.score, self.high_score)
         self.ui.draw_grid()
+        self.obstacle_mgr.draw()
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
@@ -189,6 +201,7 @@ class Game:
     def _draw_game_over(self):
         self.ui.draw_header(self.score, self.high_score)
         self.ui.draw_grid()
+        self.obstacle_mgr.draw()
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
@@ -202,6 +215,7 @@ class Game:
         self.snake = Snake()
         self.food  = Food()
         self.powerup_mgr.reset()
+        self.obstacle_mgr.reset()
         self.score = 0
         self.screens.transition_to(Screen.GAMEPLAY)
 

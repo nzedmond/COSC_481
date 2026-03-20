@@ -97,6 +97,16 @@ class UI:
             draw_text(name,   px + 28, row_y,      16, color)
             draw_text(effect, px + 28, row_y + 20, 13, GRAY)
 
+        # ── Obstacles ─────────────────────────────────────────────────────────
+        draw_line(40, 464, WINDOW_WIDTH - 40, 464, DARKGRAY)
+        draw_text("OBSTACLES", 50, 472, 20, LIGHTGRAY)
+        draw_rectangle(50, 498, 16, 16, BROWN)
+        draw_rectangle_lines(50, 498, 16, 16, BLACK)
+        draw_text("Wall segment — avoid or use Shield to survive one hit",
+                  74, 500, 14, WHITE)
+        draw_text(f"A new wall spawns every {OBSTACLE_SPAWN_EVERY} points  (max {OBSTACLE_MAX})",
+                  74, 518, 13, GRAY)
+
         # ── Footer ────────────────────────────────────────────────────────────
         draw_line(40, WINDOW_HEIGHT - 36, WINDOW_WIDTH - 40, WINDOW_HEIGHT - 36, DARKGRAY)
         draw_text("I or BACKSPACE  -  Back to menu",

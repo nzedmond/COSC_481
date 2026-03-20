@@ -86,8 +86,12 @@ class Food:
             draw_rectangle(int(self.position.x), int(self.position.y) - 4, self.size, 3, DARKGRAY)
             draw_rectangle(int(self.position.x), int(self.position.y) - 4, bar_w, 3, WHITE)
 
-    def update(self, snake):
-        """Move food (if moving type) and check collision. Returns score delta."""
+    def update(self, snake, extra_occupied=None):
+        """Move food (if moving type) and check collision. Returns score delta.
+
+        extra_occupied: optional list of Vector2 positions (e.g. obstacle tiles)
+        that the new food must not spawn on.
+        """
         if not self.isActive:
             return 0
 
@@ -99,7 +103,8 @@ class Food:
             self.life_timer += 1
             if self.life_timer >= FOOD_POISON_LIFESPAN:
                 self._init_type()
-                self.position = self._spawn_position(snake.body)
+                occupied = list(snake.body) + (extra_occupied or [])
+                self.position = self._spawn_position(occupied)
                 return 0
 
         # Box collision with snake head
@@ -121,10 +126,11 @@ class Food:
             snake.body.append(Vector2(snake.body[-1].x, snake.body[-1].y))
             snake.length += 1
 
-        # Spawn a new food of a random type
+        # Spawn a new food of a random type, avoiding obstacles
         self.isActive = False
         self._init_type()
-        self.position = self._spawn_position(snake.body)
+        occupied = list(snake.body) + (extra_occupied or [])
+        self.position = self._spawn_position(occupied)
         self.isActive = True
 
         return score_delta
