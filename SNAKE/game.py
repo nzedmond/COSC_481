@@ -36,7 +36,7 @@ def save_high_score(score, path="data/highscore.json"):
         json.dump({"high_score": score}, f)
 
 
-# ── Screen manager ─────────────────────────────────────────────────────────────
+# =============================== Screen manager ==================================
 class ScreenManager:
     def __init__(self):
         self.current = Screen.MENU
@@ -48,8 +48,15 @@ class ScreenManager:
         return self.current == screen
 
 
-# ── Game ───────────────────────────────────────────────────────────────────────
+# ============================= Game ======================================================
 class Game:
+    '''Public methods: update,  check_wall_collision, check_obstacle_collision,
+                        check_self_collision, draw, startup, reset, shutdown
+        Private methods: _update menu, _update_instructions, _update_gameplay,
+                        _update_paused, _update_game_over, _trigger_game_over,
+                        _draw_menu, _draw_instructions, _draw_gameplay, _draw_paused,
+                        _draw_game_over, _start_game, 
+    '''
     def __init__(self):
         self.screens       = ScreenManager()
         self.snake         = Snake()
@@ -59,9 +66,10 @@ class Game:
         self.obstacle_mgr  = ObstacleManager()
         self.score         = 0
         self.high_score    = load_high_score()
-        self.mode          = Mode.CLASSIC
-        self.selected_mode = 0            # index into _MODES list
-        self.time_left     = 0            # frames remaining (Time Attack only)
+        self.mode               = Mode.CLASSIC
+        self.selected_mode      = 0       # index into _MODES list
+        self.time_left          = 0       # frames remaining (Time Attack only)
+        self._waiting_for_input = False   # maze: freeze until first arrow key
 
     def update(self):
         match self.screens.current:
@@ -91,6 +99,14 @@ class Game:
     def _update_gameplay(self):
         if is_key_pressed(KEY_P):
             self.screens.transition_to(Screen.PAUSED)
+            return
+
+        # Maze: freeze until the player chooses a direction
+        if self._waiting_for_input:
+            if is_key_pressed(KEY_RIGHT): self.snake.direction = Vector2(1, 0);  self._waiting_for_input = False
+            elif is_key_pressed(KEY_LEFT):  self.snake.direction = Vector2(-1, 0); self._waiting_for_input = False
+            elif is_key_pressed(KEY_UP):    self.snake.direction = Vector2(0, -1); self._waiting_for_input = False
+            elif is_key_pressed(KEY_DOWN):  self.snake.direction = Vector2(0, 1);  self._waiting_for_input = False
             return
 
         # Time Attack: count down every frame (not just on snake moves)
@@ -155,8 +171,8 @@ class Game:
         if (
             head.x + SNAKE_SIZE >= WINDOW_WIDTH
             or head.y + SNAKE_SIZE >= WINDOW_HEIGHT
-            or head.x <= 0
-            or head.y <= HEADER_HEIGHT
+            or head.x < 0
+            or head.y < HEADER_HEIGHT
         ):
             self._trigger_game_over()
 
@@ -209,6 +225,9 @@ class Game:
             self.food.draw()
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
+        if self._waiting_for_input:
+            draw_text("Press an arrow key to start",
+                      WINDOW_WIDTH // 2 - 155, WINDOW_HEIGHT // 2, 24, WHITE)
 
     def _draw_paused(self):
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
@@ -236,9 +255,10 @@ class Game:
 
     def _start_game(self):
         """Set up a fresh round for the current mode and transition to gameplay."""
-        self.snake = Snake()
-        self.food  = Food()
-        self.score = 0
+        self.snake              = Snake()
+        self.food               = Food()
+        self.score              = 0
+        self._waiting_for_input = False
 
         match self.mode:
             case Mode.CLASSIC:
@@ -260,7 +280,9 @@ class Game:
                 self.powerup_mgr.reset()
                 self.obstacle_mgr.reset(dynamic=False)
                 self.obstacle_mgr.preload(generate_maze())
-                self.time_left = 0
+                self.time_left          = 0
+                self._waiting_for_input = True
+                self.snake.move_interval = 20   # start at slowest speed
                 # Place snake at the maze start passage tile
                 sx = MAZE_START_CELL[0] * SNAKE_SIZE * 2
                 sy = HEADER_HEIGHT + MAZE_START_CELL[1] * SNAKE_SIZE * 2

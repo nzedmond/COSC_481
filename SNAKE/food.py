@@ -12,7 +12,7 @@ class Food:
         self._init_type()
         self.position = self._spawn_position([])
 
-    # ── Type setup ────────────────────────────────────────────────────────────
+    # ============================ Type setup ========================================
 
     def _init_type(self):
         r = random.random()
@@ -48,7 +48,7 @@ class Food:
         # Poison food counts up; 0 means no lifespan limit
         self.life_timer = 0 if self.food_type == FoodType.POISON else -1
 
-    # ── Helpers ────────────────────────────────────────────────────────────────
+    # ===================== Helpers ====================================================
 
     def _spawn_position(self, occupied):
         occupied_set = {(s.x, s.y) for s in occupied}
@@ -116,7 +116,7 @@ class Food:
                 head.y + snake.size > self.position.y):
             return 0
 
-        # ── Food eaten ────────────────────────────────────────────────────────
+        # ====================== Food eaten =================================
         score_delta = self.score_value
 
         if self.food_type == FoodType.POISON:

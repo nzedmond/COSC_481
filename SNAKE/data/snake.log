@@ -366,3 +366,67 @@
 2026-03-19 22:57:46,181  INFO  Game over — score: 0, best: 12
 2026-03-19 22:57:47,644  INFO  Game started — mode: MAZE
 2026-03-19 22:57:47,726  INFO  Game over — score: 0, best: 12
+2026-03-19 23:08:09,270  INFO  Game started — mode: MAZE
+2026-03-19 23:08:14,101  INFO  Game over — score: 0, best: 12
+2026-03-19 23:08:17,262  INFO  Game started — mode: MAZE
+2026-03-19 23:08:19,764  INFO  Game over — score: 0, best: 12
+2026-03-19 23:08:27,569  INFO  Game started — mode: MAZE
+2026-03-19 23:08:32,093  INFO  Game over — score: 0, best: 12
+2026-03-19 23:08:34,566  INFO  Game started — mode: MAZE
+2026-03-19 23:08:36,570  INFO  Game over — score: 0, best: 12
+2026-03-19 23:08:37,654  INFO  Game started — mode: MAZE
+2026-03-19 23:08:41,528  INFO  Game over — score: 0, best: 12
+2026-03-20 20:09:33,173  INFO  Game started — mode: MAZE
+2026-03-20 20:09:37,007  INFO  Game over — score: 0, best: 12
+2026-03-20 20:22:53,555  INFO  Game started — mode: MAZE
+2026-03-20 20:22:59,362  INFO  Game over — score: 0, best: 12
+2026-03-20 20:23:01,460  INFO  Game started — mode: MAZE
+2026-03-20 20:23:03,618  INFO  Game over — score: 0, best: 12
+2026-03-20 20:23:04,651  INFO  Game started — mode: MAZE
+2026-03-20 20:23:12,765  INFO  Game over — score: 0, best: 12
+2026-03-20 20:23:56,437  INFO  Game started — mode: MAZE
+2026-03-20 20:24:04,276  INFO  Game over — score: 0, best: 12
+2026-03-20 20:24:05,275  INFO  Game started — mode: MAZE
+2026-03-20 20:24:31,751  INFO  Game over — score: 0, best: 12
+2026-03-20 20:25:46,592  INFO  Game started — mode: MAZE
+2026-03-20 20:28:11,937  INFO  Game started — mode: MAZE
+2026-03-20 20:30:21,865  INFO  Game over — score: 0, best: 12
+2026-03-20 20:31:27,754  INFO  Game started — mode: MAZE
+2026-03-20 20:32:16,496  INFO  Game started — mode: MAZE
+2026-03-20 20:36:00,914  INFO  Game over — score: 0, best: 12
+2026-03-20 20:36:01,930  INFO  Game started — mode: MAZE
+2026-03-20 20:36:04,381  INFO  Game over — score: 0, best: 12
+2026-03-20 20:36:05,689  INFO  Game started — mode: MAZE
+2026-03-20 20:36:08,465  INFO  Game over — score: 0, best: 12
+2026-03-20 20:36:09,326  INFO  Game started — mode: MAZE
+2026-03-20 20:36:24,889  INFO  Game over — score: 0, best: 12
+2026-03-20 20:48:35,856  INFO  Game started — mode: CLASSIC
+2026-03-20 20:48:39,049  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-03-20 20:48:41,666  INFO  Food eaten (NORMAL) — delta: 2, score: 4
+2026-03-20 20:48:44,031  INFO  Food eaten (GOLDEN) — delta: 1, score: 5
+2026-03-20 20:48:48,001  INFO  Food eaten (GOLDEN) — delta: 3, score: 8
+2026-03-20 20:48:51,801  INFO  Game over — score: 8, best: 12
+2026-03-20 20:49:00,127  INFO  Game started — mode: CLASSIC
+2026-03-20 20:49:03,249  INFO  Game over — score: 0, best: 12
+2026-03-20 20:49:04,467  INFO  Game started — mode: CLASSIC
+2026-03-20 20:49:07,334  INFO  Game over — score: 0, best: 12
+2026-03-20 20:49:08,242  INFO  Game started — mode: CLASSIC
+2026-03-20 20:49:10,929  INFO  Game over — score: 0, best: 12
+2026-03-20 20:49:12,926  INFO  Game started — mode: CLASSIC
+2026-03-20 20:49:17,317  INFO  Game over — score: 0, best: 12
+2026-03-20 20:49:18,281  INFO  Game started — mode: CLASSIC
+2026-03-20 20:49:23,530  INFO  Game over — score: 0, best: 12
+2026-03-20 21:03:34,254  INFO  Game started — mode: CLASSIC
+2026-03-20 21:03:36,234  INFO  Food eaten (GOLDEN) — delta: 1, score: 1
+2026-03-20 21:03:38,683  INFO  Game over — score: 1, best: 12
+2026-03-20 21:03:43,617  INFO  Game started — mode: CLASSIC
+2026-03-20 21:03:57,150  INFO  Game started — mode: TIME_ATTACK
+2026-03-20 21:03:59,348  INFO  Game over — score: 0, best: 12
+2026-03-20 21:04:05,239  INFO  Game started — mode: TIME_ATTACK
+2026-03-20 21:04:07,771  INFO  Game started — mode: SURVIVAL
+2026-03-20 21:04:15,032  INFO  Game over — score: 0, best: 12
+2026-03-20 21:04:18,543  INFO  Game started — mode: SURVIVAL
+2026-03-20 21:04:20,438  INFO  Game started — mode: MAZE
+2026-03-20 21:04:49,026  INFO  Game over — score: 0, best: 12
+2026-03-22 12:46:05,794  INFO  Game started — mode: MAZE
+2026-03-22 12:46:17,104  INFO  Game over — score: 0, best: 12
