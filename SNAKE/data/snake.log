@@ -430,3 +430,31 @@
 2026-03-20 21:04:49,026  INFO  Game over — score: 0, best: 12
 2026-03-22 12:46:05,794  INFO  Game started — mode: MAZE
 2026-03-22 12:46:17,104  INFO  Game over — score: 0, best: 12
+2026-03-22 12:49:02,268  INFO  Game started — mode: CLASSIC
+2026-03-22 12:49:03,097  INFO  Food eaten (MOVING) — delta: 3, score: 3
+2026-03-22 12:49:10,212  INFO  Game over — score: 3, best: 12
+2026-03-22 12:49:16,669  INFO  Game started — mode: CLASSIC
+2026-03-22 12:49:25,861  INFO  Game started — mode: SURVIVAL
+2026-03-22 12:49:31,602  INFO  Food eaten (NORMAL) — delta: 2, score: 2
+2026-03-22 12:49:34,896  INFO  Game over — score: 2, best: 12
+2026-03-22 12:49:39,506  INFO  Game started — mode: SURVIVAL
+2026-03-22 12:49:42,375  INFO  Game over — score: 0, best: 12
+2026-03-22 12:49:47,173  INFO  Game started — mode: SURVIVAL
+2026-03-22 12:49:55,699  INFO  Food eaten (NORMAL) — delta: 3, score: 3
+2026-03-22 12:49:59,243  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-03-22 12:50:01,860  INFO  Food eaten (MOVING) — delta: 1, score: 5
+2026-03-22 12:50:05,039  INFO  Food eaten (NORMAL) — delta: 2, score: 7
+2026-03-22 12:50:21,590  INFO  Food eaten (NORMAL) — delta: 1, score: 8
+2026-03-22 12:50:26,117  INFO  Food eaten (NORMAL) — delta: 1, score: 9
+2026-03-22 12:50:29,565  INFO  Food eaten (NORMAL) — delta: 1, score: 10
+2026-03-22 12:50:34,986  INFO  Game over — score: 10, best: 12
+2026-03-23 14:47:52,866  INFO  Game started — mode: MAZE
+2026-03-23 14:49:11,323  INFO  Game over — score: 0, best: 12
+2026-03-23 14:57:23,428  INFO  Game started — mode: MAZE
+2026-03-23 14:57:27,058  INFO  Game over — score: 0, best: 12
+2026-03-23 14:58:38,283  INFO  Game started — mode: MAZE
+2026-03-23 14:58:39,441  INFO  Game over — score: 0, best: 12
+2026-03-23 15:00:09,035  INFO  Game started — mode: MAZE
+2026-03-23 15:00:10,021  INFO  Game over — score: 0, best: 12
+2026-03-23 15:00:54,531  INFO  Game started — mode: MAZE
+2026-03-23 15:00:55,585  INFO  Game over — score: 0, best: 12

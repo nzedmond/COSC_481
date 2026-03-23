@@ -47,13 +47,13 @@ class UI:
                 color = ORANGE
             else:
                 color = SKYBLUE
-            draw_text(tag, WINDOW_WIDTH // 2 - 55, HDR_PAD, 16, color)
+            draw_text(tag, WINDOW_WIDTH // 2 - 20, HDR_PAD, 16, color)
         # Controls hint on the right
         draw_text("Arrow Keys  |  [ ] Speed  |  P Pause",
                   WINDOW_WIDTH - 290, HDR_PAD + 2, 14, GRAY)
 
     def draw_menu(self, selected_mode=0):
-        draw_text("SNAKE", WINDOW_WIDTH // 2 - 60, WINDOW_HEIGHT // 3, 50, DARKGREEN)
+        draw_text("SNAKE", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 4, 50, DARKGREEN)
 
         # Mode selector
         modes      = list(_MODE_LABELS.values())
@@ -95,7 +95,7 @@ class UI:
             draw_text(key,  cx,       y, 16, YELLOW)
             draw_text(desc, cx + 160, y, 16, WHITE)
 
-        # ── Food types (right column) ─────────────────────────────────────────
+        # ================ Food types (right column) =========================
         fx, fy = 450, 80
         draw_text("FOOD TYPES", fx, fy, 20, LIGHTGRAY)
         foods = [
@@ -110,7 +110,7 @@ class UI:
             draw_text(name,   fx + 24, y,      16, color)
             draw_text(effect, fx + 24, y + 18, 13, GRAY)
 
-        # ── Power-ups ─────────────────────────────────────────────────────────
+        # ========================== Power-ups ===================================
         draw_line(40, 290, WINDOW_WIDTH - 40, 290, DARKGRAY)
         draw_text("POWER-UPS", 50, 298, 20, LIGHTGRAY)
         draw_text("(white-bordered pickups — appear every 5 s)", 200, 300, 14, GRAY)
@@ -163,6 +163,7 @@ class UI:
             y += 26
 
     def draw_game_over(self, score, high_score):
+        draw_rectangle_gradient_v(210, 180, 380, 230, GRAY, RAYWHITE)
         draw_text("GAME OVER", WINDOW_WIDTH // 2 - 115, WINDOW_HEIGHT // 3, 48, RED)
         draw_text(f"Score: {score}", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 2, 24, BLACK)
         draw_text(f"Best:  {high_score}", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 2 + 32, 24, DARKGRAY)
