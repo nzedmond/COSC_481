@@ -1,0 +1,117 @@
+import random
+
+from raylib import *
+from pyray import *
+from settings import *
+
+
+class Obstacle:
+    def __init__(self, position):
+        self.position = position
+        self.size     = OBSTACLE_SIZE
+
+    def draw(self):
+        draw_rectangle(int(self.position.x), int(self.position.y),
+                       self.size, self.size, OBSTACLE_COLOR)
+        draw_rectangle_lines(int(self.position.x), int(self.position.y),
+                             self.size, self.size, BLACK)
+
+
+# ── Maze generation ────────────────────────────────────────────────────────────
+
+def generate_maze():
+    """Perfect maze via recursive-backtracker DFS. Returns a list of Obstacle."""
+    CELL = SNAKE_SIZE * 2                           # 40 px per maze cell
+    cols = WINDOW_WIDTH // CELL                     # 20
+    rows = (WINDOW_HEIGHT - HEADER_HEIGHT) // CELL  # 14
+
+    # Every snake tile starts as a wall
+    wall_tiles = set()
+    for tx in range(WINDOW_WIDTH // SNAKE_SIZE):
+        for ty in range((WINDOW_HEIGHT - HEADER_HEIGHT) // SNAKE_SIZE):
+            wall_tiles.add((tx, ty))
+
+    visited = set()
+
+    def carve(cx, cy):
+        visited.add((cx, cy))
+        wall_tiles.discard((cx * 2, cy * 2))          # open this cell's tile
+        dirs = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+        random.shuffle(dirs)
+        for dx, dy in dirs:
+            nx, ny = cx + dx, cy + dy
+            if 0 <= nx < cols and 0 <= ny < rows and (nx, ny) not in visited:
+                wall_tiles.discard((cx * 2 + dx, cy * 2 + dy))  # open connecting tile
+                carve(nx, ny)
+
+    sx, sy = MAZE_START_CELL
+    carve(sx, sy)
+
+    return [
+        Obstacle(Vector2(float(tx * SNAKE_SIZE),
+                         float(HEADER_HEIGHT + ty * SNAKE_SIZE)))
+        for tx, ty in wall_tiles
+    ]
+
+
+# ── Manager ───────────────────────────────────────────────────────────────────
+
+class ObstacleManager:
+    def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
+        self._spawn_every = spawn_every
+        self._dynamic     = dynamic   # False in maze mode — no new spawns
+        self.obstacles    = []
+        self._last_score  = 0
+
+    def reset(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
+        self._spawn_every = spawn_every
+        self._dynamic     = dynamic
+        self.obstacles    = []
+        self._last_score  = 0
+
+    def preload(self, obstacles):
+        """Replace the obstacle list with a pre-built set (used for maze mode)."""
+        self.obstacles = obstacles
+        self._dynamic  = False
+
+    @property
+    def positions(self):
+        """Vector2 list for spawn-exclusion checks in food and powerup code."""
+        return [obs.position for obs in self.obstacles]
+
+    # ── Public API ─────────────────────────────────────────────────────────────
+
+    def update(self, score, snake, food):
+        if not self._dynamic:
+            return
+        while (score - self._last_score >= self._spawn_every
+               and len(self.obstacles) < OBSTACLE_MAX):
+            self._last_score += self._spawn_every
+            self._spawn(snake, food)
+
+    def check_collision(self, snake):
+        head = snake.body[0]
+        return any(head.x == obs.position.x and head.y == obs.position.y
+                   for obs in self.obstacles)
+
+    def draw(self):
+        for obs in self.obstacles:
+            obs.draw()
+
+    # ── Helpers ────────────────────────────────────────────────────────────────
+
+    def _spawn(self, snake, food):
+        occupied = {(s.x, s.y) for s in snake.body}
+        occupied.add((food.position.x, food.position.y))
+        for obs in self.obstacles:
+            occupied.add((obs.position.x, obs.position.y))
+
+        for _ in range(200):
+            candidate = Vector2(
+                random.randint(0, (WINDOW_WIDTH - OBSTACLE_SIZE) // OBSTACLE_SIZE) * OBSTACLE_SIZE,
+                random.randint(HEADER_HEIGHT // OBSTACLE_SIZE,
+                               (WINDOW_HEIGHT - OBSTACLE_SIZE) // OBSTACLE_SIZE) * OBSTACLE_SIZE,
+            )
+            if (candidate.x, candidate.y) not in occupied:
+                self.obstacles.append(Obstacle(candidate))
+                return

@@ -53,6 +53,8 @@ class UI:
                   WINDOW_WIDTH - 290, HDR_PAD + 2, 14, GRAY)
 
     def draw_menu(self, selected_mode=0):
+        # self.draw_grid() # DELETE AFTER MEASURING SCREEN DIMENSIONS !!!!!!!!!!!!!!!
+        # draw_rectangle_gradient_v(280, 140, 260, 240, Color(112, 128, 144, 255), Color(47, 79, 79, 255))
         draw_text("SNAKE", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 4, 50, DARKGREEN)
 
         # Mode selector
