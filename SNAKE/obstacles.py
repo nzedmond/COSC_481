@@ -11,16 +11,17 @@ class Obstacle:
         self.size     = OBSTACLE_SIZE
 
     def draw(self):
+        '''Render the obstacle'''
         draw_rectangle(int(self.position.x), int(self.position.y),
                        self.size, self.size, OBSTACLE_COLOR)
         draw_rectangle_lines(int(self.position.x), int(self.position.y),
                              self.size, self.size, BLACK)
 
 
-# ── Maze generation ────────────────────────────────────────────────────────────
+# ========================== Maze generation =========================================
 
 def generate_maze():
-    """Perfect maze via recursive-backtracker DFS. Returns a list of Obstacle."""
+    '''Create a maze using DFS and return a list of obstacle objects'''
     CELL = SNAKE_SIZE * 2                           # 40 px per maze cell
     cols = WINDOW_WIDTH // CELL                     # 20
     rows = (WINDOW_HEIGHT - HEADER_HEIGHT) // CELL  # 14
@@ -34,12 +35,13 @@ def generate_maze():
     visited = set()
 
     def carve(cx, cy):
+        '''Carves path stating from (cx, cy)'''
         visited.add((cx, cy))
-        wall_tiles.discard((cx * 2, cy * 2))          # open this cell's tile
-        dirs = [(0, -1), (0, 1), (-1, 0), (1, 0)]
+        wall_tiles.discard((cx * 2, cy * 2))          # remove the wall at this cell (create a path)
+        dirs = [(0, -1), (0, 1), (-1, 0), (1, 0)]  # possible directions (UP/DOWN/LEFT/RIGHT)
         random.shuffle(dirs)
         for dx, dy in dirs:
-            nx, ny = cx + dx, cy + dy
+            nx, ny = cx + dx, cy + dy  # neighbor cell coordinates
             if 0 <= nx < cols and 0 <= ny < rows and (nx, ny) not in visited:
                 wall_tiles.discard((cx * 2 + dx, cy * 2 + dy))  # open connecting tile
                 carve(nx, ny)
@@ -54,7 +56,7 @@ def generate_maze():
     ]
 
 
-# ── Manager ───────────────────────────────────────────────────────────────────
+# ========================== Manager ===========================
 
 class ObstacleManager:
     def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
@@ -79,8 +81,6 @@ class ObstacleManager:
         """Vector2 list for spawn-exclusion checks in food and powerup code."""
         return [obs.position for obs in self.obstacles]
 
-    # ── Public API ─────────────────────────────────────────────────────────────
-
     def update(self, score, snake, food):
         if not self._dynamic:
             return
@@ -98,7 +98,7 @@ class ObstacleManager:
         for obs in self.obstacles:
             obs.draw()
 
-    # ── Helpers ────────────────────────────────────────────────────────────────
+    # =================== Helpers =========================
 
     def _spawn(self, snake, food):
         occupied = {(s.x, s.y) for s in snake.body}

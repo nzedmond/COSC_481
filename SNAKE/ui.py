@@ -91,6 +91,7 @@ class UI:
             ("ENTER",       "Start / restart game"),
             ("M",           "Return to menu (game over)"),
             ("I / BACKSPACE", "Open / close this screen"),
+            ("T",            "Path hint (Maze — pause first or use at start)"),
         ]
         for i, (key, desc) in enumerate(rows):
             y = cy + 28 + i * 26
@@ -163,6 +164,47 @@ class UI:
             if bar_h > 0:
                 draw_rectangle(x + 20, y + (18 - bar_h), 4, bar_h, p.color)
             y += 26
+
+    def draw_tip_overlay(self, path_tiles, obstacle_positions, snake_head, food_pos, food_color):
+        """Minimap in the top-right corner showing the BFS path from the snake to the food."""
+        SCALE = 5
+        COLS  = WINDOW_WIDTH  // _CELL
+        ROWS  = _PLAYABLE_H   // _CELL
+        W, H  = COLS * SCALE, ROWS * SCALE
+        ox    = WINDOW_WIDTH - W - 10
+        oy    = HEADER_HEIGHT + 10
+
+        # Border + dark background
+        draw_rectangle(ox - 2, oy - 2, W + 4, H + 4, WHITE)
+        draw_rectangle(ox, oy, W, H, Color(15, 15, 15, 255))
+
+        # Maze walls
+        for pos in obstacle_positions:
+            tx = int(pos.x) // _CELL
+            ty = int(pos.y - HEADER_HEIGHT) // _CELL
+            draw_rectangle(ox + tx * SCALE, oy + ty * SCALE, SCALE, SCALE, BROWN)
+
+        # BFS path as a cyan line
+        for i in range(len(path_tiles) - 1):
+            tx1, ty1 = path_tiles[i]
+            tx2, ty2 = path_tiles[i + 1]
+            draw_line(
+                ox + tx1 * SCALE + SCALE // 2, oy + ty1 * SCALE + SCALE // 2,
+                ox + tx2 * SCALE + SCALE // 2, oy + ty2 * SCALE + SCALE // 2, RED
+            )
+
+        # Snake head (green square)
+        hx = int(snake_head.x) // _CELL
+        hy = int(snake_head.y - HEADER_HEIGHT) // _CELL
+        draw_rectangle(ox + hx * SCALE, oy + hy * SCALE, SCALE, SCALE, GREEN)
+
+        # Food (colored square)
+        fx = int(food_pos.x) // _CELL
+        fy = int(food_pos.y - HEADER_HEIGHT) // _CELL
+        draw_rectangle(ox + fx * SCALE, oy + fy * SCALE, SCALE, SCALE, food_color)
+
+        # Label at the bottom of the minimap
+        draw_text("T  PATH HINT", ox + 4, oy + H - 13, 11, DARKGRAY)
 
     def draw_game_over(self, score, high_score):
         draw_rectangle_gradient_v(210, 180, 380, 230, GRAY, RAYWHITE)
