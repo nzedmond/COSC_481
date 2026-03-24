@@ -8,15 +8,22 @@ from entities.collectible import build_collectibles
 from systems.level import Level
 from systems.collision_manager import CollisionManager
 from systems.score_manager import ScoreManager
+from systems.save_manager import SaveManager
 from rendering.renderer import Renderer
 from rendering.camera import Camera
 from rendering.parallax import ParallaxBackground
 from rendering.particle_system import ParticleSystem
 from rendering.effects import ScreenEffects
 from rendering.hud import HUD
+from rendering.menu import MainMenu, PauseMenu, GameOverMenu, LevelCompleteMenu
 from rendering.trail_renderer import current_trail_color
 
 _PICKUP_RADIUS = 8.0   # extra tolerance added to collectible.radius on pickup
+
+# All available levels (extend this list to add more)
+_LEVELS = [
+    {"name": "Cave Run", "path": "levels/level1.json"},
+]
 
 
 class Game:
@@ -24,19 +31,35 @@ class Game:
         init_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Geometry Snake")
         set_target_fps(FPS)
 
-        self.input = InputManager()
+        self.input        = InputManager()
         self._accumulator = 0.0
-        self._debug = False
+        self._debug       = False
         self._collision_checks = 0
-        self._hud = HUD()
-        self.reset()
 
-    def reset(self):
+        self._save    = SaveManager()
+        self._hud     = HUD()
+        self._pause_menu    = PauseMenu()
+        self._over_menu     = GameOverMenu()
+        self._complete_menu = LevelCompleteMenu()
+        self._main_menu     = MainMenu(_LEVELS, self._save)
+
+        # Runtime result cache (populated on game-over / level-complete)
+        self._run_score    = 0
+        self._run_pct      = 0.0
+        self._best_score   = 0
+        self._best_pct     = 0.0
+        self._new_best     = False
+
+        # Start on the main menu
+        self.state = GameState.MENU
+
+    def reset(self, level_path=None):
         self.state = GameState.PLAYING
         self._accumulator = 0.0
         self._collision_checks = 0
 
-        self.level        = Level(DEFAULT_LEVEL)
+        path = level_path or self._main_menu.selected_level_path
+        self.level        = Level(path)
         self.player       = Player()
         self.trail        = Trail()
         self.collectibles = build_collectibles(self.level.collectibles)
@@ -79,18 +102,28 @@ class Game:
         close_window()
 
     def _update_loop(self, dt):
+        if self.state == GameState.MENU:
+            action = self._main_menu.handle_input()
+            if action == "play":
+                self.reset()
+            return
+
         if is_key_pressed(KEY_D):
             self._debug = not self._debug
 
         if self.state in (GameState.GAME_OVER, GameState.LEVEL_COMPLETE):
             if is_key_pressed(KEY_R):
                 self.reset()
+            elif is_key_pressed(KEY_ESCAPE):
+                self.state = GameState.MENU
             return
 
         if self.state == GameState.PAUSED:
             if is_key_pressed(KEY_P):
                 self._accumulator = 0.0
                 self.state = GameState.PLAYING
+            elif is_key_pressed(KEY_ESCAPE):
+                self.state = GameState.MENU
             return
 
         if self.state == GameState.PLAYING:
@@ -122,22 +155,38 @@ class Game:
         self.effects.update(dt)
 
         if self.player.pos.x >= self.level.level_end_x:
-            self.state = GameState.LEVEL_COMPLETE
+            self._end_run(completed=True)
             return
 
         self._check_collectibles()
 
         self._collision_checks += 1
         if self.collision.check_all():
-            self.state = GameState.GAME_OVER
-            self.camera.add_trauma(SHAKE_DEATH_TRAUMA)
             progress = min(1.0, self.player.pos.x / self.level.level_end_x)
+            self.camera.add_trauma(SHAKE_DEATH_TRAUMA)
             self.particles.emit_burst(
                 self.player.pos.x, self.player.pos.y,
                 PARTICLE_DEATH_COUNT,
                 PARTICLE_DEATH_SPEED,
                 current_trail_color(progress),
             )
+            self._end_run(completed=False)
+
+    def _end_run(self, completed: bool):
+        progress = min(1.0, self.player.pos.x / self.level.level_end_x)
+        score    = self.score_manager.score
+        name     = self.level.name
+
+        new_best  = self._save.update(name, score, progress if completed else progress)
+        best_score, best_pct, _ = self._save.get_best(name)
+
+        self._run_score  = score
+        self._run_pct    = progress
+        self._best_score = best_score
+        self._best_pct   = best_pct
+        self._new_best   = new_best
+
+        self.state = GameState.LEVEL_COMPLETE if completed else GameState.GAME_OVER
 
     def _check_collectibles(self):
         px, py = self.player.pos.x, self.player.pos.y
@@ -158,23 +207,37 @@ class Game:
     # ------------------------------------------------------------------
 
     def _render(self):
+        begin_drawing()
+
+        if self.state == GameState.MENU:
+            clear_background(BLACK)
+            self._main_menu.draw()
+            end_drawing()
+            return
+
         interp   = self._accumulator / FIXED_DT
         progress = min(1.0, self.player.pos.x / self.level.level_end_x)
 
-        begin_drawing()
-
         self.renderer.draw(progress, self.player.speed_mult)
         self.effects.draw()
-        self._hud.draw(self.score_manager)
+        self._hud.draw(self.score_manager, progress)
 
         if self.state == GameState.PAUSED:
-            draw_text("PAUSED - Press P to Resume", 220, 280, 20, YELLOW)
+            self._pause_menu.draw()
 
-        if self.state == GameState.GAME_OVER:
-            draw_text("GAME OVER - Press R to Restart", 180, 280, 20, RED)
+        elif self.state == GameState.GAME_OVER:
+            self._over_menu.draw(
+                self._run_score, self._best_score,
+                self._run_pct,   self._best_pct,
+                self._new_best,
+            )
 
-        if self.state == GameState.LEVEL_COMPLETE:
-            draw_text("LEVEL COMPLETE! - Press R to Play Again", 130, 280, 20, GREEN)
+        elif self.state == GameState.LEVEL_COMPLETE:
+            self._complete_menu.draw(
+                self._run_score, self._best_score,
+                self._run_pct,   self._best_pct,
+                self._new_best,
+            )
 
         if self._debug:
             self._draw_debug_overlay(interp, progress)

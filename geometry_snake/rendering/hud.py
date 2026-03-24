@@ -7,6 +7,9 @@ Layout (top-left corner):
   │  ● ● ◌ ◌ ◌   3 / 5   │
   └───────────────────────┘
 
+Progress bar at bottom of screen:
+  [████████░░░░░░░░░░░░]  64%
+
 Dots represent individual collectibles (filled = collected).
 If the level has more than MAX_DOTS collectibles the dots are replaced
 by a plain "X / Y" counter to avoid overflow.
@@ -28,9 +31,16 @@ _COL_MISS   = Color(90, 90, 90, 255)
 _COL_BG     = Color(0, 0, 0, 150)
 _COL_BORDER = Color(255, 255, 255, 30)
 
+# Progress bar
+_BAR_H      = 6
+_BAR_MARGIN = 40
+_BAR_Y      = SCREEN_HEIGHT - 16
+_COL_BAR_BG = Color(40,  40,  40,  200)
+_COL_BAR_FG = Color(0,  220, 255,  220)   # cyan, matches trail head
+
 
 class HUD:
-    def draw(self, score_manager):
+    def draw(self, score_manager, progress: float = 0.0):
         sm = score_manager
 
         # Background panel
@@ -56,3 +66,14 @@ class HUD:
             counter = f"{sm.collected} / {sm.total}"
             draw_text("ITEMS", _PANEL_X + 10, row_y - 6, 12, _COL_LABEL)
             draw_text(counter,  _PANEL_X + 60, row_y - 7, 14, _COL_HIT)
+
+        # Progress bar at bottom of screen
+        bar_w    = SCREEN_WIDTH - _BAR_MARGIN * 2
+        filled_w = int(bar_w * max(0.0, min(1.0, progress)))
+        draw_rectangle(_BAR_MARGIN, _BAR_Y, bar_w,    _BAR_H, _COL_BAR_BG)
+        if filled_w > 0:
+            draw_rectangle(_BAR_MARGIN, _BAR_Y, filled_w, _BAR_H, _COL_BAR_FG)
+        pct_str = f"{progress:.0%}"
+        draw_text(pct_str,
+                  _BAR_MARGIN + bar_w + 8,
+                  _BAR_Y - 2, 12, _COL_LABEL)
