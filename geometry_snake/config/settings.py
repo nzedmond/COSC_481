@@ -11,3 +11,6 @@ PLAYER_SPEED_Y = 160.0
 TRAIL_MAX_LENGTH = 500
 TRAIL_MIN_STEP = 6.0
 COLLISION_RADIUS = 8.0
+COLLISION_MARGIN = 2.0       # forgiveness pixels shrunk from collision radius
+SELF_COLLISION_SKIP = 8      # ignore this many newest trail points near head
+LOOKAHEAD = 200.0            # x-range for AABB broad-phase culling
