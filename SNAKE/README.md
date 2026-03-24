@@ -29,6 +29,7 @@ python main.py
 | `ENTER` | Start game / restart after game over |
 | `M` | Return to menu (game over screen only) |
 | `I` / `BACKSPACE` | Open / close instructions screen |
+| `T` | Show / hide path hint (Maze mode only — pause first or use before moving) |
 
 ---
 
@@ -41,7 +42,7 @@ Select a mode from the main menu using **Up/Down** then **ENTER**.
 | **Classic** | Standard snake. Obstacles appear every 3 points (max 20). |
 | **Time Attack** | Score as many points as possible within **60 seconds**. Timer shown in the header; turns red when ≤ 10 s remain. |
 | **Survival** | Snake speeds up every 5 points. Obstacles spawn every 2 points. Designed to end — survive as long as you can. |
-| **Maze** | A randomly generated perfect maze fills the board. Snake starts frozen at the slowest speed; press any arrow key to begin. No additional obstacles spawn. |
+| **Maze** | A randomly generated perfect maze fills the board. Snake starts frozen at the slowest speed; press any arrow key to begin. No additional obstacles spawn. Press `T` before moving (or while paused) to reveal the shortest path to the food. |
 
 ---
 
