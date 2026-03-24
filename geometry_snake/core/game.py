@@ -4,14 +4,19 @@ from core.input_manager import InputManager
 from core.state import GameState
 from entities.player import Player
 from entities.trail import Trail
+from entities.collectible import build_collectibles
 from systems.level import Level
 from systems.collision_manager import CollisionManager
+from systems.score_manager import ScoreManager
 from rendering.renderer import Renderer
 from rendering.camera import Camera
 from rendering.parallax import ParallaxBackground
 from rendering.particle_system import ParticleSystem
 from rendering.effects import ScreenEffects
+from rendering.hud import HUD
 from rendering.trail_renderer import current_trail_color
+
+_PICKUP_RADIUS = 8.0   # extra tolerance added to collectible.radius on pickup
 
 
 class Game:
@@ -23,6 +28,7 @@ class Game:
         self._accumulator = 0.0
         self._debug = False
         self._collision_checks = 0
+        self._hud = HUD()
         self.reset()
 
     def reset(self):
@@ -30,10 +36,13 @@ class Game:
         self._accumulator = 0.0
         self._collision_checks = 0
 
-        self.level = Level(DEFAULT_LEVEL)
+        self.level        = Level(DEFAULT_LEVEL)
+        self.player       = Player()
+        self.trail        = Trail()
+        self.collectibles = build_collectibles(self.level.collectibles)
 
-        self.player  = Player()
-        self.trail   = Trail()
+        self.score_manager = ScoreManager()
+        self.score_manager.setup(len(self.collectibles))
 
         cam_cfg = self.level.camera_config
         self.camera = Camera(
@@ -55,7 +64,12 @@ class Game:
         self.renderer = Renderer(
             self.player, self.trail, self.level.obstacles,
             self.camera, self.parallax, self.particles,
+            self.collectibles,
         )
+
+    # ------------------------------------------------------------------
+    # Main loop
+    # ------------------------------------------------------------------
 
     def run(self):
         while not window_should_close():
@@ -93,6 +107,10 @@ class Game:
             self._fixed_update(holding, FIXED_DT)
             self._accumulator -= FIXED_DT
 
+    # ------------------------------------------------------------------
+    # Physics tick
+    # ------------------------------------------------------------------
+
     def _fixed_update(self, holding, dt):
         """Physics/model step — no draw calls here."""
         self.player.speed_mult = self.level.speed_multiplier_at(self.player.pos.x)
@@ -107,6 +125,8 @@ class Game:
             self.state = GameState.LEVEL_COMPLETE
             return
 
+        self._check_collectibles()
+
         self._collision_checks += 1
         if self.collision.check_all():
             self.state = GameState.GAME_OVER
@@ -119,15 +139,33 @@ class Game:
                 current_trail_color(progress),
             )
 
+    def _check_collectibles(self):
+        px, py = self.player.pos.x, self.player.pos.y
+        for col in self.collectibles:
+            if col.collected:
+                continue
+            dx = px - col.x
+            dy = py - col.y
+            if (dx * dx + dy * dy) ** 0.5 < col.radius + _PICKUP_RADIUS:
+                col.collected = True
+                self.score_manager.collect(col.value)
+                self.particles.emit_burst(
+                    col.x, col.y, 15, 120, col.color,
+                )
+
+    # ------------------------------------------------------------------
+    # Render
+    # ------------------------------------------------------------------
+
     def _render(self):
-        """View step — parallax + world (camera) + effects + HUD."""
         interp   = self._accumulator / FIXED_DT
         progress = min(1.0, self.player.pos.x / self.level.level_end_x)
 
         begin_drawing()
 
         self.renderer.draw(progress, self.player.speed_mult)
-        self.effects.draw()   # vignette + fade — screen space, on top of world
+        self.effects.draw()
+        self._hud.draw(self.score_manager)
 
         if self.state == GameState.PAUSED:
             draw_text("PAUSED - Press P to Resume", 220, 280, 20, YELLOW)
@@ -151,6 +189,8 @@ class Game:
             f"Vel:        ({p.vel.x:.1f}, {p.vel.y:.1f})",
             f"Speed mult: {p.speed_mult:.2f}",
             f"Progress:   {progress:.1%}",
+            f"Score:      {self.score_manager.score}",
+            f"Collected:  {self.score_manager.collected}/{self.score_manager.total}",
             f"Level end:  {self.level.level_end_x}",
             f"Scroll X:   {self.camera.scroll_x:.1f}",
             f"Trauma:     {self.camera.trauma:.2f}",
