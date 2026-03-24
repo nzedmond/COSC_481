@@ -3,7 +3,7 @@ from config.settings import *
 
 class Player:
     def __init__(self):
-        self.pos = Vector2(100, 300)
+        self.pos = Vector2(100, SCREEN_HEIGHT // 2)
         self.prev_pos = self.pos
         self.heading_up = False
         
