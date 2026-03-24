@@ -42,10 +42,15 @@ class ParallaxBackground:
     elements stay in screen space.
     """
 
-    def __init__(self, level_width=LEVEL_WIDTH, seed=42):
+    def __init__(self, level_width=LEVEL_WIDTH, seed=42, speed_overrides=None):
+        """speed_overrides: optional list of {"speed": float} from level JSON,
+        one entry per layer.  Extra or missing entries are handled gracefully."""
         rng = random.Random(seed)
         self._layers = []
-        for cfg in _LAYER_DEFS:
+        for i, cfg in enumerate(_LAYER_DEFS):
+            speed = cfg["speed"]
+            if speed_overrides and i < len(speed_overrides):
+                speed = float(speed_overrides[i].get("speed", speed))
             rects = []
             for _ in range(cfg["count"]):
                 wx = rng.randint(0, level_width)
@@ -54,7 +59,7 @@ class ParallaxBackground:
                 h  = rng.randint(cfg["min_h"], cfg["max_h"])
                 rects.append((wx, wy, w, h))
             self._layers.append({
-                "speed": cfg["speed"],
+                "speed": speed,
                 "color": cfg["color"],
                 "rects": rects,
             })

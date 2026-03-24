@@ -16,6 +16,7 @@ SELF_COLLISION_SKIP = 8      # ignore this many newest trail points near head
 LOOKAHEAD = 200.0            # x-range for AABB broad-phase culling
 
 LEVEL_WIDTH = 5000           # default level length; overridden by JSON in Phase 4
+DEFAULT_LEVEL = "levels/level1.json"
 
 CAMERA_LERP = 0.08           # smoothing factor applied each fixed tick
 CAMERA_LOOKAHEAD = 160       # world pixels ahead of player shown at screen centre

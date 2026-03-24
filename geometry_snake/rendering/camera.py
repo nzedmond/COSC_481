@@ -10,11 +10,14 @@ class Camera:
     The camera itself is updated once per fixed physics tick.
     """
 
-    def __init__(self, level_width=LEVEL_WIDTH):
+    def __init__(self, level_width=LEVEL_WIDTH,
+                 lookahead=CAMERA_LOOKAHEAD, lerp=CAMERA_LERP):
         self.level_width = level_width
-        self._lerp_x = SCREEN_WIDTH / 2.0
-        self._lerp_y = SCREEN_HEIGHT / 2.0
-        self._trauma = 0.0
+        self._lookahead  = lookahead
+        self._lerp       = lerp
+        self._lerp_x     = SCREEN_WIDTH / 2.0
+        self._lerp_y     = SCREEN_HEIGHT / 2.0
+        self._trauma     = 0.0
 
         self._cam = Camera2D()
         self._cam.offset = Vector2(SCREEN_WIDTH / 2.0, SCREEN_HEIGHT / 2.0)
@@ -32,12 +35,12 @@ class Camera:
         Lerps toward player position + lookahead, clamps to level bounds,
         then applies a randomised shake offset proportional to trauma².
         """
-        desired_x = player_pos.x + CAMERA_LOOKAHEAD
+        desired_x = player_pos.x + self._lookahead
         # Y is fixed — level height equals screen height, so no vertical scroll
         desired_y = SCREEN_HEIGHT / 2.0
 
-        self._lerp_x += (desired_x - self._lerp_x) * CAMERA_LERP
-        self._lerp_y += (desired_y - self._lerp_y) * CAMERA_LERP
+        self._lerp_x += (desired_x - self._lerp_x) * self._lerp
+        self._lerp_y += (desired_y - self._lerp_y) * self._lerp
 
         # Clamp so the view never shows empty space outside level bounds
         min_x = SCREEN_WIDTH / 2.0

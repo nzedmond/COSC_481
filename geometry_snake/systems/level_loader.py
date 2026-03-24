@@ -1,7 +1,7 @@
-import json
+from systems.level import Level
+
 
 class LevelLoader:
     @staticmethod
     def load(path):
-        with open(path, "r") as f:
-            return json.load(f)
+        return Level(path)
