@@ -11,7 +11,7 @@ class CollisionManager:
     def check_self_collision(self):
         head = self.player.pos
         for i, segment in enumerate(list(self.trail.points)[5:]):
-            dx = head.x - segment.X
+            dx = head.x - segment.x
             dy = head.y - segment.y
             
             if (dx*dx + dy*dy) ** 0.5 < COLLISION_RADIUS:

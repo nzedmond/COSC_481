@@ -1,7 +1,7 @@
 from pyray import *
 
 class Renderer:
-    def __init__(slf, player, trail):
+    def __init__(self, player, trail):
         self.player = player
         self.trail = trail
         
