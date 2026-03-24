@@ -3,5 +3,15 @@
     "best_score": 120,
     "best_pct": 0.8011,
     "attempts": 1
+  },
+  "The Gauntlet": {
+    "best_score": 80,
+    "best_pct": 1.0,
+    "attempts": 4
+  },
+  "Crystal Depths": {
+    "best_score": 80,
+    "best_pct": 1.0,
+    "attempts": 6
   }
 }

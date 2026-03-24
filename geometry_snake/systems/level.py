@@ -30,14 +30,15 @@ class Level:
 
         self._validate_top(raw, path)
 
-        self.name           = raw["name"]
-        self.level_end_x    = int(raw["length"])
-        self.start_x        = int(raw.get("start_x", 0))
-        self.speed_curve    = self._validated_speed_curve(raw.get("speed_curve", [{"x": 0, "mult": 1.0}]))
-        self.camera_config  = raw.get("camera", {})
+        self.name            = raw["name"]
+        self.level_end_x     = int(raw["length"])
+        self.start_x         = int(raw.get("start_x", 0))
+        self.speed_curve     = self._validated_speed_curve(raw.get("speed_curve", [{"x": 0, "mult": 1.0}]))
+        self.camera_config   = raw.get("camera", {})
         self.parallax_config = raw.get("parallax", [])
-        self.collectibles   = raw.get("collectibles", [])
-        self.obstacles      = self._build_obstacles(raw["obstacles"])
+        self.parallax_seed   = int(raw.get("parallax_seed", 42))
+        self.collectibles    = raw.get("collectibles", [])
+        self.obstacles       = self._build_obstacles(raw["obstacles"])
 
     # ------------------------------------------------------------------
     # Public helpers

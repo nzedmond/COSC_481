@@ -22,7 +22,9 @@ _PICKUP_RADIUS = 8.0   # extra tolerance added to collectible.radius on pickup
 
 # All available levels (extend this list to add more)
 _LEVELS = [
-    {"name": "Cave Run", "path": "levels/level1.json"},
+    {"name": "Cave Run",      "path": "levels/level1.json"},
+    {"name": "Crystal Depths","path": "levels/level2.json"},
+    {"name": "The Gauntlet",  "path": "levels/level3.json"},
 ]
 
 
@@ -75,6 +77,7 @@ class Game:
         )
         self.parallax = ParallaxBackground(
             level_width=self.level.level_end_x,
+            seed=self.level.parallax_seed,
             speed_overrides=self.level.parallax_config,
         )
         self.particles = ParticleSystem()
