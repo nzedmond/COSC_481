@@ -29,13 +29,20 @@ class UI:
             y = HEADER_HEIGHT + int(_CELL * i + _OFF_Y / 2)
             draw_line(0, y, WINDOW_WIDTH, y, LIGHTGRAY)
 
-    def draw_header(self, score, high_score, mode=None, time_left=0):
+    def draw_header(self, score, high_score, mode=None, time_left=0, score_pop_timer=0):
         # Background + bottom border
         draw_rectangle(0, 0, WINDOW_WIDTH, HEADER_HEIGHT, DARKGRAY)
         draw_line(0, HEADER_HEIGHT, WINDOW_WIDTH, HEADER_HEIGHT, BLACK)
-        # Score on the left
-        draw_text(f"Score: {score}",      HDR_PAD,       HDR_PAD, 18, WHITE)
-        draw_text(f"Best:  {high_score}", HDR_PAD + 130, HDR_PAD, 18, LIGHTGRAY)
+        # Score on the left — pops when points are earned
+        if score_pop_timer > 0:
+            ratio      = score_pop_timer / SCORE_POP_DURATION
+            score_size = int(18 + 8 * ratio)
+            score_col  = Color(255, int(255 * (1 - ratio * 0.5)), 0, 255)
+        else:
+            score_size = 18
+            score_col  = WHITE
+        draw_text(f"Score: {score}",      HDR_PAD,       HDR_PAD, score_size, score_col)
+        draw_text(f"Best:  {high_score}", HDR_PAD + 130, HDR_PAD, 18,         LIGHTGRAY)
         # Mode tag + timer (centre)
         if mode is not None and mode != Mode.CLASSIC:
             tag = _MODE_LABELS[mode]
@@ -164,6 +171,20 @@ class UI:
             if bar_h > 0:
                 draw_rectangle(x + 20, y + (18 - bar_h), 4, bar_h, p.color)
             y += 26
+
+    def draw_food_pops(self, pops):
+        """Expanding + fading square at each recently eaten food position."""
+        for pos, color, timer in pops:
+            ratio  = timer / FOOD_POP_DURATION
+            size   = int(FOOD_SIZE * (1 + ratio))
+            alpha  = int(255 * (1 - ratio))
+            offset = (size - FOOD_SIZE) // 2
+            draw_rectangle(
+                int(pos.x) - offset,
+                int(pos.y) - offset,
+                size, size,
+                color,
+            )
 
     def draw_tip_overlay(self, path_tiles, obstacle_positions, snake_head, food_pos, food_color):
         """Minimap in the top-right corner showing the BFS path from the snake to the food."""

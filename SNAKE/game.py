@@ -73,6 +73,8 @@ class Game:
         self._waiting_for_input = False   # maze: freeze until first arrow key
         self._show_tip          = False   # maze: path-hint overlay visible
         self._tip_path          = []      # list of (tx, ty) tile coords
+        self._food_pops         = []      # active eat animations: [Vector2, Color, timer]
+        self.score_pop_timer    = 0       # frames remaining for score text pop
 
     def update(self):
         match self.screens.current:
@@ -136,6 +138,13 @@ class Game:
         self.snake.handle_input()
         moved = self.snake.update()
 
+        # Tick pop animations every frame regardless of snake movement
+        for pop in self._food_pops:
+            pop[2] += 1
+        self._food_pops = [p for p in self._food_pops if p[2] < FOOD_POP_DURATION]
+        if self.score_pop_timer > 0:
+            self.score_pop_timer -= 1
+
         if not moved:
             return  # Skip collision checks if the snake didn't move this frame
 
@@ -149,8 +158,12 @@ class Game:
         obs_positions = self.obstacle_mgr.positions
         self.powerup_mgr.update(self.snake, self.food, obs_positions)
 
+        eaten_pos   = Vector2(self.food.position.x, self.food.position.y)
+        eaten_color = self.food.color
         score_delta = self.food.update(self.snake, obs_positions)
         if score_delta != 0:
+            self._food_pops.append([eaten_pos, eaten_color, 0])
+            self.score_pop_timer = SCORE_POP_DURATION
             self.score = max(0, self.score + score_delta)
             log.info(f"Food eaten ({self.food.food_type.name}) — delta: {score_delta}, score: {self.score}")
 
@@ -235,12 +248,13 @@ class Game:
         self.ui.draw_instructions()
 
     def _draw_gameplay(self):
-        self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
+        self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left, self.score_pop_timer)
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
+        self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
         if self._waiting_for_input:
@@ -256,12 +270,13 @@ class Game:
             )
 
     def _draw_paused(self):
-        self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
+        self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left, self.score_pop_timer)
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
+        self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
         draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
@@ -281,6 +296,7 @@ class Game:
         self.snake.draw()
         if self.food.isActive:
             self.food.draw()
+        self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_game_over(self.score, self.high_score)
 
@@ -333,6 +349,8 @@ class Game:
         self._waiting_for_input = False
         self._show_tip          = False
         self._tip_path          = []
+        self._food_pops         = []
+        self.score_pop_timer    = 0
 
         match self.mode:
             case Mode.CLASSIC:

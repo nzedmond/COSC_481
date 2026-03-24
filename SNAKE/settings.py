@@ -54,6 +54,10 @@ FOOD_MOVING_SPEED = 2
 # Poison food lifespan in frames (300 = 5 seconds at 60 fps)
 FOOD_POISON_LIFESPAN = 300
 
+# Eat animation: expanding + fading square at the eaten food's position
+FOOD_POP_DURATION  = 20   # frames
+SCORE_POP_DURATION = 20   # frames the score text stays enlarged
+
 # ------------------POWER-UPS---------------------
 POWERUP_SIZE           = 20
 POWERUP_SPAWN_INTERVAL = 300   # frames between pickups (~5 s at 60 fps)
