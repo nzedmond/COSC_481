@@ -51,6 +51,17 @@ class Game:
                 self.reset()
             return
 
+        if self.state == GameState.PAUSED:
+            if is_key_pressed(KEY_P):
+                self._accumulator = 0.0  # discard elapsed time so no phantom ticks on resume
+                self.state = GameState.PLAYING
+            return
+
+        if self.state == GameState.PLAYING:
+            if is_key_pressed(KEY_P):
+                self.state = GameState.PAUSED
+                return
+
         # Clamp accumulator to avoid spiral of death on slow machines
         self._accumulator += dt
         if self._accumulator > MAX_ACCUMULATOR:
@@ -79,6 +90,9 @@ class Game:
         clear_background(BLACK)
 
         self.renderer.draw()
+
+        if self.state == GameState.PAUSED:
+            draw_text("PAUSED - Press P to Resume", 220, 280, 20, YELLOW)
 
         if self.state == GameState.GAME_OVER:
             draw_text("GAME OVER - Press R to Restart", 180, 280, 20, RED)
