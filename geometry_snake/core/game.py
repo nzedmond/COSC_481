@@ -7,6 +7,8 @@ from entities.trail import Trail
 from entities.obstacle import Obstacle
 from systems.collision_manager import CollisionManager
 from rendering.renderer import Renderer
+from rendering.camera import Camera
+from rendering.parallax import ParallaxBackground
 
 
 class Game:
@@ -32,8 +34,13 @@ class Game:
             Obstacle(650, 0, 40, 300),
             Obstacle(900, 300, 40, 300),
         ]
+        self.camera = Camera(level_width=LEVEL_WIDTH)
+        self.parallax = ParallaxBackground(level_width=LEVEL_WIDTH)
         self.collision = CollisionManager(self.player, self.trail, self.obstacles)
-        self.renderer = Renderer(self.player, self.trail, self.obstacles)
+        self.renderer = Renderer(
+            self.player, self.trail, self.obstacles,
+            self.camera, self.parallax,
+        )
 
     def run(self):
         while not window_should_close():
@@ -53,7 +60,7 @@ class Game:
 
         if self.state == GameState.PAUSED:
             if is_key_pressed(KEY_P):
-                self._accumulator = 0.0  # discard elapsed time so no phantom ticks on resume
+                self._accumulator = 0.0
                 self.state = GameState.PLAYING
             return
 
@@ -77,19 +84,20 @@ class Game:
         self.player.apply_control(holding)
         self.player.update(dt)
         self.trail.update(self.player.pos)
+        self.camera.update(self.player.pos, dt)
 
         self._collision_checks += 1
         if self.collision.check_all():
             self.state = GameState.GAME_OVER
+            self.camera.add_trauma(SHAKE_DEATH_TRAUMA)
 
     def _render(self):
-        """View step — interpolation alpha available for smooth visuals."""
+        """View step — parallax + world (camera) + HUD."""
         interp = self._accumulator / FIXED_DT
 
         begin_drawing()
-        clear_background(BLACK)
 
-        self.renderer.draw()
+        self.renderer.draw()  # handles clear_background internally via parallax
 
         if self.state == GameState.PAUSED:
             draw_text("PAUSED - Press P to Resume", 220, 280, 20, YELLOW)
@@ -106,11 +114,13 @@ class Game:
         p = self.player
         lines = [
             f"FPS: {get_fps()}",
-            f"Pos:   ({p.pos.x:.1f}, {p.pos.y:.1f})",
-            f"Vel:   ({p.vel.x:.1f}, {p.vel.y:.1f})",
-            f"Collision checks: {self._collision_checks}",
-            f"Interp alpha: {interp:.3f}",
-            f"State: {self.state.name}",
+            f"Pos:        ({p.pos.x:.1f}, {p.pos.y:.1f})",
+            f"Vel:        ({p.vel.x:.1f}, {p.vel.y:.1f})",
+            f"Scroll X:   {self.camera.scroll_x:.1f}",
+            f"Trauma:     {self.camera.trauma:.2f}",
+            f"Col checks: {self._collision_checks}",
+            f"Interp:     {interp:.3f}",
+            f"State:      {self.state.name}",
         ]
         for i, line in enumerate(lines):
             draw_text(line, 8, 8 + i * 18, 16, GREEN)
