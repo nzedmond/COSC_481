@@ -10,7 +10,6 @@ from utils.geometry import (
     segment_intersect_segment,
     segment_intersect_rect,
     point_to_segment_distance,
-    segment_segment_distance,
 )
 
 
@@ -90,23 +89,3 @@ def test_degenerate_segment_point_distance():
     assert abs(point_to_segment_distance((3, 4), (0, 0), (0, 0)) - 5.0) < 1e-9
 
 
-# ---------------------------------------------------------------------------
-# segment_segment_distance
-# ---------------------------------------------------------------------------
-
-def test_intersecting_segments_distance_zero():
-    assert segment_segment_distance((0, 1), (2, 1), (1, 0), (1, 2)) == 0.0
-
-def test_parallel_segments_distance():
-    # Two horizontal segments at y=0 and y=3, same x-range
-    d = segment_segment_distance((0, 0), (2, 0), (0, 3), (2, 3))
-    assert abs(d - 3.0) < 1e-9
-
-def test_perpendicular_non_crossing_segments():
-    # Segment A: (0,0)->(0,1), Segment B: (1,0)->(2,0)
-    # Closest points: (0,0) and (1,0), distance = 1
-    d = segment_segment_distance((0, 0), (0, 1), (1, 0), (2, 0))
-    assert abs(d - 1.0) < 1e-9
-
-def test_same_segment_distance_zero():
-    assert segment_segment_distance((0, 0), (1, 1), (0, 0), (1, 1)) == 0.0

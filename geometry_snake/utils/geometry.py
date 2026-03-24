@@ -59,14 +59,3 @@ def point_to_segment_distance(p, a, b):
     return ((p[0] - cx) ** 2 + (p[1] - cy) ** 2) ** 0.5
 
 
-def segment_segment_distance(p1, p2, p3, p4):
-    """Minimum distance between segment p1->p2 and segment p3->p4."""
-    if segment_intersect_segment(p1, p2, p3, p4):
-        return 0.0
-
-    return min(
-        point_to_segment_distance(p1, p3, p4),
-        point_to_segment_distance(p2, p3, p4),
-        point_to_segment_distance(p3, p1, p2),
-        point_to_segment_distance(p4, p1, p2),
-    )
