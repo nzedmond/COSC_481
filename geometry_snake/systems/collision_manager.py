@@ -21,21 +21,21 @@ class CollisionManager:
         
     def check_self_collision(self):
         head = self.player.pos
-        
+
         for segment in list(self.trail.points)[5:]:
-            dx = head.x - segment.x 
+            dx = head.x - segment.x
             dy = head.y - segment.y
-            
+
             if (dx * dx + dy * dy) ** 0.5 < COLLISION_RADIUS:
                 return True
-            
-            return False
-        
+
+        return False
+
     def check_obstacle_collision(self):
         head = self.player.pos
-        
+
         for obs in self.obstacles:
             if obs.collides(head):
                 return True
-            
-            return False
+
+        return False

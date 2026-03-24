@@ -5,6 +5,7 @@ class Player:
     def __init__(self):
         self.pos = Vector2(100, SCREEN_HEIGHT // 2)
         self.prev_pos = self.pos
+        self.vel = Vector2(PLAYER_SPEED_X, 0.0)
         self.heading_up = False
         
     def apply_control(self, holding):
@@ -13,6 +14,7 @@ class Player:
     def update(self, dt):
         self.prev_pos = Vector2(self.pos.x, self.pos.y)
         vy = -PLAYER_SPEED_Y if self.heading_up else PLAYER_SPEED_Y
+        self.vel = Vector2(PLAYER_SPEED_X, vy)
         self.pos.x += PLAYER_SPEED_X * dt
         self.pos.y += vy * dt
         
