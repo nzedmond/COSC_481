@@ -74,14 +74,14 @@ class UI:
                   WINDOW_WIDTH // 2 - 88, WINDOW_HEIGHT - 44, 16, DARKGRAY)
 
     def draw_instructions(self):
-        # ── Background ────────────────────────────────────────────────────────
+        # ============================= Background ============================
         draw_rectangle(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color(20, 20, 20, 255))
 
-        # ── Title ─────────────────────────────────────────────────────────────
+        # ============================= Title ===============================
         draw_text("HOW TO PLAY", WINDOW_WIDTH // 2 - 120, 20, 36, GREEN)
         draw_line(40, 64, WINDOW_WIDTH - 40, 64, DARKGRAY)
 
-        # ── Controls (left column) ────────────────────────────────────────────
+        # ================== Controls (left column) ==========================
         cx, cy = 50, 80
         draw_text("CONTROLS", cx, cy, 20, LIGHTGRAY)
         rows = [
@@ -132,7 +132,7 @@ class UI:
             draw_text(name,   px + 28, row_y,      16, color)
             draw_text(effect, px + 28, row_y + 20, 13, GRAY)
 
-        # ── Obstacles ─────────────────────────────────────────────────────────
+        # ======================== Obstacles ==================================
         draw_line(40, 464, WINDOW_WIDTH - 40, 464, DARKGRAY)
         draw_text("OBSTACLES", 50, 472, 20, LIGHTGRAY)
         draw_rectangle(50, 498, 16, 16, BROWN)
@@ -142,7 +142,7 @@ class UI:
         draw_text(f"A new wall spawns every {OBSTACLE_SPAWN_EVERY} points  (max {OBSTACLE_MAX})",
                   74, 518, 13, GRAY)
 
-        # ── Footer ────────────────────────────────────────────────────────────
+        # ========================= Footer =====================================
         draw_line(40, WINDOW_HEIGHT - 36, WINDOW_WIDTH - 40, WINDOW_HEIGHT - 36, DARKGRAY)
         draw_text("I or BACKSPACE  -  Back to menu",
                   WINDOW_WIDTH // 2 - 150, WINDOW_HEIGHT - 26, 16, DARKGRAY)
