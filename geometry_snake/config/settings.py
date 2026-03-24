@@ -23,3 +23,15 @@ CAMERA_LOOKAHEAD = 160       # world pixels ahead of player shown at screen cent
 SHAKE_MAX_OFFSET = 8.0       # max pixel displacement at full trauma
 SHAKE_DECAY = 3.0            # trauma units lost per second
 SHAKE_DEATH_TRAUMA = 0.8     # trauma added on death
+
+# Visual polish (Phase 5)
+TRAIL_CORE_RADIUS  = 4.0     # base half-width of trail at speed_mult=1
+TRAIL_GLOW_MULT    = 2.5     # glow layer width = core * this
+TRAIL_GLOW_ALPHA   = 55      # alpha of glow layer at head (fades to 0 at tail)
+TRAIL_GLOW_LENGTH  = 80      # segments near head that receive glow pass
+PARTICLE_POOL_SIZE   = 200
+PARTICLE_DEATH_COUNT = 25
+PARTICLE_DEATH_SPEED = 180.0
+FADE_DURATION      = 0.5     # seconds for level fade-in
+VIGNETTE_LAYERS    = 20      # gradient bands drawn at screen edges
+VIGNETTE_MAX_ALPHA = 160     # darkest alpha at screen corner
