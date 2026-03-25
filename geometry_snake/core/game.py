@@ -117,7 +117,7 @@ class Game:
         if self.state in (GameState.GAME_OVER, GameState.LEVEL_COMPLETE):
             if is_key_pressed(KEY_R):
                 self.reset()
-            elif is_key_pressed(KEY_ESCAPE):
+            elif is_key_pressed(KEY_M):
                 self.state = GameState.MENU
             return
 
@@ -125,7 +125,7 @@ class Game:
             if is_key_pressed(KEY_P):
                 self._accumulator = 0.0
                 self.state = GameState.PLAYING
-            elif is_key_pressed(KEY_ESCAPE):
+            elif is_key_pressed(KEY_M):
                 self.state = GameState.MENU
             return
 

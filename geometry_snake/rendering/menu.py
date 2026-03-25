@@ -144,7 +144,7 @@ class PauseMenu:
 
         _centered_text("PAUSED", _CY - 46, 28, _COL_HEAD)
         _key_hint("P",   "resume",       _CY +  2)
-        _key_hint("ESC", "quit to menu", _CY + 26)
+        _key_hint("M", "quit to menu", _CY + 26)
 
 
 # ── GameOverMenu ─────────────────────────────────────────────────────────
@@ -177,7 +177,7 @@ class GameOverMenu:
             _centered_text("NEW BEST!", _CY + 34, 16, _COL_GOOD)
 
         _key_hint("R",   "retry",        _CY + 60)
-        _key_hint("ESC", "quit to menu", _CY + 82)
+        _key_hint("M", "quit to menu", _CY + 82)
 
 
 # ── LevelCompleteMenu ────────────────────────────────────────────────────
@@ -201,4 +201,4 @@ class LevelCompleteMenu:
             _centered_text("NEW BEST!", _CY + 10, 16, _COL_GOOD)
 
         _key_hint("R",   "play again",   _CY + 50)
-        _key_hint("ESC", "quit to menu", _CY + 72)
+        _key_hint("M", "quit to menu", _CY + 72)
