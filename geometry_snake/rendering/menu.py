@@ -127,7 +127,7 @@ class MainMenu:
 
         # Controls hint
         hint_y = panel_y + panel_h + 20
-        _key_hint("↑ / ↓",    "select level",   hint_y)
+        _key_hint("UP / DOWN",    "select level",   hint_y)
         _key_hint("SPACE / ENTER", "start",      hint_y + 22)
         _key_hint("HOLD SPACE / MOUSE", "steer up", hint_y + 44)
 
