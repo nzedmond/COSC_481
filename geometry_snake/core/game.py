@@ -18,11 +18,11 @@ from rendering.hud import HUD
 from rendering.menu import MainMenu, PauseMenu, GameOverMenu, LevelCompleteMenu
 from rendering.trail_renderer import current_trail_color
 
-_PICKUP_RADIUS       = 8.0
-_PICKUP_BURST_COUNT  = 15
-_PICKUP_BURST_SPEED  = 120
+PICKUP_RADIUS       = 8.0
+PICKUP_BURST_COUNT  = 15
+PICKUP_BURST_SPEED  = 120
 
-_LEVELS = [
+GAME_LEVELS = [
     {"name": "Cave Run", "path": "levels/level1.json"},
     {"name": "Crystal Depths", "path": "levels/level2.json"},
     {"name": "The Gauntlet", "path": "levels/level3.json"},
@@ -44,7 +44,7 @@ class Game:
         self._pause_menu    = PauseMenu()
         self._over_menu     = GameOverMenu()
         self._complete_menu = LevelCompleteMenu()
-        self._main_menu     = MainMenu(_LEVELS, self._save)
+        self._main_menu     = MainMenu(GAME_LEVELS, self._save)
 
         # Runtime result cache (populated on game-over / level-complete)
         self._run_score        = 0
@@ -199,11 +199,11 @@ class Game:
                 continue
             delta_x = player_x - collectible.x
             delta_y = player_y - collectible.y
-            if (delta_x * delta_x + delta_y * delta_y) ** 0.5 < collectible.radius + _PICKUP_RADIUS:
+            if (delta_x * delta_x + delta_y * delta_y) ** 0.5 < collectible.radius + PICKUP_RADIUS:
                 collectible.collected = True
                 self.score_manager.collect(collectible.value)
                 self.particles.emit_burst(
-                    collectible.x, collectible.y, _PICKUP_BURST_COUNT, _PICKUP_BURST_SPEED, collectible.color,
+                    collectible.x, collectible.y, PICKUP_BURST_COUNT, PICKUP_BURST_SPEED, collectible.color,
                 )
 
     # ------------------------------------------------------------------

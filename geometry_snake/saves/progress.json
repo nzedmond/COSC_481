@@ -1,17 +1,17 @@
 {
   "Cave Run": {
-    "best_score": 120,
+    "best_score": 135,
     "best_pct": 1.0,
-    "attempts": 25
+    "attempts": 31
   },
   "The Gauntlet": {
-    "best_score": 80,
+    "best_score": 100,
     "best_pct": 1.0,
-    "attempts": 6
+    "attempts": 8
   },
   "Crystal Depths": {
     "best_score": 80,
     "best_pct": 1.0,
-    "attempts": 7
+    "attempts": 8
   }
 }
