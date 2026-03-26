@@ -20,7 +20,6 @@ from rendering.trail_renderer import current_trail_color
 
 _PICKUP_RADIUS = 8.0   # extra tolerance added to collectible.radius on pickup
 
-# All available levels (extend this list to add more)
 _LEVELS = [
     {"name": "Cave Run",      "path": "levels/level1.json"},
     {"name": "Crystal Depths","path": "levels/level2.json"},
@@ -33,10 +32,10 @@ class Game:
         init_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Geometry Snake")
         set_target_fps(FPS)
 
-        self.input        = InputManager()
-        self._accumulator = 0.0
-        self._debug       = False
-        self._collision_checks = 0
+        self.input                  = InputManager()
+        self._physics_accumulator   = 0.0
+        self._debug_mode            = False
+        self._collision_check_count = 0
 
         self._save    = SaveManager()
         self._hud     = HUD()
@@ -46,19 +45,19 @@ class Game:
         self._main_menu     = MainMenu(_LEVELS, self._save)
 
         # Runtime result cache (populated on game-over / level-complete)
-        self._run_score    = 0
-        self._run_pct      = 0.0
-        self._best_score   = 0
-        self._best_pct     = 0.0
-        self._new_best     = False
+        self._run_score        = 0
+        self._run_completion   = 0.0
+        self._best_score       = 0
+        self._best_completion  = 0.0
+        self._is_new_best      = False
 
         # Start on the main menu
         self.state = GameState.MENU
 
     def reset(self, level_path=None):
         self.state = GameState.PLAYING
-        self._accumulator = 0.0
-        self._collision_checks = 0
+        self._physics_accumulator   = 0.0
+        self._collision_check_count = 0
 
         path = level_path or self._main_menu.selected_level_path
         self.level        = Level(path)
@@ -69,11 +68,11 @@ class Game:
         self.score_manager = ScoreManager()
         self.score_manager.setup(len(self.collectibles))
 
-        cam_cfg = self.level.camera_config
+        camera_config = self.level.camera_config
         self.camera = Camera(
             level_width=self.level.level_end_x,
-            lookahead=cam_cfg.get("lookahead", CAMERA_LOOKAHEAD),
-            lerp=cam_cfg.get("lerp", CAMERA_LERP),
+            lookahead=camera_config.get("lookahead", CAMERA_LOOKAHEAD),
+            lerp=camera_config.get("lerp", CAMERA_LERP),
         )
         self.parallax = ParallaxBackground(
             level_width=self.level.level_end_x,
@@ -94,10 +93,12 @@ class Game:
         )
 
     # ------------------------------------------------------------------
-    # Main loop
+    #                          MAIN LOOP
     # ------------------------------------------------------------------
 
     def run(self):
+        '''Called once per rendered frame = varies with frame rate'''
+        
         while not window_should_close():
             dt = get_frame_time()
             self._update_loop(dt)
@@ -105,6 +106,8 @@ class Game:
         close_window()
 
     def _update_loop(self, dt):
+        '''Handle everything that varies with real time: key presses and state transitions.'''
+        
         if self.state == GameState.MENU:
             action = self._main_menu.handle_input()
             if action == "play":
@@ -112,9 +115,9 @@ class Game:
             return
 
         if is_key_pressed(KEY_D):
-            self._debug = not self._debug
+            self._debug_mode = not self._debug_mode
 
-        if self.state in (GameState.GAME_OVER, GameState.LEVEL_COMPLETE):
+        if self.state in (GameState.GAME_OVER, GameState.LEVEL_COMPLETE):  # WILL USE MATCH/CASE BEFORE SUBMITTING
             if is_key_pressed(KEY_R):
                 self.reset()
             elif is_key_pressed(KEY_M):
@@ -123,7 +126,7 @@ class Game:
 
         if self.state == GameState.PAUSED:
             if is_key_pressed(KEY_P):
-                self._accumulator = 0.0
+                self._physics_accumulator = 0.0
                 self.state = GameState.PLAYING
             elif is_key_pressed(KEY_M):
                 self.state = GameState.MENU
@@ -134,23 +137,21 @@ class Game:
                 self.state = GameState.PAUSED
                 return
 
-        self._accumulator += dt
-        if self._accumulator > MAX_ACCUMULATOR:
-            self._accumulator = MAX_ACCUMULATOR
+        # add the elapsed time to the running total. Decide how many physics ticks are due
+        self._physics_accumulator += dt
+        if self._physics_accumulator > MAX_ACCUMULATOR:
+            self._physics_accumulator = MAX_ACCUMULATOR
 
-        holding = self.input.is_holding()
-        while self._accumulator >= FIXED_DT:
-            self._fixed_update(holding, FIXED_DT)
-            self._accumulator -= FIXED_DT
+        is_input_held = self.input.is_holding()
+        while self._physics_accumulator >= FIXED_DT:
+            self._fixed_update(is_input_held, FIXED_DT)
+            self._physics_accumulator -= FIXED_DT
 
-    # ------------------------------------------------------------------
-    # Physics tick
-    # ------------------------------------------------------------------
-
-    def _fixed_update(self, holding, dt):
-        """Physics/model step — no draw calls here."""
+    def _fixed_update(self, is_input_held, dt):
+        '''Physics tick: dt=1/60 always. Move the player, grow the trail, update the camera, check collisions.'''
+        
         self.player.speed_mult = self.level.speed_multiplier_at(self.player.pos.x)
-        self.player.apply_control(holding)
+        self.player.apply_control(is_input_held)
         self.player.update(dt)
         self.trail.update(self.player.pos)
         self.camera.update(self.player.pos, dt)
@@ -163,7 +164,7 @@ class Game:
 
         self._check_collectibles()
 
-        self._collision_checks += 1
+        self._collision_check_count += 1
         if self.collision.check_all():
             progress = min(1.0, self.player.pos.x / self.level.level_end_x)
             self.camera.add_trauma(SHAKE_DEATH_TRAUMA)
@@ -176,33 +177,33 @@ class Game:
             self._end_run(completed=False)
 
     def _end_run(self, completed: bool):
-        progress = min(1.0, self.player.pos.x / self.level.level_end_x)
-        score    = self.score_manager.score
-        name     = self.level.name
+        completion_progress = min(1.0, self.player.pos.x / self.level.level_end_x)
+        current_score       = self.score_manager.score
+        level_name          = self.level.name
 
-        new_best  = self._save.update(name, score, progress if completed else progress)
-        best_score, best_pct, _ = self._save.get_best(name)
+        is_new_best = self._save.update(level_name, current_score, completion_progress)
+        saved_best_score, saved_best_completion, _ = self._save.get_best(level_name)
 
-        self._run_score  = score
-        self._run_pct    = progress
-        self._best_score = best_score
-        self._best_pct   = best_pct
-        self._new_best   = new_best
+        self._run_score       = current_score
+        self._run_completion  = completion_progress
+        self._best_score      = saved_best_score
+        self._best_completion = saved_best_completion
+        self._is_new_best     = is_new_best
 
         self.state = GameState.LEVEL_COMPLETE if completed else GameState.GAME_OVER
 
     def _check_collectibles(self):
-        px, py = self.player.pos.x, self.player.pos.y
-        for col in self.collectibles:
-            if col.collected:
+        player_x, player_y = self.player.pos.x, self.player.pos.y
+        for collectible in self.collectibles:
+            if collectible.collected:
                 continue
-            dx = px - col.x
-            dy = py - col.y
-            if (dx * dx + dy * dy) ** 0.5 < col.radius + _PICKUP_RADIUS:
-                col.collected = True
-                self.score_manager.collect(col.value)
+            delta_x = player_x - collectible.x
+            delta_y = player_y - collectible.y
+            if (delta_x * delta_x + delta_y * delta_y) ** 0.5 < collectible.radius + _PICKUP_RADIUS:
+                collectible.collected = True
+                self.score_manager.collect(collectible.value)
                 self.particles.emit_burst(
-                    col.x, col.y, 15, 120, col.color,
+                    collectible.x, collectible.y, 15, 120, collectible.color,
                 )
 
     # ------------------------------------------------------------------
@@ -218,7 +219,7 @@ class Game:
             end_drawing()
             return
 
-        interp   = self._accumulator / FIXED_DT
+        interpolation_factor = self._physics_accumulator / FIXED_DT
         progress = min(1.0, self.player.pos.x / self.level.level_end_x)
 
         self.renderer.draw(progress, self.player.speed_mult)
@@ -231,38 +232,40 @@ class Game:
         elif self.state == GameState.GAME_OVER:
             self._over_menu.draw(
                 self._run_score, self._best_score,
-                self._run_pct,   self._best_pct,
-                self._new_best,
+                self._run_completion,  self._best_completion,
+                self._is_new_best,
             )
 
         elif self.state == GameState.LEVEL_COMPLETE:
             self._complete_menu.draw(
                 self._run_score, self._best_score,
-                self._run_pct,   self._best_pct,
-                self._new_best,
+                self._run_completion,  self._best_completion,
+                self._is_new_best,
             )
 
-        if self._debug:
-            self._draw_debug_overlay(interp, progress)
+        if self._debug_mode:
+            self._draw_debug_overlay(interpolation_factor, progress)
 
         end_drawing()
 
-    def _draw_debug_overlay(self, interp, progress):
-        p = self.player
+    def _draw_debug_overlay(self, interpolation_factor, progress):
+        player = self.player
         lines = [
             f"FPS:        {get_fps()}",
-            f"Pos:        ({p.pos.x:.1f}, {p.pos.y:.1f})",
-            f"Vel:        ({p.vel.x:.1f}, {p.vel.y:.1f})",
-            f"Speed mult: {p.speed_mult:.2f}",
+            f"Pos:        ({player.pos.x:.1f}, {player.pos.y:.1f})",
+            f"Vel:        ({player.vel.x:.1f}, {player.vel.y:.1f})",
+            f"Speed mult: {player.speed_mult:.2f}",
             f"Progress:   {progress:.1%}",
             f"Score:      {self.score_manager.score}",
             f"Collected:  {self.score_manager.collected}/{self.score_manager.total}",
             f"Level end:  {self.level.level_end_x}",
             f"Scroll X:   {self.camera.scroll_x:.1f}",
             f"Trauma:     {self.camera.trauma:.2f}",
-            f"Col checks: {self._collision_checks}",
-            f"Interp:     {interp:.3f}",
+            f"Col checks: {self._collision_check_count}",
+            f"Interp:     {interpolation_factor:.3f}",
             f"State:      {self.state.name}",
         ]
+        draw_rectangle(8, 26, 120, 8+18*len(lines), Color(0, 0, 120))
+        draw_rectangle_lines(8, 26, 120, 8+18*len(lines), WHITE)
         for i, line in enumerate(lines):
             draw_text(line, 8, 8 + i * 18, 16, GREEN)
