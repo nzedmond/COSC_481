@@ -17,9 +17,6 @@ DEFAULT_LEVEL = "levels/level1.json"
 
 CAMERA_LERP = 0.08           # smoothing factor applied each fixed tick
 CAMERA_LOOKAHEAD = 160       # world pixels ahead of player shown at screen centre
-SHAKE_MAX_OFFSET = 8.0       # max pixel displacement at full trauma
-SHAKE_DECAY = 3.0            # trauma units lost per second
-SHAKE_DEATH_TRAUMA = 0.8     # trauma added on death
 
 # Visual polish (Phase 5)
 TRAIL_CORE_RADIUS  = 4.0     # base half-width of trail at speed_mult=1

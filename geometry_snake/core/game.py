@@ -167,7 +167,6 @@ class Game:
         self._collision_check_count += 1
         if self.collision.check_all():
             progress = min(1.0, self.player.pos.x / self.level.level_end_x)
-            self.camera.add_trauma(SHAKE_DEATH_TRAUMA)
             self.particles.emit_burst(
                 self.player.pos.x, self.player.pos.y,
                 PARTICLE_DEATH_COUNT,
