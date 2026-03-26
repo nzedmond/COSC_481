@@ -23,9 +23,9 @@ _PICKUP_BURST_COUNT  = 15
 _PICKUP_BURST_SPEED  = 120
 
 _LEVELS = [
-    {"name": "Cave Run",      "path": "levels/level1.json"},
-    {"name": "Crystal Depths","path": "levels/level2.json"},
-    {"name": "The Gauntlet",  "path": "levels/level3.json"},
+    {"name": "Cave Run", "path": "levels/level1.json"},
+    {"name": "Crystal Depths", "path": "levels/level2.json"},
+    {"name": "The Gauntlet", "path": "levels/level3.json"},
 ]
 
 
@@ -109,37 +109,36 @@ class Game:
 
     def _update_loop(self, dt):
         '''Handle everything that varies with real time: key presses and state transitions.'''
-        
-        if self.state == GameState.MENU:
-            action = self._main_menu.handle_input()
-            if action == "play":
-                self.reset()
-            return
 
-        if is_key_pressed(KEY_D):
-            self._debug_mode = not self._debug_mode
-
-        if self.state in (GameState.GAME_OVER, GameState.LEVEL_COMPLETE):  # WILL USE MATCH/CASE BEFORE SUBMITTING
-            if is_key_pressed(KEY_R):
-                self.reset()
-            elif is_key_pressed(KEY_M):
-                self.state = GameState.MENU
-            return
-
-        if self.state == GameState.PAUSED:
-            if is_key_pressed(KEY_P):
-                self._physics_accumulator = 0.0
-                self.state = GameState.PLAYING
-            elif is_key_pressed(KEY_M):
-                self.state = GameState.MENU
-            return
-
-        if self.state == GameState.PLAYING:
-            if is_key_pressed(KEY_P):
-                self.state = GameState.PAUSED
+        match self.state:
+            case GameState.MENU:
+                action = self._main_menu.handle_input()
+                if action == "play":
+                    self.reset()
                 return
 
-        # add the elapsed time to the running total. Decide how many physics ticks are due
+            case GameState.GAME_OVER | GameState.LEVEL_COMPLETE:
+                if is_key_pressed(KEY_R):
+                    self.reset()
+                elif is_key_pressed(KEY_M):
+                    self.state = GameState.MENU
+                return
+
+            case GameState.PAUSED:
+                if is_key_pressed(KEY_P):
+                    self._physics_accumulator = 0.0
+                    self.state = GameState.PLAYING
+                elif is_key_pressed(KEY_M):
+                    self.state = GameState.MENU
+                return
+
+            case GameState.PLAYING:
+                if is_key_pressed(KEY_D):
+                    self._debug_mode = not self._debug_mode
+                if is_key_pressed(KEY_P):
+                    self.state = GameState.PAUSED
+                    return
+
         self._physics_accumulator += dt
         if self._physics_accumulator > MAX_ACCUMULATOR:
             self._physics_accumulator = MAX_ACCUMULATOR
@@ -150,7 +149,6 @@ class Game:
             self._physics_accumulator -= FIXED_DT
 
     def _fixed_update(self, is_input_held, dt):
-        '''Physics tick: dt=1/60 always. Move the player, grow the trail, update the camera, check collisions.'''
         
         self.player.speed_mult = self.level.speed_multiplier_at(self.player.pos.x)
         self.player.apply_control(is_input_held)
@@ -221,7 +219,6 @@ class Game:
             end_drawing()
             return
 
-        interpolation_factor = self._physics_accumulator / FIXED_DT
         progress = min(1.0, self.player.pos.x / self.level.level_end_x)
 
         self.renderer.draw(progress, self.player.speed_mult)
@@ -246,11 +243,12 @@ class Game:
             )
 
         if self._debug_mode:
-            self._draw_debug_overlay(interpolation_factor, progress)
+            self._draw_debug_overlay(progress)
 
         end_drawing()
 
-    def _draw_debug_overlay(self, interpolation_factor, progress):
+    def _draw_debug_overlay(self, progress):
+        interpolation_factor = self._physics_accumulator / FIXED_DT
         player = self.player
         lines = [
             f"FPS:        {get_fps()}",
