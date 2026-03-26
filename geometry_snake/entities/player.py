@@ -2,6 +2,12 @@ from pyray import *
 from config.settings import *
 
 class Player:
+    """The snake head — owns position, velocity, and input state.
+
+    Moves automatically to the right each frame; vertical direction is controlled
+    by the player holding or releasing the control key.
+    """
+
     def __init__(self):
         self.pos = Vector2(100, SCREEN_HEIGHT // 2)
         self.prev_pos = self.pos
@@ -11,7 +17,7 @@ class Player:
         
     def apply_control(self, holding):
         self.heading_up = holding
-        
+
     def update(self, dt):
         self.prev_pos = Vector2(self.pos.x, self.pos.y)
         vx = PLAYER_SPEED_X * self.speed_mult

@@ -3,6 +3,12 @@ from pyray import *
 from config.settings import *
 
 class Trail:
+    """Capped history of past player positions that forms the snake's body.
+
+    Records a new point only when the player has moved at least TRAIL_MIN_STEP
+    pixels, and evicts the oldest point once the deque reaches TRAIL_MAX_LENGTH.
+    """
+
     def __init__(self):
         self.points = deque()
         
