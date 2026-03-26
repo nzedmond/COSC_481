@@ -41,7 +41,7 @@ COL_BAR_FG = Color(0,  220, 255,  220)   # cyan, matches trail head
 
 class HUD:
     def draw(self, score_manager, progress: float = 0.0):
-        sm = score_manager
+        score_mgr = score_manager
 
         # Background panel
         draw_rectangle(PANEL_X, PANEL_Y, PANEL_W, PANEL_H, COL_BG)
@@ -49,21 +49,21 @@ class HUD:
 
         # Row 1 — score
         draw_text("SCORE", PANEL_X + 10, PANEL_Y + 10, 12, COL_LABEL)
-        score_str = f"{sm.score:,}"
+        score_str = f"{score_mgr.score:,}"
         draw_text(score_str, PANEL_X + PANEL_W - 10 - measure_text(score_str, 18),
                   PANEL_Y + 8, 18, COL_SCORE)
 
         # Row 2 — collectible indicators
         row_y = PANEL_Y + 36
-        if sm.total <= MAX_DOTS:
-            for i in range(sm.total):
-                cx = PANEL_X + 14 + i * 15
-                if i < sm.collected:
-                    draw_circle(cx, row_y, 5, COL_HIT)
+        if score_mgr.total <= MAX_DOTS:
+            for i in range(score_mgr.total):
+                center_x = PANEL_X + 14 + i * 15
+                if i < score_mgr.collected:
+                    draw_circle(center_x, row_y, 5, COL_HIT)
                 else:
-                    draw_circle_lines(cx, row_y, 5, COL_MISS)
+                    draw_circle_lines(center_x, row_y, 5, COL_MISS)
         else:
-            counter = f"{sm.collected} / {sm.total}"
+            counter = f"{score_mgr.collected} / {score_mgr.total}"
             draw_text("ITEMS", PANEL_X + 10, row_y - 6, 12, COL_LABEL)
             draw_text(counter,  PANEL_X + 60, row_y - 7, 14, COL_HIT)
 
@@ -73,7 +73,7 @@ class HUD:
         draw_rectangle(BAR_MARGIN, BAR_Y, bar_w,    BAR_H, COL_BAR_BG)
         if filled_w > 0:
             draw_rectangle(BAR_MARGIN, BAR_Y, filled_w, BAR_H, COL_BAR_FG)
-        pct_str = f"{progress:.0%}"
-        draw_text(pct_str,
+        percentage_str = f"{progress:.0%}"
+        draw_text(percentage_str,
                   BAR_MARGIN + bar_w + 8,
                   BAR_Y - 2, 12, COL_LABEL)
