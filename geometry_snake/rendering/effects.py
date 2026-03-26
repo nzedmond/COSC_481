@@ -44,9 +44,6 @@ class ScreenEffects:
             draw_rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT,
                            Color(0, 0, 0, int(self._fade_alpha)))
 
-    # ------------------------------------------------------------------
-    # Private
-    # ------------------------------------------------------------------
 
     @staticmethod
     def _draw_vignette():
