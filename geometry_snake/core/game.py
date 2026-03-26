@@ -18,7 +18,9 @@ from rendering.hud import HUD
 from rendering.menu import MainMenu, PauseMenu, GameOverMenu, LevelCompleteMenu
 from rendering.trail_renderer import current_trail_color
 
-_PICKUP_RADIUS = 8.0   # extra tolerance added to collectible.radius on pickup
+_PICKUP_RADIUS       = 8.0
+_PICKUP_BURST_COUNT  = 15
+_PICKUP_BURST_SPEED  = 120
 
 _LEVELS = [
     {"name": "Cave Run",      "path": "levels/level1.json"},
@@ -203,7 +205,7 @@ class Game:
                 collectible.collected = True
                 self.score_manager.collect(collectible.value)
                 self.particles.emit_burst(
-                    collectible.x, collectible.y, 15, 120, collectible.color,
+                    collectible.x, collectible.y, _PICKUP_BURST_COUNT, _PICKUP_BURST_SPEED, collectible.color,
                 )
 
     # ------------------------------------------------------------------
