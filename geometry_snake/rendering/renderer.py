@@ -4,6 +4,12 @@ from rendering.trail_renderer import TrailRenderer, current_trail_color
 
 
 class Renderer:
+    """Draws all in-game entities each frame.
+
+    Owns a TrailRenderer internally and coordinates the layered draw order:
+    parallax background → obstacles → collectibles → trail → player → particles.
+    """
+
     def __init__(self, player, trail, obstacles, camera, parallax, particles,
                  collectibles):
         self.player      = player
@@ -16,6 +22,13 @@ class Renderer:
         self._trail_renderer = TrailRenderer()
 
     def draw(self, progress, speed_mult):
+        """Render one frame.
+
+        Args:
+            progress: 0.0–1.0 cycle position used to compute the trail's hue shift.
+            speed_mult: current speed multiplier, passed to TrailRenderer to scale
+                        trail visual intensity.
+        """
         # 1. Parallax fills background in screen space
         self.parallax.draw(self.camera.scroll_x)
 
