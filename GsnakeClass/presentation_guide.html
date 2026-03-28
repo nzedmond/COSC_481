@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Geometry Snake — Presentation Guide</title>
+  <style>
+    /* ── Page setup ── */
+    @media print {
+      body { font-size: 11pt; }
+      .no-print { display: none; }
+      h1 { page-break-before: avoid; }
+      h2 { page-break-after: avoid; }
+      pre, table { page-break-inside: avoid; }
+      .section { page-break-inside: avoid; }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 12pt;
+      line-height: 1.65;
+      color: #1a1a1a;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 40px 48px;
+      background: #fff;
+    }
+
+    /* ── Headings ── */
+    h1 {
+      font-size: 22pt;
+      font-weight: bold;
+      border-bottom: 3px solid #1a1a1a;
+      padding-bottom: 8px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 11pt;
+      color: #555;
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      font-size: 15pt;
+      font-weight: bold;
+      margin-top: 36px;
+      margin-bottom: 10px;
+      border-left: 4px solid #1a1a1a;
+      padding-left: 10px;
+    }
+
+    h3 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-top: 20px;
+      margin-bottom: 6px;
+    }
+
+    /* ── Body text ── */
+    p { margin-bottom: 10px; }
+
+    ul, ol {
+      margin: 8px 0 12px 24px;
+    }
+
+    li { margin-bottom: 4px; }
+
+    /* ── Q&A blocks ── */
+    .qa {
+      background: #f5f5f5;
+      border-left: 3px solid #888;
+      padding: 10px 14px;
+      margin: 10px 0 14px 0;
+      border-radius: 2px;
+    }
+
+    .qa .q {
+      font-style: italic;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .qa .q::before { content: "Q: "; font-weight: bold; font-style: normal; }
+    .qa .a::before { content: "A: "; font-weight: bold; }
+
+    /* ── Code / monospace ── */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 10pt;
+      background: #eee;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    pre {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 9.5pt;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      padding: 12px 16px;
+      border-radius: 3px;
+      overflow-x: auto;
+      margin: 10px 0 14px 0;
+      line-height: 1.5;
+    }
+
+    /* ── Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 10.5pt;
+    }
+
+    th {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 7px 10px;
+      text-align: left;
+    }
+
+    td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) td { background: #f9f9f9; }
+
+    /* ── Divider ── */
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 30px 0;
+    }
+
+    /* ── Presentation order box ── */
+    .order-box {
+      border: 2px solid #1a1a1a;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+
+    .order-box ol { margin-left: 20px; }
+    .order-box li { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+  <h1>Geometry Snake</h1>
+  <p class="subtitle">COSC 481 — Presentation Guide &amp; Design Reference</p>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <h2>Presentation Structure</h2>
+
+  <div class="order-box">
+    <ol>
+      <li><strong>Live demo</strong> — Run the game. Collect something, die, show the score screen. Let them see what they're about to hear explained.</li>
+      <li><strong>Folder tour (1 min)</strong> — Show the <code>core/</code>, <code>entities/</code>, <code>systems/</code>, <code>rendering/</code> split and state the rule: <em>logic never imports rendering</em>.</li>
+      <li><strong>Walk one frame</strong> — Trace input → physics tick → collision check → render. This ties everything together naturally.</li>
+      <li><strong>Go deep on 2–3 design decisions</strong> — Don't try to cover everything. Pick the ones you're most confident defending and go deep.</li>
+      <li><strong>Show the tests</strong> — Open <code>tests/</code> briefly. Mention that <code>geometry.py</code> functions are testable without a window. This signals software engineering maturity.</li>
+      <li><strong>End with what you'd do differently</strong> — Instructors love honest reflection. It shows you understand the tradeoffs, not just the code.</li>
+    </ol>
+  </div>
+
+  <hr />
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <h2>Project Architecture Overview</h2>
+
+  <pre>geometry_snake/
+├── main.py                    # Entry point
+├── config/settings.py         # All numeric constants
+├── core/                      # Game loop and state machine
+│   ├── game.py
+│   ├── input_manager.py
+│   └── state.py
+├── entities/                  # Pure-data game objects
+│   ├── player.py
+│   ├── trail.py
+│   ├── obstacle.py
+│   └── collectible.py
+├── systems/                   # Game logic systems
+│   ├── level.py
+│   ├── collision_manager.py
+│   ├── score_manager.py
+│   └── save_manager.py
+├── rendering/                 # All drawing code (separated from logic)
+│   ├── renderer.py
+│   ├── camera.py
+│   ├── trail_renderer.py
+│   ├── particle_system.py
+│   ├── parallax.py
+│   ├── hud.py
+│   ├── effects.py
+│   └── menu.py
+├── utils/geometry.py          # Pure-Python collision math (no pyray)
+├── levels/                    # JSON level definitions
+└── tests/                     # Unit test suite</pre>
+
+  <hr />
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <h2>Key Design Decisions to Highlight</h2>
+
+  <!-- 1 -->
+  <div class="section">
+    <h3>1. Logic vs. Rendering Separation</h3>
+    <p>
+      This is the strongest architectural decision. The <strong>entities</strong>
+      (<code>Player</code>, <code>Trail</code>, <code>Obstacle</code>, <code>Collectible</code>)
+      are pure data — no drawing code anywhere in them. The <strong><code>Renderer</code></strong>
+      class owns all drawing, receives entities, and reads their state. You could swap out
+      pyray for another library without touching a single game logic file.
+    </p>
+    <p>
+      Data flows one direction: <strong>logic → rendering</strong>.
+      Rendering state never affects physics.
+    </p>
+    <div class="qa">
+      <p class="q">Why did you separate rendering from logic?</p>
+      <p class="a">Testability and maintainability. The geometry utilities and collision
+      logic can be unit tested without opening a window. It also means the rendering layer
+      can change independently of game rules.</p>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section">
+    <h3>2. Fixed-Timestep Physics Loop</h3>
+    <p>
+      Physics runs at exactly 60 Hz regardless of frame rate using an
+      <strong>accumulator pattern</strong> in <code>game.py</code>.
+      Real frame time accumulates into a buffer; physics ticks batch-process
+      when the accumulator reaches <code>FIXED_DT = 1/60 s</code>.
+      The accumulator is clamped at <code>MAX_ACCUMULATOR</code> (0.2 s)
+      to prevent a "death spiral" on slow machines.
+    </p>
+    <div class="qa">
+      <p class="q">What happens if the game runs at 30 FPS or 120 FPS?</p>
+      <p class="a">Physics stays deterministic. The accumulator catches up with
+      multiple ticks on slow frames, or waits on fast frames. Game behavior is
+      identical regardless of display refresh rate.</p>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section">
+    <h3>3. Sweep-Based Collision — No Tunneling</h3>
+    <p>
+      <code>CollisionManager</code> tests the <strong>movement segment</strong>
+      (previous position → current position) against obstacles using parametric
+      segment-rectangle intersection from <code>utils/geometry.py</code>.
+      This prevents the snake from clipping through thin walls at high speed,
+      which a simple point-in-rect test would miss.
+    </p>
+    <p>
+      A broad-phase AABB cull (only test obstacles within 200 px ahead of the player)
+      keeps the per-frame cost low even with many obstacles.
+    </p>
+    <div class="qa">
+      <p class="q">How does collision detection work at high speeds?</p>
+      <p class="a">We test the full movement segment each tick, not just the current
+      position. This is called a sweep test and it guarantees the snake can't skip
+      through an obstacle no matter how fast it moves.</p>
+    </div>
+    <div class="qa">
+      <p class="q">Do you check for self-collision?</p>
+      <p class="a">No — and deliberately so. The snake always moves rightward, so
+      x strictly increases each tick. The head can never geometrically reach a
+      previous trail point. Skipping that check is correct, not an oversight.</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section">
+    <h3>4. Data-Driven Level Design</h3>
+    <p>
+      Levels are entirely defined in JSON files with a validated schema —
+      obstacles, collectibles, speed curve, camera config, and parallax seed.
+      No code changes are needed to add a new level.
+    </p>
+    <pre>{
+  "name": "Cave Run",
+  "length": 5000,
+  "speed_curve": [{"x": 0, "mult": 1.0}, {"x": 5000, "mult": 2.2}],
+  "camera": {"lookahead": 160, "lerp": 0.08},
+  "parallax_seed": 42,
+  "obstacles": [...],
+  "collectibles": [...]
+}</pre>
+    <div class="qa">
+      <p class="q">How would you add a new level?</p>
+      <p class="a">Create a JSON file following the schema, register it in
+      <code>GAME_LEVELS</code> in <code>game.py</code>, and run the test suite.
+      No other code changes needed.</p>
+    </div>
+    <div class="qa">
+      <p class="q">What happens if the JSON is malformed?</p>
+      <p class="a">The <code>Level</code> loader validates required fields, types,
+      and speed curve ordering at load time and raises a descriptive
+      <code>ValueError</code> before the game starts.</p>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section">
+    <h3>5. Piecewise-Linear Speed Curve</h3>
+    <p>
+      Each level JSON defines a speed curve as a list of waypoints
+      (<code>x</code> world position → <code>mult</code> speed multiplier).
+      <code>Level.speed_multiplier_at(x)</code> linearly interpolates between them.
+      This gives each level a custom difficulty ramp — early sections easy,
+      late sections punishing — without hardcoding anything.
+    </p>
+    <div class="qa">
+      <p class="q">How does the game get harder over time?</p>
+      <p class="a">The speed curve increases the player's horizontal velocity as
+      they progress through the level. The same obstacles become harder to dodge
+      because you have less reaction time.</p>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section">
+    <h3>6. Particle Object Pool</h3>
+    <p>
+      <code>ParticleSystem</code> pre-allocates 200 particles at startup and
+      recycles them — <strong>zero memory allocation during gameplay</strong>.
+      When a collectible is picked up or the player dies, the system finds dead
+      particles in the pool and reuses them. If the pool is exhausted, it silently
+      emits fewer particles rather than crashing.
+    </p>
+    <div class="qa">
+      <p class="q">Why not just create particle objects on the fly?</p>
+      <p class="a">Frequent allocation triggers garbage collection, which causes
+      frame hitches in real-time games. Pooling keeps memory pressure flat and
+      frame times consistent.</p>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section">
+    <h3>7. Trauma-Squared Screen Shake</h3>
+    <p>
+      Screen shake intensity = <code>trauma² × max_offset</code>.
+      Trauma decays over time (<code>trauma -= SHAKE_DECAY × dt</code>).
+      Squaring the trauma value creates a non-linear response:
+      soft rattles at low trauma, violent shakes at high trauma —
+      more perceptually realistic than a linear relationship.
+    </p>
+  </div>
+
+  <!-- 8 -->
+  <div class="section">
+    <h3>8. Two-Pass Trail Rendering</h3>
+    <p>
+      The trail is drawn in two passes inside <code>TrailRenderer</code>:
+    </p>
+    <ul>
+      <li><strong>Glow pass</strong> — wider, semi-transparent, covers only the head region. Widens with speed multiplier.</li>
+      <li><strong>Core pass</strong> — full trail drawn as a tapered quad mesh. Colors shift from cyan (level start) → magenta (level end) based on progress.</li>
+    </ul>
+    <p>
+      This creates a glowing aura effect without expensive post-processing.
+    </p>
+  </div>
+
+  <!-- 9 -->
+  <div class="section">
+    <h3>9. Deterministic Procedural Parallax</h3>
+    <p>
+      <code>ParallaxBackground</code> generates its background rectangles using a
+      seeded random number generator. The same seed always produces the same background.
+      Each level can specify its own <code>parallax_seed</code> in JSON, giving each
+      level a visually unique background with no asset files needed.
+    </p>
+  </div>
+
+  <hr />
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <h2>How One Frame Works</h2>
+
+  <pre>Game.run() — each iteration:
+
+  1. dt = get_frame_time()          (real wall-clock delta, e.g. 0.016 s)
+
+  2. _update_loop(dt)
+       match self.state:
+         MENU         → handle menu input, transition to PLAYING on selection
+         PLAYING      → accumulate dt; run fixed physics ticks:
+                          Player.apply_control(input_held)
+                          Player.update(FIXED_DT)
+                          Trail.update(player.pos)
+                          Camera.update(player.pos, FIXED_DT)
+                          ParticleSystem.update(FIXED_DT)
+                          _check_collectibles()       ← distance-based collection
+                          CollisionManager.check_all() ← sweep test each tick
+         PAUSED / GAME_OVER / LEVEL_COMPLETE → handle overlay input
+
+  3. _render()
+       progress = player.pos.x / level.level_end_x
+
+       Renderer.draw(progress, player.speed_mult)
+         ParallaxBackground.draw()    ← screen space (before camera)
+         camera.begin()
+           _draw_obstacles()
+           _draw_collectibles()       ← animated bob, glow, shape
+           TrailRenderer.draw()       ← two-pass quad mesh
+           _draw_player()             ← two concentric circles
+           ParticleSystem.draw()
+         camera.end()
+       ScreenEffects.draw()           ← screen space (vignette, fade)
+       HUD.draw()                     ← screen space (score, progress bar)
+       [menu overlay if not PLAYING]</pre>
+
+  <hr />
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <h2>Architecture Summary Table</h2>
+
+  <table>
+    <thead>
+      <tr><th>Aspect</th><th>Solution</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Physics timing</td><td>Fixed-timestep accumulator (60 Hz)</td></tr>
+      <tr><td>State management</td><td>GameState enum with <code>match</code> dispatch</td></tr>
+      <tr><td>Collision detection</td><td>Sweep-based segment-rect tests with AABB broad-phase cull</td></tr>
+      <tr><td>Rendering separation</td><td>Renderer owns all drawing; entities are data-only</td></tr>
+      <tr><td>Trail rendering</td><td>Two-pass glow + core quad-mesh with color lerp</td></tr>
+      <tr><td>Camera movement</td><td>Lerp smoothing with lookahead and trauma² screen shake</td></tr>
+      <tr><td>Particles</td><td>Pre-allocated pool (zero GC pressure during gameplay)</td></tr>
+      <tr><td>Level definition</td><td>JSON with schema validation and obstacle builder</td></tr>
+      <tr><td>Speed progression</td><td>Piecewise-linear speed curve (waypoints in JSON)</td></tr>
+      <tr><td>Procedural background</td><td>Seeded RNG for deterministic per-level parallax</td></tr>
+      <tr><td>Input abstraction</td><td>InputManager hides Space / mouse button distinction</td></tr>
+      <tr><td>Geometry math</td><td>Pure-Python utilities — testable without a render window</td></tr>
+    </tbody>
+  </table>
+
+  <hr />
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <h2>What You Would Do Differently</h2>
+  <p>
+    Instructors value honest reflection — it shows you understand the tradeoffs,
+    not just the code. A few honest answers:
+  </p>
+  <ul>
+    <li>
+      Move <code>speed_mult</code> updates out of the game loop and into a dedicated
+      system, so the <code>Game</code> class isn't responsible for both orchestration
+      and per-entity state management.
+    </li>
+    <li>
+      The <code>level_loader.py</code> wrapper around <code>Level</code> adds a thin
+      layer that doesn't do much — those responsibilities could be collapsed.
+    </li>
+    <li>
+      Collectible rendering shape logic (<code>if col.type == "gem"</code> etc.) in
+      <code>renderer.py</code> could be moved into a per-type draw strategy to avoid
+      adding another <code>elif</code> each time a new collectible type is introduced.
+    </li>
+  </ul>
+
+</body>
+</html>
