@@ -3,6 +3,16 @@ from settings import *
 
 
 class Camera:
+    """Smooth-following 2-D camera that keeps the player in view.
+
+    Each physics tick the camera lerps toward the player's position plus a
+    lookahead offset so the player sees ahead of where they are heading.  The
+    horizontal target is clamped so the view never shows empty space outside
+    the level boundaries.  Call begin() before drawing world-space objects and
+    end() afterward; scroll_x exposes the left-edge world coordinate for the
+    parallax background.
+    """
+
     def __init__(self, level_width=LEVEL_WIDTH, lookahead=CAMERA_LOOKAHEAD, lerp=CAMERA_LERP):
         self.level_width  = level_width
         self._lookahead   = lookahead

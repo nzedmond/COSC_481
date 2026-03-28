@@ -44,6 +44,15 @@ def _segment_hits_rect(p1, p2, rect_x, rect_y, rect_w, rect_h):
 # ── Entities ──────────────────────────────────────────────────────────────────
 
 class Player:
+    """The snake's head — owns position, velocity, and steering state.
+
+    Moves automatically to the right every tick at a speed controlled by the
+    level's speed curve.  Vertical movement is binary: holding the control input
+    drives the head upward; releasing it drives the head downward.  prev_pos is
+    recorded at the start of each update so the collision system can sweep-test
+    the full movement segment rather than just the endpoint.
+    """
+
     def __init__(self):
         self.pos        = Vector2(100, SCREEN_HEIGHT // 2)
         self.prev_pos   = Vector2(100, SCREEN_HEIGHT // 2)
@@ -61,6 +70,15 @@ class Player:
 
 
 class Trail:
+    """A capped history of past player positions that forms the snake's body.
+
+    A new point is appended only when the player has moved at least
+    TRAIL_MIN_STEP pixels from the last recorded point, preventing redundant
+    entries at low speeds.  The deque is capped at TRAIL_MAX_LENGTH points; the
+    oldest point is evicted when the cap is exceeded.  The TrailRenderer in
+    ui.py reads this deque each frame to draw the quad-mesh trail.
+    """
+
     def __init__(self):
         self.points = deque()
 
@@ -76,6 +94,13 @@ class Trail:
 
 
 class Obstacle:
+    """An axis-aligned rectangular obstacle that kills the player on contact.
+
+    Built by Level._build_obstacles() from the JSON level definition.  Stores
+    only integer pixel coordinates; the collision system uses these to perform
+    segment-rectangle intersection tests each physics tick.
+    """
+
     def __init__(self, x, y, w, h):
         self.x, self.y, self.w, self.h = int(x), int(y), int(w), int(h)
 
@@ -86,6 +111,15 @@ SPIKE_WIDTH, SPIKE_HEIGHT = 15, 30
 
 
 class Level:
+    """Loads and exposes a single level from its JSON file.
+
+    Parses the JSON on construction and builds the list of Obstacle objects from
+    the raw obstacle definitions (rectangles and spike rows).  Also stores the
+    piecewise-linear speed curve, camera overrides, parallax configuration, and
+    the raw collectible list.  speed_at(x) interpolates the speed multiplier for
+    any world x-coordinate using the curve waypoints.
+    """
+
     def __init__(self, path):
         with open(path) as f:
             raw = json.load(f)
@@ -129,6 +163,15 @@ SAVE_FILE_PATH = "saves/progress.json"
 
 
 class SaveManager:
+    """Persists per-level best scores and completion percentages across sessions.
+
+    Reads saves/progress.json on startup and writes it back after every run.
+    Each level is keyed by its name string and stores best_score, best_pct
+    (0.0–1.0), and total attempt count.  update() returns True when the run
+    sets a new best score or completion percentage, which the game uses to
+    display the "NEW BEST!" indicator.
+    """
+
     def __init__(self):
         self._data = {}
         if os.path.exists(SAVE_FILE_PATH):
@@ -158,6 +201,12 @@ class SaveManager:
 # ── Game ──────────────────────────────────────────────────────────────────────
 
 class GameState(Enum):
+    """The five mutually exclusive states the game can be in at any moment.
+
+    The Game class holds one current state and routes input and rendering
+    through a match statement based on it.
+    """
+
     MENU = 0; PLAYING = 1; PAUSED = 2; GAME_OVER = 3; LEVEL_COMPLETE = 4
 
 
@@ -173,6 +222,16 @@ PICKUP_PARTICLE_SPEED   = 120
 
 
 class Game:
+    """Top-level controller that owns the game loop and all runtime objects.
+
+    Initialises the raylib window and creates the menus and save manager in
+    __init__.  reset() builds a fresh level, player, trail, camera, and renderer
+    each time a run starts.  run() is the main loop: _update() advances the
+    state machine and runs fixed-timestep physics ticks via _tick(), while
+    _render() draws everything for the current frame.  All other classes are
+    either called from here or passed into the Renderer.
+    """
+
     def __init__(self):
         init_window(SCREEN_WIDTH, SCREEN_HEIGHT, "Geometry Snake")
         set_target_fps(FPS)

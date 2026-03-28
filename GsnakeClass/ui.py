@@ -32,6 +32,16 @@ CAVE_BACKGROUND_COLOR = Color(8, 6, 16, 255)
 
 
 class ParallaxBackground:
+    """Procedural multi-layer scrolling background made of randomized rectangles.
+
+    Three layers of dark cave-wall shapes are generated once at construction
+    using a seeded RNG, so the background is deterministic and unique per level
+    seed.  Each layer scrolls at a different fraction of the camera speed,
+    creating depth through parallax.  draw() must be called before
+    camera.begin() so the background stays in screen space behind all
+    world-space objects.
+    """
+
     def __init__(self, level_width=LEVEL_WIDTH, seed=42, speed_overrides=None):
         rng = random.Random(seed)
         self._layers = []
@@ -78,6 +88,16 @@ def _draw_trail_segment(point_a, point_b, half_width, color):
 
 
 class TrailRenderer:
+    """Draws the snake's trail as a tapered, color-shifting quad-mesh strip.
+
+    Rendering happens in two passes.  The first pass draws a wide, semi-
+    transparent glow over the most recent segments near the head, widening
+    further at higher speeds.  The second pass draws the full-length solid core
+    as a tapered strip that blends from white at the head to the current trail
+    color toward the tail.  The trail color itself shifts from cyan to magenta
+    as the player progresses through the level.
+    """
+
     def draw(self, points, progress, speed_mult):
         point_list  = list(points)
         point_count = len(point_list)
@@ -108,11 +128,28 @@ class TrailRenderer:
 # ── Particle system ───────────────────────────────────────────────────────────
 
 class _Particle:
+    """A single particle slot in the ParticleSystem pool.
+
+    life <= 0 means the slot is available for reuse.  __slots__ is used to
+    avoid per-instance dictionaries and keep memory layout compact across the
+    fixed-size pool.
+    """
+
     __slots__ = ('x', 'y', 'velocity_x', 'velocity_y', 'life', 'max_life', 'red', 'green', 'blue')
     def __init__(self): self.life = 0.0
 
 
 class ParticleSystem:
+    """Fixed-size pool of particles with zero memory allocation after startup.
+
+    All particle slots are created once in __init__ and recycled throughout the
+    game.  emit_burst() finds dead slots (life <= 0) and initializes them with
+    a random outward velocity and a randomized lifetime.  update() moves live
+    particles and applies gravity each tick.  draw() renders live particles as
+    small circles that fade out as their lifetime expires.  If the pool is
+    exhausted during a burst, the overflow is silently dropped.
+    """
+
     def __init__(self, pool_size=PARTICLE_POOL_SIZE):
         self._pool = [_Particle() for _ in range(pool_size)]
 
@@ -152,6 +189,15 @@ class ParticleSystem:
 # ── Screen effects ────────────────────────────────────────────────────────────
 
 class ScreenEffects:
+    """Screen-space overlay effects drawn on top of all world objects.
+
+    Manages two effects.  The fade-in is a black rectangle whose opacity drops
+    to zero over FADE_DURATION seconds each time start_fade_in() is called,
+    giving a smooth transition when a level loads.  The vignette is a permanent
+    dark gradient drawn along all four screen edges that frames the play area
+    and adds depth without any texture assets.
+    """
+
     def __init__(self):
         self._fade_alpha = 255.0
         self._fading_in  = False
@@ -191,6 +237,15 @@ COLOR_BAR_FILL        = Color(0,  220, 255,  220)
 
 
 class HUD:
+    """Heads-up display drawn in screen space during active gameplay.
+
+    Shows a top-left panel with the current score and collectible status, and a
+    progress bar along the bottom of the screen.  Collectibles are shown as
+    individual dots (filled when collected) up to 12 items; beyond that they
+    collapse into an X / Y counter to avoid overflow.  Must be drawn after
+    camera.end() so it always sits on top of world-space content.
+    """
+
     def draw(self, score, collected, total, progress):
         draw_rectangle(8, 8, 200, 58, Color(0, 0, 0, 150))
         draw_rectangle_lines(8, 8, 200, 58, Color(255, 255, 255, 30))
@@ -248,6 +303,15 @@ def draw_key_hint(key, action, y):
 
 
 class MainMenu:
+    """Full-screen title and level-selection menu shown at startup.
+
+    Displays the game title, a scrollable list of levels with their saved best
+    scores, and keyboard hints.  Up/Down arrows move the selection; Space or
+    Enter confirms.  handle_input() returns the string "play" when the player
+    confirms, which the Game class uses to trigger reset().  selected_level_path
+    exposes the JSON path of whichever level is currently highlighted.
+    """
+
     def __init__(self, levels, save):
         self._levels   = levels
         self._save     = save
@@ -298,6 +362,13 @@ class MainMenu:
 
 
 class PauseMenu:
+    """Semi-transparent overlay shown while the game is paused.
+
+    Dims the gameplay scene behind it and displays P to resume and M to quit
+    to the main menu.  Has no input handling of its own; key checks live in
+    Game._update().
+    """
+
     def draw(self):
         draw_rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(0, 0, 0, 120))
         draw_panel(SCREEN_CENTER_X - 150, SCREEN_CENTER_Y - 70, 300, 140)
@@ -307,6 +378,13 @@ class PauseMenu:
 
 
 class GameOverMenu:
+    """Overlay shown when the player dies before reaching the level end.
+
+    Displays the score and completion percentage for the run just finished,
+    the all-time best for the level, and a "NEW BEST!" banner when either
+    record is broken.  R retries the level; M returns to the main menu.
+    """
+
     def draw(self, score, best_score, completion, best_completion, new_best):
         draw_rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(0, 0, 0, 150))
         draw_panel(SCREEN_CENTER_X - 180, SCREEN_CENTER_Y - 100, 360, 200)
@@ -320,6 +398,13 @@ class GameOverMenu:
 
 
 class LevelCompleteMenu:
+    """Overlay shown when the player reaches the end of the level.
+
+    Displays the run score alongside the all-time best score and completion
+    percentage, plus a "NEW BEST!" banner if a record was broken.  R plays the
+    level again; M returns to the main menu.
+    """
+
     def draw(self, score, best_score, best_completion, new_best):
         draw_rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, Color(0, 0, 0, 150))
         draw_panel(SCREEN_CENTER_X - 180, SCREEN_CENTER_Y - 100, 360, 200)
@@ -334,6 +419,17 @@ class LevelCompleteMenu:
 # ── In-game renderer ──────────────────────────────────────────────────────────
 
 class Renderer:
+    """Orchestrates all in-game drawing for one frame.
+
+    Receives references to every game object at construction and calls their
+    draw logic in the correct layer order each frame: parallax background first
+    in screen space, then obstacles, collectibles, trail, player, and particles
+    all in world space between camera.begin() and camera.end().  Collectibles
+    get an animated vertical bob and a glow ring; their core shape varies by
+    type.  The player is drawn as two concentric circles colored by trail
+    progress.
+    """
+
     def __init__(self, player, trail, obstacles, camera, parallax, particles, collectibles):
         self.player          = player
         self.trail           = trail

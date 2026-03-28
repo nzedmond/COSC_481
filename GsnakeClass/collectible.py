@@ -8,6 +8,14 @@ DEFAULT_COLLECTIBLE_TYPE = COLLECTIBLE_TYPES["gem"]
 
 
 class Collectible:
+    """A pickup item the player can collect by flying through it.
+
+    Holds the item's world position, point value, collision radius, display
+    color, and whether it has already been collected this run.  The visual
+    appearance is determined by the type name ('gem', 'coin', or 'star') and
+    looked up from COLLECTIBLE_TYPES at construction time.
+    """
+
     def __init__(self, x, y, type_name):
         type_config    = COLLECTIBLE_TYPES.get(type_name, DEFAULT_COLLECTIBLE_TYPE)
         self.x         = float(x)
