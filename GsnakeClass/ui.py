@@ -23,14 +23,6 @@ def current_trail_color(progress):
 
 # ── Parallax background ───────────────────────────────────────────────────────
 
-PARALLAX_LAYER_CONFIGS = [
-    {"speed": 0.15, "color": Color(18, 12, 28, 255),  "count": 25, "min_w": 60,  "max_w": 150, "min_h": 80,  "max_h": 200},
-    {"speed": 0.35, "color": Color(28, 20, 45, 255),  "count": 20, "min_w": 30,  "max_w": 80,  "min_h": 40,  "max_h": 120},
-    {"speed": 0.65, "color": Color(40, 30, 65, 255),  "count": 30, "min_w": 10,  "max_w": 30,  "min_h": 20,  "max_h":  60},
-]
-CAVE_BACKGROUND_COLOR = Color(8, 6, 16, 255)
-
-
 class ParallaxBackground:
     """Procedural multi-layer scrolling background made of randomized rectangles.
 
