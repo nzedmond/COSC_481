@@ -56,7 +56,6 @@ class Player:
     def __init__(self):
         self.pos        = Vector2(100, SCREEN_HEIGHT // 2)
         self.prev_pos   = Vector2(100, SCREEN_HEIGHT // 2)
-        self.vel        = Vector2(PLAYER_SPEED_X, 0.0)
         self.heading_up = False
         self.speed_mult = 1.0
 
@@ -64,7 +63,6 @@ class Player:
         self.prev_pos  = Vector2(self.pos.x, self.pos.y)
         velocity_x     = PLAYER_SPEED_X * self.speed_mult
         velocity_y     = -PLAYER_SPEED_Y if self.heading_up else PLAYER_SPEED_Y
-        self.vel       = Vector2(velocity_x, velocity_y)
         self.pos.x    += velocity_x * dt
         self.pos.y    += velocity_y * dt
 
@@ -127,7 +125,6 @@ class Level:
         self.level_end_x     = int(raw["length"])
         self.speed_curve     = sorted(raw.get("speed_curve", [{"x": 0, "mult": 1.0}]), key=lambda p: p["x"])
         self.camera_config   = raw.get("camera", {})
-        self.parallax_config = raw.get("parallax", [])
         self.parallax_seed   = int(raw.get("parallax_seed", 42))
         self.collectibles    = raw.get("collectibles", [])
         self.obstacles       = self._build_obstacles(raw["obstacles"])
@@ -264,8 +261,7 @@ class Game:
                                 camera_config.get("lookahead", CAMERA_LOOKAHEAD),
                                 camera_config.get("lerp",      CAMERA_LERP))
         self.parallax  = ParallaxBackground(self.level.level_end_x,
-                                            self.level.parallax_seed,
-                                            self.level.parallax_config)
+                                            self.level.parallax_seed)
         self.particles = ParticleSystem()
         self.effects   = ScreenEffects()
         self.effects.start_fade_in()

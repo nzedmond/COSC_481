@@ -27,20 +27,18 @@ class ParallaxBackground:
     """Procedural multi-layer scrolling background made of randomized rectangles.
 
     Three layers of dark cave-wall shapes are generated once at construction
-    using a seeded RNG, so the background is deterministic and unique per level
+    using a seeded random number generator, so the background is deterministic and unique per level
     seed.  Each layer scrolls at a different fraction of the camera speed,
     creating depth through parallax.  draw() must be called before
     camera.begin() so the background stays in screen space behind all
     world-space objects.
     """
 
-    def __init__(self, level_width=LEVEL_WIDTH, seed=42, speed_overrides=None):
+    def __init__(self, level_width=LEVEL_WIDTH, seed=42):
         rng = random.Random(seed)
         self._layers = []
-        for i, layer_config in enumerate(PARALLAX_LAYER_CONFIGS):
+        for layer_config in PARALLAX_LAYER_CONFIGS:
             speed = layer_config["speed"]
-            if speed_overrides and i < len(speed_overrides):
-                speed = float(speed_overrides[i].get("speed", speed))
             rectangles = [(rng.randint(0, level_width), rng.randint(0, SCREEN_HEIGHT),
                            rng.randint(layer_config["min_w"], layer_config["max_w"]),
                            rng.randint(layer_config["min_h"], layer_config["max_h"]))
