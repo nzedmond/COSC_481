@@ -159,10 +159,9 @@
   <div class="order-box">
     <ol>
       <li><strong>Live demo</strong> — Run the game. Collect something, die, show the score screen. Let them see what they're about to hear explained.</li>
-      <li><strong>Folder tour (1 min)</strong> — Show the <code>core/</code>, <code>entities/</code>, <code>systems/</code>, <code>rendering/</code> split and state the rule: <em>logic never imports rendering</em>.</li>
+      <li><strong>File tour (1 min)</strong> — Show the 5-file structure and explain the division: <code>main.py</code> is logic, <code>ui.py</code> is rendering, <code>camera.py</code> / <code>collectible.py</code> / <code>settings.py</code> are focused modules. State the rule: <em>rendering never writes back to game state.</em></li>
       <li><strong>Walk one frame</strong> — Trace input → physics tick → collision check → render. This ties everything together naturally.</li>
       <li><strong>Go deep on 2–3 design decisions</strong> — Don't try to cover everything. Pick the ones you're most confident defending and go deep.</li>
-      <li><strong>Show the tests</strong> — Open <code>tests/</code> briefly. Mention that <code>geometry.py</code> functions are testable without a window. This signals software engineering maturity.</li>
       <li><strong>End with what you'd do differently</strong> — Instructors love honest reflection. It shows you understand the tradeoffs, not just the code.</li>
     </ol>
   </div>
@@ -172,35 +171,14 @@
   <!-- ═══════════════════════════════════════════════════════ -->
   <h2>Project Architecture Overview</h2>
 
-  <pre>geometry_snake/
-├── main.py                    # Entry point
-├── config/settings.py         # All numeric constants
-├── core/                      # Game loop and state machine
-│   ├── game.py
-│   ├── input_manager.py
-│   └── state.py
-├── entities/                  # Pure-data game objects
-│   ├── player.py
-│   ├── trail.py
-│   ├── obstacle.py
-│   └── collectible.py
-├── systems/                   # Game logic systems
-│   ├── level.py
-│   ├── collision_manager.py
-│   ├── score_manager.py
-│   └── save_manager.py
-├── rendering/                 # All drawing code (separated from logic)
-│   ├── renderer.py
-│   ├── camera.py
-│   ├── trail_renderer.py
-│   ├── particle_system.py
-│   ├── parallax.py
-│   ├── hud.py
-│   ├── effects.py
-│   └── menu.py
-├── utils/geometry.py          # Pure-Python collision math (no pyray)
-├── levels/                    # JSON level definitions
-└── tests/                     # Unit test suite</pre>
+  <pre>GsnakeClass/
+├── main.py          # Entry point + game loop + player, trail, obstacle, level, save, collision
+├── ui.py            # All rendering: trail, parallax, particles, effects, HUD, menus
+├── camera.py        # Smooth-follow camera with lerp and lookahead
+├── collectible.py   # Collectible data class and build_collectibles() factory
+├── settings.py      # All numeric constants (speed, physics, rendering)
+├── levels/          # JSON level definitions
+└── saves/           # Auto-generated progress file</pre>
 
   <hr />
 
@@ -211,21 +189,21 @@
   <div class="section">
     <h3>1. Logic vs. Rendering Separation</h3>
     <p>
-      This is the strongest architectural decision. The <strong>entities</strong>
-      (<code>Player</code>, <code>Trail</code>, <code>Obstacle</code>, <code>Collectible</code>)
-      are pure data — no drawing code anywhere in them. The <strong><code>Renderer</code></strong>
-      class owns all drawing, receives entities, and reads their state. You could swap out
-      pyray for another library without touching a single game logic file.
+      Game logic lives in <code>main.py</code>; all drawing lives in <code>ui.py</code>.
+      The <code>Renderer</code> class in <code>ui.py</code> receives game objects as
+      parameters and reads their state — it never writes back. Data flows one direction:
+      <strong>logic → rendering</strong>.
     </p>
     <p>
-      Data flows one direction: <strong>logic → rendering</strong>.
-      Rendering state never affects physics.
+      This means you could swap out pyray for a different graphics library by only
+      touching <code>ui.py</code> and <code>camera.py</code> — the physics, collision,
+      and save logic in <code>main.py</code> would be untouched.
     </p>
     <div class="qa">
       <p class="q">Why did you separate rendering from logic?</p>
-      <p class="a">Testability and maintainability. The geometry utilities and collision
-      logic can be unit tested without opening a window. It also means the rendering layer
-      can change independently of game rules.</p>
+      <p class="a">Maintainability. If a drawing function breaks, the bug is in
+      <code>ui.py</code>. If physics breaks, the bug is in <code>main.py</code>.
+      The two concerns can't interfere with each other.</p>
     </div>
   </div>
 
@@ -234,7 +212,7 @@
     <h3>2. Fixed-Timestep Physics Loop</h3>
     <p>
       Physics runs at exactly 60 Hz regardless of frame rate using an
-      <strong>accumulator pattern</strong> in <code>game.py</code>.
+      <strong>accumulator pattern</strong> in <code>Game._update()</code>.
       Real frame time accumulates into a buffer; physics ticks batch-process
       when the accumulator reaches <code>FIXED_DT = 1/60 s</code>.
       The accumulator is clamped at <code>MAX_ACCUMULATOR</code> (0.2 s)
@@ -252,15 +230,15 @@
   <div class="section">
     <h3>3. Sweep-Based Collision — No Tunneling</h3>
     <p>
-      <code>CollisionManager</code> tests the <strong>movement segment</strong>
-      (previous position → current position) against obstacles using parametric
-      segment-rectangle intersection from <code>utils/geometry.py</code>.
+      <code>_segment_hits_rect()</code> in <code>main.py</code> tests the
+      <strong>movement segment</strong> (previous position → current position) against
+      obstacles using parametric segment-rectangle intersection.
       This prevents the snake from clipping through thin walls at high speed,
       which a simple point-in-rect test would miss.
     </p>
     <p>
-      A broad-phase AABB cull (only test obstacles within 200 px ahead of the player)
-      keeps the per-frame cost low even with many obstacles.
+      A broad-phase AABB cull (only test obstacles within <code>LOOKAHEAD = 200 px</code>
+      ahead of the player) keeps the per-frame cost low even with many obstacles.
     </p>
     <div class="qa">
       <p class="q">How does collision detection work at high speeds?</p>
@@ -280,9 +258,10 @@
   <div class="section">
     <h3>4. Data-Driven Level Design</h3>
     <p>
-      Levels are entirely defined in JSON files with a validated schema —
+      Levels are entirely defined in JSON files —
       obstacles, collectibles, speed curve, camera config, and parallax seed.
-      No code changes are needed to add a new level.
+      No code changes are needed to add a new level; you only register its path
+      in the <code>GAME_LEVELS</code> list in <code>main.py</code>.
     </p>
     <pre>{
   "name": "Cave Run",
@@ -295,15 +274,8 @@
 }</pre>
     <div class="qa">
       <p class="q">How would you add a new level?</p>
-      <p class="a">Create a JSON file following the schema, register it in
-      <code>GAME_LEVELS</code> in <code>game.py</code>, and run the test suite.
-      No other code changes needed.</p>
-    </div>
-    <div class="qa">
-      <p class="q">What happens if the JSON is malformed?</p>
-      <p class="a">The <code>Level</code> loader validates required fields, types,
-      and speed curve ordering at load time and raises a descriptive
-      <code>ValueError</code> before the game starts.</p>
+      <p class="a">Create a JSON file following the schema and add one line to
+      <code>GAME_LEVELS</code> in <code>main.py</code>. No other code changes needed.</p>
     </div>
   </div>
 
@@ -313,15 +285,15 @@
     <p>
       Each level JSON defines a speed curve as a list of waypoints
       (<code>x</code> world position → <code>mult</code> speed multiplier).
-      <code>Level.speed_multiplier_at(x)</code> linearly interpolates between them.
+      <code>Level.speed_at(x)</code> linearly interpolates between them.
       This gives each level a custom difficulty ramp — early sections easy,
       late sections punishing — without hardcoding anything.
     </p>
     <div class="qa">
       <p class="q">How does the game get harder over time?</p>
       <p class="a">The speed curve increases the player's horizontal velocity as
-      they progress through the level. The same obstacles become harder to dodge
-      because you have less reaction time.</p>
+      they progress. The same obstacles become harder to dodge because you have
+      less reaction time.</p>
     </div>
   </div>
 
@@ -329,8 +301,8 @@
   <div class="section">
     <h3>6. Particle Object Pool</h3>
     <p>
-      <code>ParticleSystem</code> pre-allocates 200 particles at startup and
-      recycles them — <strong>zero memory allocation during gameplay</strong>.
+      <code>ParticleSystem</code> in <code>ui.py</code> pre-allocates 200 particles
+      at startup and recycles them — <strong>zero memory allocation during gameplay</strong>.
       When a collectible is picked up or the player dies, the system finds dead
       particles in the pool and reuses them. If the pool is exhausted, it silently
       emits fewer particles rather than crashing.
@@ -345,24 +317,12 @@
 
   <!-- 7 -->
   <div class="section">
-    <h3>7. Trauma-Squared Screen Shake</h3>
+    <h3>7. Two-Pass Trail Rendering</h3>
     <p>
-      Screen shake intensity = <code>trauma² × max_offset</code>.
-      Trauma decays over time (<code>trauma -= SHAKE_DECAY × dt</code>).
-      Squaring the trauma value creates a non-linear response:
-      soft rattles at low trauma, violent shakes at high trauma —
-      more perceptually realistic than a linear relationship.
-    </p>
-  </div>
-
-  <!-- 8 -->
-  <div class="section">
-    <h3>8. Two-Pass Trail Rendering</h3>
-    <p>
-      The trail is drawn in two passes inside <code>TrailRenderer</code>:
+      The trail is drawn in two passes inside <code>TrailRenderer</code> in <code>ui.py</code>:
     </p>
     <ul>
-      <li><strong>Glow pass</strong> — wider, semi-transparent, covers only the head region. Widens with speed multiplier.</li>
+      <li><strong>Glow pass</strong> — wider, semi-transparent, covers only the head region. Width scales with the current speed multiplier.</li>
       <li><strong>Core pass</strong> — full trail drawn as a tapered quad mesh. Colors shift from cyan (level start) → magenta (level end) based on progress.</li>
     </ul>
     <p>
@@ -370,15 +330,22 @@
     </p>
   </div>
 
-  <!-- 9 -->
+  <!-- 8 -->
   <div class="section">
-    <h3>9. Deterministic Procedural Parallax</h3>
+    <h3>8. Deterministic Procedural Parallax</h3>
     <p>
       <code>ParallaxBackground</code> generates its background rectangles using a
-      seeded random number generator. The same seed always produces the same background.
-      Each level can specify its own <code>parallax_seed</code> in JSON, giving each
-      level a visually unique background with no asset files needed.
+      seeded random number generator (<code>random.Random(seed)</code>). The same seed
+      always produces the same background. Each level specifies its own
+      <code>parallax_seed</code> in JSON, giving each level a visually unique
+      background with no asset files needed.
     </p>
+    <div class="qa">
+      <p class="q">How do you get a different background per level without image files?</p>
+      <p class="a">Each level has a different <code>parallax_seed</code> integer in its
+      JSON. The background generator uses that seed to produce a deterministic but unique
+      arrangement of rectangles. Same seed always gives the same background.</p>
+    </div>
   </div>
 
   <hr />
@@ -390,17 +357,17 @@
 
   1. dt = get_frame_time()          (real wall-clock delta, e.g. 0.016 s)
 
-  2. _update_loop(dt)
+  2. _update(dt)
        match self.state:
          MENU         → handle menu input, transition to PLAYING on selection
-         PLAYING      → accumulate dt; run fixed physics ticks:
-                          Player.apply_control(input_held)
+         PLAYING      → accumulate dt; run fixed physics ticks (_tick):
+                          player.heading_up = steering_up
                           Player.update(FIXED_DT)
                           Trail.update(player.pos)
                           Camera.update(player.pos, FIXED_DT)
                           ParticleSystem.update(FIXED_DT)
-                          _check_collectibles()       ← distance-based collection
-                          CollisionManager.check_all() ← sweep test each tick
+                          collectible pickup check    ← distance-based radius test
+                          boundary + _segment_hits_rect() ← sweep test each obstacle
          PAUSED / GAME_OVER / LEVEL_COMPLETE → handle overlay input
 
   3. _render()
@@ -409,14 +376,14 @@
        Renderer.draw(progress, player.speed_mult)
          ParallaxBackground.draw()    ← screen space (before camera)
          camera.begin()
-           _draw_obstacles()
-           _draw_collectibles()       ← animated bob, glow, shape
+           draw obstacles             ← red rectangles
+           draw collectibles          ← animated bob, glow ring, type-specific shape
            TrailRenderer.draw()       ← two-pass quad mesh
-           _draw_player()             ← two concentric circles
+           draw player                ← two concentric circles
            ParticleSystem.draw()
          camera.end()
-       ScreenEffects.draw()           ← screen space (vignette, fade)
-       HUD.draw()                     ← screen space (score, progress bar)
+       ScreenEffects.draw()           ← screen space (vignette, fade-in)
+       HUD.draw()                     ← screen space (score panel, progress bar)
        [menu overlay if not PLAYING]</pre>
 
   <hr />
@@ -429,18 +396,18 @@
       <tr><th>Aspect</th><th>Solution</th></tr>
     </thead>
     <tbody>
-      <tr><td>Physics timing</td><td>Fixed-timestep accumulator (60 Hz)</td></tr>
+      <tr><td>Physics timing</td><td>Fixed-timestep accumulator (60 Hz) in <code>Game._update()</code></td></tr>
       <tr><td>State management</td><td>GameState enum with <code>match</code> dispatch</td></tr>
-      <tr><td>Collision detection</td><td>Sweep-based segment-rect tests with AABB broad-phase cull</td></tr>
-      <tr><td>Rendering separation</td><td>Renderer owns all drawing; entities are data-only</td></tr>
-      <tr><td>Trail rendering</td><td>Two-pass glow + core quad-mesh with color lerp</td></tr>
-      <tr><td>Camera movement</td><td>Lerp smoothing with lookahead and trauma² screen shake</td></tr>
-      <tr><td>Particles</td><td>Pre-allocated pool (zero GC pressure during gameplay)</td></tr>
-      <tr><td>Level definition</td><td>JSON with schema validation and obstacle builder</td></tr>
-      <tr><td>Speed progression</td><td>Piecewise-linear speed curve (waypoints in JSON)</td></tr>
-      <tr><td>Procedural background</td><td>Seeded RNG for deterministic per-level parallax</td></tr>
-      <tr><td>Input abstraction</td><td>InputManager hides Space / mouse button distinction</td></tr>
-      <tr><td>Geometry math</td><td>Pure-Python utilities — testable without a render window</td></tr>
+      <tr><td>Collision detection</td><td>Sweep-based <code>_segment_hits_rect()</code> with AABB broad-phase cull</td></tr>
+      <tr><td>Rendering separation</td><td><code>ui.py</code> owns all drawing; game logic stays in <code>main.py</code></td></tr>
+      <tr><td>Trail rendering</td><td>Two-pass glow + core quad-mesh with color interpolation by progress</td></tr>
+      <tr><td>Camera movement</td><td>Lerp smoothing toward player + lookahead, clamped to level bounds</td></tr>
+      <tr><td>Particles</td><td>Pre-allocated pool in <code>ParticleSystem</code> (zero GC pressure during gameplay)</td></tr>
+      <tr><td>Level definition</td><td>JSON files; loaded and built by <code>Level</code> class in <code>main.py</code></td></tr>
+      <tr><td>Speed progression</td><td>Piecewise-linear speed curve interpolated by <code>Level.speed_at(x)</code></td></tr>
+      <tr><td>Procedural background</td><td>Seeded RNG in <code>ParallaxBackground</code> for deterministic per-level parallax</td></tr>
+      <tr><td>Progress persistence</td><td><code>SaveManager</code> reads/writes <code>saves/progress.json</code> after every run</td></tr>
+      <tr><td>Geometry math</td><td>Pure-Python helpers <code>_segments_intersect</code> / <code>_segment_hits_rect</code> in <code>main.py</code></td></tr>
     </tbody>
   </table>
 
@@ -454,18 +421,22 @@
   </p>
   <ul>
     <li>
-      Move <code>speed_mult</code> updates out of the game loop and into a dedicated
-      system, so the <code>Game</code> class isn't responsible for both orchestration
-      and per-entity state management.
+      <code>main.py</code> handles too many responsibilities — game loop, entities,
+      level loading, collision, and saving all live in one file. For a larger project
+      these would each earn their own module, but for a class project the simplicity
+      of a flat structure outweighs the organizational benefit.
     </li>
     <li>
-      The <code>level_loader.py</code> wrapper around <code>Level</code> adds a thin
-      layer that doesn't do much — those responsibilities could be collapsed.
+      Collectible rendering shape logic (<code>if collectible.type == "gem"</code> etc.)
+      in <code>ui.py</code> could be replaced with a per-type draw function stored
+      in <code>COLLECTIBLE_TYPES</code>, so adding a new type doesn't require touching
+      the renderer at all.
     </li>
     <li>
-      Collectible rendering shape logic (<code>if col.type == "gem"</code> etc.) in
-      <code>renderer.py</code> could be moved into a per-type draw strategy to avoid
-      adding another <code>elif</code> each time a new collectible type is introduced.
+      <code>speed_mult</code> is set by the game loop and written directly onto the
+      <code>Player</code> object before each tick. A cleaner approach would pass it
+      as a parameter to <code>Player.update()</code> so the player object doesn't
+      carry state that belongs to the level.
     </li>
   </ul>
 
