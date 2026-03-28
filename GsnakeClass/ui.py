@@ -10,7 +10,7 @@ TRAIL_TAIL_COLOR  = (255,  60, 200)   # hot magenta at level end
 TRAIL_WHITE_COLOR = (255, 255, 255)
 
 
-def interpolate_color(start_color, end_color, t):
+def mix_colors(start_color, end_color, t):
     t = max(0.0, min(1.0, t))
     return (int(start_color[0] + (end_color[0] - start_color[0]) * t),
             int(start_color[1] + (end_color[1] - start_color[1]) * t),
@@ -18,7 +18,7 @@ def interpolate_color(start_color, end_color, t):
 
 
 def current_trail_color(progress):
-    return interpolate_color(TRAIL_HEAD_COLOR, TRAIL_TAIL_COLOR, progress)
+    return mix_colors(TRAIL_HEAD_COLOR, TRAIL_TAIL_COLOR, progress)
 
 
 # ── Parallax background ───────────────────────────────────────────────────────
@@ -120,7 +120,7 @@ class TrailRenderer:
         for i in range(point_count - 1):
             taper         = 1.0 - i / point_count
             half_width    = max(0.4, base_half_width * taper)
-            segment_color = interpolate_color(TRAIL_WHITE_COLOR, trail_color, i / point_count)
+            segment_color = mix_colors(TRAIL_WHITE_COLOR, trail_color, i / point_count)
             _draw_trail_segment(point_list[i], point_list[i + 1], half_width,
                                 Color(segment_color[0], segment_color[1], segment_color[2], 255))
 
