@@ -9,6 +9,7 @@ from food import Food
 from ui import UI
 from powerups import PowerupManager, Shield
 from obstacles import ObstacleManager
+from audio import AudioManager
 
 
 os.makedirs("data", exist_ok=True)
@@ -61,8 +62,10 @@ class Game:
         self.score_pop_timer    = 0       # frames remaining for score text pop
         self.debug              = False
         self.god_mode           = False
+        self.audio_mgr          = AudioManager()
 
     def update(self):
+        self.audio_mgr.update(self.screens.current, self.mode)
         match self.screens.current:
             case Screen.MENU:         self._update_menu()
             case Screen.GAMEPLAY:     self._update_gameplay()
@@ -149,12 +152,14 @@ class Game:
 
         eaten_pos   = Vector2(self.food.position.x, self.food.position.y)
         eaten_color = self.food.color
+        eaten_type  = self.food.food_type
         score_delta = self.food.update(self.snake, obs_positions)
         if score_delta != 0:
+            self.audio_mgr.play_hit(eaten_type)
             self._food_pops.append([eaten_pos, eaten_color, 0])
             self.score_pop_timer = SCORE_POP_DURATION
             self.score = max(0, self.score + score_delta)
-            log.info(f"Food eaten ({self.food.food_type.name}) — delta: {score_delta}, score: {self.score}")
+            log.info(f"Food eaten ({eaten_type.name}) — delta: {score_delta}, score: {self.score}")
 
         self.obstacle_mgr.update(self.score, self.snake, self.food)
 
@@ -262,7 +267,7 @@ class Game:
         self.ui.draw_game_over(self.score, self.high_score)
 
     def startup(self):
-        pass
+        self.audio_mgr.load()
 
     def _start_game(self):
         """Set up a fresh round for the current mode and transition to gameplay."""
@@ -296,5 +301,5 @@ class Game:
         self._start_game()
 
     def shutdown(self):
-        pass
+        self.audio_mgr.unload()
 
