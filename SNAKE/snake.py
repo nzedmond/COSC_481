@@ -16,7 +16,6 @@ class Snake:
         self.body            = [Vector2(100 - i * self.size, 100) for i in range(self.length)]
         self.active_powerups = []
         self.shielded        = False
-        self.magnet          = False
 
     def handle_input(self):
         if is_key_pressed(KEY_RIGHT) and self.direction.x == 0 and self.allow_move:
@@ -43,15 +42,13 @@ class Snake:
     def update(self):
         self.frames_counter += 1
         if (self.frames_counter % self.move_interval) != 0:
-            return False  # Skip movement until the next interval
+            return False
 
-        # Move the snake's body segments
         for i in range(len(self.body) - 1, 0, -1):
             self.body[i] = Vector2(self.body[i - 1].x, self.body[i - 1].y)
 
-        # Move the head of the snake in the current direction
         self.body[0].x += self.direction.x * self.speed
         self.body[0].y += self.direction.y * self.speed
         self.allow_move = True
-        self.frames_counter = 0  # Reset to avoid unbounded growth
-        return True  # Indicate that the snake has moved this frame
+        self.frames_counter = 0
+        return True

@@ -19,20 +19,16 @@ HDR_PAD  = 10   # inner padding from header edges
 
 class UI:
     def draw_grid(self):
-        # Vertical lines — full playable height
         for i in range(WINDOW_WIDTH // _CELL + 1):
             x = int(_CELL * i + _OFF_X / 2)
             draw_line(x, HEADER_HEIGHT, x, WINDOW_HEIGHT, LIGHTGRAY)
-        # Horizontal lines — confined below the header
         for i in range(_PLAYABLE_H // _CELL + 1):
             y = HEADER_HEIGHT + int(_CELL * i + _OFF_Y / 2)
             draw_line(0, y, WINDOW_WIDTH, y, LIGHTGRAY)
 
     def draw_header(self, score, high_score, mode=None, time_left=0, score_pop_timer=0):
-        # Background + bottom border
         draw_rectangle(0, 0, WINDOW_WIDTH, HEADER_HEIGHT, DARKGRAY)
         draw_line(0, HEADER_HEIGHT, WINDOW_WIDTH, HEADER_HEIGHT, BLACK)
-        # Score on the left — pops when points are earned
         if score_pop_timer > 0:
             ratio      = score_pop_timer / SCORE_POP_DURATION
             score_size = int(18 + 8 * ratio)
@@ -42,7 +38,6 @@ class UI:
             score_col  = WHITE
         draw_text(f"Score: {score}",      HDR_PAD,       HDR_PAD, score_size, score_col)
         draw_text(f"Best:  {high_score}", HDR_PAD + 130, HDR_PAD, 18,         LIGHTGRAY)
-        # Mode tag + timer (centre)
         if mode is not None and mode != Mode.CLASSIC:
             tag = _MODE_LABELS[mode]
             if mode == Mode.TIME_ATTACK:
@@ -54,13 +49,10 @@ class UI:
             else:
                 color = SKYBLUE
             draw_text(tag, WINDOW_WIDTH // 2 - 20, HDR_PAD, 16, color)
-        # Controls hint on the right
         draw_text("Arrow Keys  |  [ ] Speed  |  P Pause",
                   WINDOW_WIDTH - 290, HDR_PAD + 2, 14, GRAY)
 
     def draw_menu(self, selected_mode=0):
-        # self.draw_grid() # DELETE AFTER MEASURING SCREEN DIMENSIONS !!!!!!!!!!!!!!!
-        # draw_rectangle_gradient_v(280, 140, 260, 240, Color(112, 128, 144, 255), Color(47, 79, 79, 255))
         draw_text("SNAKE", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 4, 50, DARKGREEN)
 
         # Mode selector
@@ -80,31 +72,25 @@ class UI:
                   WINDOW_WIDTH // 2 - 88, WINDOW_HEIGHT - 44, 16, DARKGRAY)
 
     def draw_instructions(self):
-        # ============================= Background ============================
         draw_rectangle(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, Color(20, 20, 20, 255))
-
-        # ============================= Title ===============================
         draw_text("HOW TO PLAY", WINDOW_WIDTH // 2 - 120, 20, 36, GREEN)
         draw_line(40, 64, WINDOW_WIDTH - 40, 64, DARKGRAY)
 
-        # ================== Controls (left column) ==========================
         cx, cy = 50, 80
         draw_text("CONTROLS", cx, cy, 20, LIGHTGRAY)
         rows = [
-            ("Arrow Keys",  "Move the snake"),
-            ("[ ]",         "Decrease / increase speed"),
-            ("P",           "Pause / resume"),
-            ("ENTER",       "Start / restart game"),
-            ("M",           "Return to menu (game over)"),
+            ("Arrow Keys",    "Move the snake"),
+            ("[ ]",           "Decrease / increase speed"),
+            ("P",             "Pause / resume"),
+            ("ENTER",         "Start / restart game"),
+            ("M",             "Return to menu (game over)"),
             ("I / BACKSPACE", "Open / close this screen"),
-            ("T",            "Path hint (Maze — pause first or use at start)"),
         ]
         for i, (key, desc) in enumerate(rows):
             y = cy + 28 + i * 26
             draw_text(key,  cx,       y, 16, YELLOW)
             draw_text(desc, cx + 160, y, 16, WHITE)
 
-        # ================ Food types (right column) =========================
         fx, fy = 450, 80
         draw_text("FOOD TYPES", fx, fy, 20, LIGHTGRAY)
         foods = [
@@ -119,16 +105,13 @@ class UI:
             draw_text(name,   fx + 24, y,      16, color)
             draw_text(effect, fx + 24, y + 18, 13, GRAY)
 
-        # ========================== Power-ups ===================================
         draw_line(40, 290, WINDOW_WIDTH - 40, 290, DARKGRAY)
         draw_text("POWER-UPS", 50, 298, 20, LIGHTGRAY)
         draw_text("(white-bordered pickups — appear every 5 s)", 200, 300, 14, GRAY)
 
         powerups = [
-            (SKYBLUE, "S  Speed Boost", "Move interval -3 for 5 s"),
-            (YELLOW,  "H  Shield",      "Absorbs the next lethal collision (10 s)"),
-            (PINK,    "M  Magnet",      "Pulls food toward your head for 5 s"),
-            (LIME,    "Z  Shrink",      "Instantly removes 3 tail segments"),
+            (YELLOW,  "H  Shield",  "Absorbs the next lethal collision (10 s)"),
+            (LIME,    "Z  Shrink",  "Instantly removes 3 tail segments"),
         ]
         cols = [(50, 322), (430, 322)]
         for i, (color, name, effect) in enumerate(powerups):
@@ -139,7 +122,6 @@ class UI:
             draw_text(name,   px + 28, row_y,      16, color)
             draw_text(effect, px + 28, row_y + 20, 13, GRAY)
 
-        # ======================== Obstacles ==================================
         draw_line(40, 464, WINDOW_WIDTH - 40, 464, DARKGRAY)
         draw_text("OBSTACLES", 50, 472, 20, LIGHTGRAY)
         draw_rectangle(50, 498, 16, 16, BROWN)
@@ -149,7 +131,6 @@ class UI:
         draw_text(f"A new wall spawns every {OBSTACLE_SPAWN_EVERY} points  (max {OBSTACLE_MAX})",
                   74, 518, 13, GRAY)
 
-        # ========================= Footer =====================================
         draw_line(40, WINDOW_HEIGHT - 36, WINDOW_WIDTH - 40, WINDOW_HEIGHT - 36, DARKGRAY)
         draw_text("I or BACKSPACE  -  Back to menu",
                   WINDOW_WIDTH // 2 - 150, WINDOW_HEIGHT - 26, 16, DARKGRAY)
@@ -161,10 +142,8 @@ class UI:
         x = WINDOW_WIDTH - 28
         y = HEADER_HEIGHT + 6
         for p in active_powerups:
-            # Icon
             draw_rectangle(x, y, 18, 18, p.color)
             draw_text(p.label, x + 4, y + 3, 12, BLACK)
-            # Vertical timer bar (shrinks downward as the effect expires)
             draw_rectangle(x + 20, y, 4, 18, DARKGRAY)
             bar_h = int(18 * p.ratio)
             if bar_h > 0:
@@ -185,46 +164,26 @@ class UI:
                 color,
             )
 
-    def draw_tip_overlay(self, path_tiles, obstacle_positions, snake_head, food_pos, food_color):
-        """Minimap in the top-right corner showing the BFS path from the snake to the food."""
-        SCALE = 5
-        COLS  = WINDOW_WIDTH  // _CELL
-        ROWS  = _PLAYABLE_H   // _CELL
-        W, H  = COLS * SCALE, ROWS * SCALE
-        ox    = WINDOW_WIDTH - W - 10
-        oy    = HEADER_HEIGHT + 10
-
-        # Border + dark background
-        draw_rectangle(ox - 2, oy - 2, W + 4, H + 4, WHITE)
-        draw_rectangle(ox, oy, W, H, Color(15, 15, 15, 255))
-
-        # Maze walls
-        for pos in obstacle_positions:
-            tx = int(pos.x) // _CELL
-            ty = int(pos.y - HEADER_HEIGHT) // _CELL
-            draw_rectangle(ox + tx * SCALE, oy + ty * SCALE, SCALE, SCALE, BROWN)
-
-        # BFS path as a cyan line
-        for i in range(len(path_tiles) - 1):
-            tx1, ty1 = path_tiles[i]
-            tx2, ty2 = path_tiles[i + 1]
-            draw_line(
-                ox + tx1 * SCALE + SCALE // 2, oy + ty1 * SCALE + SCALE // 2,
-                ox + tx2 * SCALE + SCALE // 2, oy + ty2 * SCALE + SCALE // 2, RED
-            )
-
-        # Snake head (green square)
-        hx = int(snake_head.x) // _CELL
-        hy = int(snake_head.y - HEADER_HEIGHT) // _CELL
-        draw_rectangle(ox + hx * SCALE, oy + hy * SCALE, SCALE, SCALE, GREEN)
-
-        # Food (colored square)
-        fx = int(food_pos.x) // _CELL
-        fy = int(food_pos.y - HEADER_HEIGHT) // _CELL
-        draw_rectangle(ox + fx * SCALE, oy + fy * SCALE, SCALE, SCALE, food_color)
-
-        # Label at the bottom of the minimap
-        draw_text("T  PATH HINT", ox + 4, oy + H - 13, 11, DARKGRAY)
+    def draw_debug_overlay(self, game):
+        X, Y = 6, HEADER_HEIGHT + 6
+        LH, PAD = 15, 5
+        head = game.snake.body[0]
+        tx   = int(head.x) // SNAKE_SIZE
+        ty   = int(head.y - HEADER_HEIGHT) // SNAKE_SIZE
+        pu   = [p.label for p in game.snake.active_powerups]
+        lines = [
+            f"FPS {get_fps()}",
+            f"mode={game.mode.name}  score={game.score}  time={game.time_left}",
+            f"head=({int(head.x)}, {int(head.y)})  tile=({tx}, {ty})  len={game.snake.length}  iv={game.snake.move_interval}",
+            f"food={game.food.food_type.name}  pos=({int(game.food.position.x)}, {int(game.food.position.y)})",
+            f"powerups=[{', '.join(pu) if pu else 'none'}]",
+            ("GOD  " if game.god_mode else "") + "DEBUG ON  |  D=toggle  G=god  F=eat  N=spawn power-up",
+        ]
+        W = 400
+        H = len(lines) * LH + PAD * 2
+        draw_rectangle(X - PAD, Y - PAD, W, H, Color(0, 0, 0, 180))
+        for i, line in enumerate(lines):
+            draw_text(line, X, Y + i * LH, 12, LIME)
 
     def draw_game_over(self, score, high_score):
         draw_rectangle_gradient_v(210, 180, 380, 230, GRAY, RAYWHITE)

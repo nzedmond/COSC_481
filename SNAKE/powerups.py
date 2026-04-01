@@ -5,8 +5,6 @@ from pyray import *
 from settings import *
 
 
-# ── Effect base class ──────────────────────────────────────────────────────────
-
 class Powerup:
     """Base class for all timed power-up effects applied to the snake."""
     COLOR = WHITE
@@ -36,22 +34,6 @@ class Powerup:
         return max(0.0, 1.0 - self.timer / self.duration)
 
 
-# ── Concrete effect types ──────────────────────────────────────────────────────
-
-class SpeedBoost(Powerup):
-    COLOR = SKYBLUE
-    LABEL = "S"
-
-    def __init__(self):
-        super().__init__(PowerupType.SPEED_BOOST, POWERUP_SPEED_BOOST_DURATION)
-
-    def apply(self, snake):
-        snake.move_interval = max(1, snake.move_interval - POWERUP_SPEED_BOOST_AMOUNT)
-
-    def remove(self, snake):
-        snake.move_interval = min(20, snake.move_interval + POWERUP_SPEED_BOOST_AMOUNT)
-
-
 class Shield(Powerup):
     """Absorbs the next lethal collision instead of ending the game."""
     COLOR = YELLOW
@@ -65,21 +47,6 @@ class Shield(Powerup):
 
     def remove(self, snake):
         snake.shielded = False
-
-
-class Magnet(Powerup):
-    """Pulls the active food item toward the snake head each frame."""
-    COLOR = PINK
-    LABEL = "M"
-
-    def __init__(self):
-        super().__init__(PowerupType.MAGNET, POWERUP_MAGNET_DURATION)
-
-    def apply(self, snake):
-        snake.magnet = True
-
-    def remove(self, snake):
-        snake.magnet = False
 
 
 class Shrink(Powerup):
@@ -99,17 +66,11 @@ class Shrink(Powerup):
     def remove(self, snake): pass
 
 
-# ── Factory mapping ────────────────────────────────────────────────────────────
-
 _POWERUP_CLASSES = {
-    PowerupType.SPEED_BOOST: SpeedBoost,
-    PowerupType.SHIELD:      Shield,
-    PowerupType.MAGNET:      Magnet,
-    PowerupType.SHRINK:      Shrink,
+    PowerupType.SHIELD:  Shield,
+    PowerupType.SHRINK:  Shrink,
 }
 
-
-# ── Field pickup (the collectable item drawn on the grid) ─────────────────────
 
 class PowerupPickup:
     def __init__(self, occupied):
@@ -146,8 +107,6 @@ class PowerupPickup:
                 head.y + snake.size > self.position.y)
 
 
-# ── Manager ───────────────────────────────────────────────────────────────────
-
 class PowerupManager:
     def __init__(self):
         self.pickup      = None   # one pickup on the field at a time
@@ -158,14 +117,12 @@ class PowerupManager:
         self.spawn_timer = 0
 
     def update(self, snake, food, extra_occupied=None):
-        # Tick toward next spawn
         self.spawn_timer += 1
         if self.pickup is None and self.spawn_timer >= POWERUP_SPAWN_INTERVAL:
             self.spawn_timer = 0
             occupied = list(snake.body) + [food.position] + (extra_occupied or [])
             self.pickup = PowerupPickup(occupied)
 
-        # Check collection
         if self.pickup is not None and self.pickup.is_collected(snake):
             effect = _POWERUP_CLASSES[self.pickup.kind]()
             effect.apply(snake)
@@ -174,7 +131,6 @@ class PowerupManager:
             self.pickup      = None
             self.spawn_timer = 0             # brief pause before next spawn
 
-        # Tick active effects; discard expired ones
         snake.active_powerups = [p for p in snake.active_powerups if not p.update(snake)]
 
     def draw(self):

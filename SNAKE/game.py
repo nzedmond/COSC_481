@@ -11,7 +11,6 @@ from powerups import PowerupManager, Shield
 from obstacles import ObstacleManager
 
 
-# ── Logging setup ──────────────────────────────────────────────────────────────
 os.makedirs("data", exist_ok=True)
 logging.basicConfig(
     filename="data/snake.log",
@@ -21,7 +20,6 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
-# ── High score persistence ─────────────────────────────────────────────────────
 def load_high_score(path="data/highscore.json"):
     try:
         with open(path) as f:
@@ -35,7 +33,6 @@ def save_high_score(score, path="data/highscore.json"):
         json.dump({"high_score": score}, f)
 
 
-# =============================== Screen manager ==================================
 class ScreenManager:
     def __init__(self):
         self.current = Screen.MENU
@@ -47,15 +44,7 @@ class ScreenManager:
         return self.current == screen
 
 
-# ============================= Game ======================================================
 class Game:
-    '''Public methods: update,  check_wall_collision, check_obstacle_collision,
-                        check_self_collision, draw, startup, reset, shutdown
-        Private methods: _update menu, _update_instructions, _update_gameplay,
-                        _update_paused, _update_game_over, _trigger_game_over,
-                        _draw_menu, _draw_instructions, _draw_gameplay, _draw_paused,
-                        _draw_game_over, _start_game, 
-    '''
     def __init__(self):
         self.screens       = ScreenManager()
         self.snake         = Snake()
@@ -70,6 +59,8 @@ class Game:
         self.time_left          = 0       # frames remaining (Time Attack only)
         self._food_pops         = []      # active eat animations: [Vector2, Color, timer]
         self.score_pop_timer    = 0       # frames remaining for score text pop
+        self.debug              = False
+        self.god_mode           = False
 
     def update(self):
         match self.screens.current:
@@ -97,9 +88,28 @@ class Game:
             self.screens.transition_to(Screen.MENU)
 
     def _update_gameplay(self):
+        if is_key_pressed(KEY_D):
+            self.debug = not self.debug
         if is_key_pressed(KEY_P):
             self.screens.transition_to(Screen.PAUSED)
             return
+
+        if self.debug:
+            if is_key_pressed(KEY_G):
+                self.god_mode = not self.god_mode
+                log.info(f"God mode {'ON' if self.god_mode else 'OFF'}")
+            if is_key_pressed(KEY_F):
+                snake = self.snake
+                snake.body.append(Vector2(snake.body[-1].x, snake.body[-1].y))
+                snake.length += 1
+                self.score += 1
+                occupied = list(snake.body) + self.obstacle_mgr.positions
+                self.food._init_type()
+                self.food.position = self.food._spawn_position(occupied)
+                log.info(f"Debug: force-ate food, score={self.score}")
+            if is_key_pressed(KEY_N):
+                self.powerup_mgr.spawn_timer = POWERUP_SPAWN_INTERVAL
+                log.info("Debug: forced powerup spawn")
 
         # Time Attack: count down every frame (not just on snake moves)
         if self.mode == Mode.TIME_ATTACK:
@@ -148,17 +158,9 @@ class Game:
 
         self.obstacle_mgr.update(self.score, self.snake, self.food)
 
-        # Magnet: pull food toward the snake head every frame
-        if self.snake.magnet and self.food.isActive:
-            head = self.snake.body[0]
-            dx = head.x - self.food.position.x
-            dy = head.y - self.food.position.y
-            dist = (dx * dx + dy * dy) ** 0.5
-            if dist > 1:
-                self.food.position.x += dx / dist * 2
-                self.food.position.y += dy / dist * 2
-
     def _update_paused(self):
+        if is_key_pressed(KEY_D):
+            self.debug = not self.debug
         if is_key_pressed(KEY_P):
             self.screens.transition_to(Screen.GAMEPLAY)
 
@@ -191,6 +193,8 @@ class Game:
                 break
 
     def _trigger_game_over(self):
+        if self.god_mode:
+            return
         if self.snake.shielded:
             self.snake.shielded = False
             self.snake.active_powerups = [
@@ -229,6 +233,8 @@ class Game:
         self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
+        if self.debug:
+            self.ui.draw_debug_overlay(self)
 
     def _draw_paused(self):
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left, self.score_pop_timer)
@@ -241,6 +247,8 @@ class Game:
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
         draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
+        if self.debug:
+            self.ui.draw_debug_overlay(self)
 
     def _draw_game_over(self):
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)

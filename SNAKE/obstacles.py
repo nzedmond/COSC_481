@@ -11,14 +11,11 @@ class Obstacle:
         self.size     = OBSTACLE_SIZE
 
     def draw(self):
-        '''Render the obstacle'''
         draw_rectangle(int(self.position.x), int(self.position.y),
                        self.size, self.size, OBSTACLE_COLOR)
         draw_rectangle_lines(int(self.position.x), int(self.position.y),
                              self.size, self.size, BLACK)
 
-
-# ========================== Manager ===========================
 
 class ObstacleManager:
     def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
@@ -32,11 +29,6 @@ class ObstacleManager:
         self._dynamic     = dynamic
         self.obstacles    = []
         self._last_score  = 0
-
-    def preload(self, obstacles):
-        """Replace the obstacle list with a pre-built set."""
-        self.obstacles = obstacles
-        self._dynamic  = False
 
     @property
     def positions(self):
@@ -59,8 +51,6 @@ class ObstacleManager:
     def draw(self):
         for obs in self.obstacles:
             obs.draw()
-
-    # =================== Helpers =========================
 
     def _spawn(self, snake, food):
         occupied = {(s.x, s.y) for s in snake.body}
