@@ -81,14 +81,8 @@ class Mode(Enum):
     CLASSIC     = 0
     TIME_ATTACK = 1
     SURVIVAL    = 2
-    MAZE        = 3
-
 TIME_ATTACK_DURATION    = 3600  # 60 s at 60 fps
 SURVIVAL_SPEED_INTERVAL = 5     # every N points, move_interval drops by 1
-
-# Maze: DFS starts from this maze-cell; snake is also placed here
-# Maze cell (cx, cy) → snake tile (cx*2, cy*2) → pixel (cx*40, HEADER_HEIGHT+cy*40)
-MAZE_START_CELL = (2, 2)
 
 # ------------------OBSTACLES---------------------
 OBSTACLE_SIZE        = 20

@@ -18,50 +18,12 @@ class Obstacle:
                              self.size, self.size, BLACK)
 
 
-# ========================== Maze generation =========================================
-
-def generate_maze():
-    '''Create a maze using DFS and return a list of obstacle objects'''
-    CELL = SNAKE_SIZE * 2                           # 40 px per maze cell
-    cols = WINDOW_WIDTH // CELL                     # 20
-    rows = (WINDOW_HEIGHT - HEADER_HEIGHT) // CELL  # 14
-
-    # Every snake tile starts as a wall
-    wall_tiles = set()
-    for tx in range(WINDOW_WIDTH // SNAKE_SIZE):
-        for ty in range((WINDOW_HEIGHT - HEADER_HEIGHT) // SNAKE_SIZE):
-            wall_tiles.add((tx, ty))
-
-    visited = set()
-
-    def carve(cx, cy):
-        '''Carves path stating from (cx, cy)'''
-        visited.add((cx, cy))
-        wall_tiles.discard((cx * 2, cy * 2))          # remove the wall at this cell (create a path)
-        dirs = [(0, -1), (0, 1), (-1, 0), (1, 0)]  # possible directions (UP/DOWN/LEFT/RIGHT)
-        random.shuffle(dirs)
-        for dx, dy in dirs:
-            nx, ny = cx + dx, cy + dy  # neighbor cell coordinates
-            if 0 <= nx < cols and 0 <= ny < rows and (nx, ny) not in visited:
-                wall_tiles.discard((cx * 2 + dx, cy * 2 + dy))  # open connecting tile
-                carve(nx, ny)
-
-    sx, sy = MAZE_START_CELL
-    carve(sx, sy)
-
-    return [
-        Obstacle(Vector2(float(tx * SNAKE_SIZE),
-                         float(HEADER_HEIGHT + ty * SNAKE_SIZE)))
-        for tx, ty in wall_tiles
-    ]
-
-
 # ========================== Manager ===========================
 
 class ObstacleManager:
     def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
         self._spawn_every = spawn_every
-        self._dynamic     = dynamic   # False in maze mode — no new spawns
+        self._dynamic     = dynamic
         self.obstacles    = []
         self._last_score  = 0
 
@@ -72,7 +34,7 @@ class ObstacleManager:
         self._last_score  = 0
 
     def preload(self, obstacles):
-        """Replace the obstacle list with a pre-built set (used for maze mode)."""
+        """Replace the obstacle list with a pre-built set."""
         self.obstacles = obstacles
         self._dynamic  = False
 

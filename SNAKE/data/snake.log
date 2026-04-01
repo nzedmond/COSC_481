@@ -642,3 +642,32 @@
 2026-03-23 23:15:51,405  INFO  Game over — score: 0, best: 18
 2026-03-23 23:15:52,253  INFO  Game started — mode: CLASSIC
 2026-03-23 23:15:56,047  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-31 20:01:10,446  INFO  Game started — mode: CLASSIC
+2026-03-31 20:01:12,723  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-31 20:01:15,933  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-03-31 20:01:18,883  INFO  Food eaten (POISON) — delta: 1, score: 3
+2026-03-31 20:01:21,585  INFO  Game over — score: 3, best: 18
+2026-03-31 20:14:14,306  INFO  Game started — mode: CLASSIC
+2026-03-31 20:14:19,764  INFO  Food eaten (NORMAL) — delta: -1, score: 0
+2026-03-31 20:14:21,369  INFO  Food eaten (MOVING) — delta: 1, score: 1
+2026-03-31 20:14:24,070  INFO  Food eaten (NORMAL) — delta: 2, score: 3
+2026-03-31 20:14:26,268  INFO  Game over — score: 3, best: 18
+2026-03-31 20:14:32,518  INFO  Game started — mode: CLASSIC
+2026-03-31 20:14:35,556  INFO  Game over — score: 0, best: 18
+2026-03-31 20:14:40,137  INFO  Game started — mode: CLASSIC
+2026-03-31 20:14:42,585  INFO  Food eaten (GOLDEN) — delta: 1, score: 1
+2026-03-31 20:14:45,708  INFO  Food eaten (MOVING) — delta: 3, score: 4
+2026-03-31 20:14:47,058  INFO  Food eaten (MOVING) — delta: 2, score: 6
+2026-03-31 20:14:50,352  INFO  Food eaten (NORMAL) — delta: 2, score: 8
+2026-03-31 20:14:53,985  INFO  Game over — score: 8, best: 18
+2026-03-31 20:14:56,041  INFO  Game started — mode: CLASSIC
+2026-03-31 20:14:57,882  INFO  Game started — mode: TIME_ATTACK
+2026-03-31 20:15:00,415  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-03-31 20:15:02,779  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-03-31 20:15:04,975  INFO  Food eaten (NORMAL) — delta: 1, score: 3
+2026-03-31 20:15:10,124  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-03-31 20:15:12,152  INFO  Food eaten (NORMAL) — delta: 1, score: 5
+2026-03-31 20:15:20,260  INFO  Food eaten (GOLDEN) — delta: 1, score: 6
+2026-03-31 20:15:24,989  INFO  Food eaten (GOLDEN) — delta: 3, score: 9
+2026-03-31 20:15:33,521  INFO  Shield absorbed a collision
+2026-03-31 20:15:34,197  INFO  Game over — score: 9, best: 18

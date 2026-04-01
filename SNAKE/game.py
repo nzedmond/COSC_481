@@ -1,8 +1,6 @@
 import json
 import logging
 import os
-from collections import deque
-
 from raylib import *
 from pyray import *
 from settings import *
@@ -10,7 +8,7 @@ from snake import Snake
 from food import Food
 from ui import UI
 from powerups import PowerupManager, Shield
-from obstacles import ObstacleManager, generate_maze
+from obstacles import ObstacleManager
 
 
 # ── Logging setup ──────────────────────────────────────────────────────────────
@@ -70,9 +68,6 @@ class Game:
         self.mode               = Mode.CLASSIC
         self.selected_mode      = 0       # index into _MODES list
         self.time_left          = 0       # frames remaining (Time Attack only)
-        self._waiting_for_input = False   # maze: freeze until first arrow key
-        self._show_tip          = False   # maze: path-hint overlay visible
-        self._tip_path          = []      # list of (tx, ty) tile coords
         self._food_pops         = []      # active eat animations: [Vector2, Color, timer]
         self.score_pop_timer    = 0       # frames remaining for score text pop
 
@@ -84,7 +79,7 @@ class Game:
             case Screen.GAME_OVER:    self._update_game_over()
             case Screen.INSTRUCTIONS: self._update_instructions()
 
-    _MODES = [Mode.CLASSIC, Mode.TIME_ATTACK, Mode.SURVIVAL, Mode.MAZE]
+    _MODES = [Mode.CLASSIC, Mode.TIME_ATTACK, Mode.SURVIVAL]
 
     def _update_menu(self):
         if is_key_pressed(KEY_DOWN):
@@ -104,22 +99,6 @@ class Game:
     def _update_gameplay(self):
         if is_key_pressed(KEY_P):
             self.screens.transition_to(Screen.PAUSED)
-            return
-
-        # Maze: freeze until the player chooses a direction
-        if self._waiting_for_input:
-            if is_key_pressed(KEY_T) and self.mode == Mode.MAZE:
-                if self._show_tip:
-                    self._show_tip = False
-                else:
-                    self._tip_path = self._compute_tip_path()
-                    self._show_tip = True
-            if is_key_pressed(KEY_RIGHT): self.snake.direction = Vector2(1, 0);  self._waiting_for_input = False
-            elif is_key_pressed(KEY_LEFT):  self.snake.direction = Vector2(-1, 0); self._waiting_for_input = False
-            elif is_key_pressed(KEY_UP):    self.snake.direction = Vector2(0, -1); self._waiting_for_input = False
-            elif is_key_pressed(KEY_DOWN):  self.snake.direction = Vector2(0, 1);  self._waiting_for_input = False
-            if not self._waiting_for_input:
-                self._show_tip = False   # hide hint once the snake starts moving
             return
 
         # Time Attack: count down every frame (not just on snake moves)
@@ -180,14 +159,7 @@ class Game:
                 self.food.position.y += dy / dist * 2
 
     def _update_paused(self):
-        if is_key_pressed(KEY_T) and self.mode == Mode.MAZE:
-            if self._show_tip:
-                self._show_tip = False
-            else:
-                self._tip_path = self._compute_tip_path()
-                self._show_tip = True
         if is_key_pressed(KEY_P):
-            self._show_tip = False
             self.screens.transition_to(Screen.GAMEPLAY)
 
     def _update_game_over(self):
@@ -257,17 +229,6 @@ class Game:
         self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
-        if self._waiting_for_input:
-            draw_text("Press an arrow key to start",
-                      WINDOW_WIDTH // 2 - 155, WINDOW_HEIGHT // 2, 24, WHITE)
-        if self._show_tip and self.mode == Mode.MAZE:
-            self.ui.draw_tip_overlay(
-                self._tip_path,
-                self.obstacle_mgr.positions,
-                self.snake.body[0],
-                self.food.position,
-                self.food.color,
-            )
 
     def _draw_paused(self):
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left, self.score_pop_timer)
@@ -280,14 +241,6 @@ class Game:
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
         draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
-        if self._show_tip and self.mode == Mode.MAZE:
-            self.ui.draw_tip_overlay(
-                self._tip_path,
-                self.obstacle_mgr.positions,
-                self.snake.body[0],
-                self.food.position,
-                self.food.color,
-            )
 
     def _draw_game_over(self):
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
@@ -300,44 +253,6 @@ class Game:
         self.powerup_mgr.draw()
         self.ui.draw_game_over(self.score, self.high_score)
 
-    def _compute_tip_path(self):
-        """BFS from the snake head to the food through the maze.
-        Returns a list of (tx, ty) tile coordinates forming the shortest path."""
-        wall_set = set()
-        for obs in self.obstacle_mgr.obstacles:
-            tx = int(obs.position.x) // SNAKE_SIZE
-            ty = int(obs.position.y - HEADER_HEIGHT) // SNAKE_SIZE
-            wall_set.add((tx, ty))
-
-        head = self.snake.body[0]
-        sx   = int(head.x) // SNAKE_SIZE
-        sy   = int(head.y - HEADER_HEIGHT) // SNAKE_SIZE
-
-        gx   = int(self.food.position.x) // SNAKE_SIZE
-        gy   = int(self.food.position.y - HEADER_HEIGHT) // SNAKE_SIZE
-
-        queue  = deque([(sx, sy)])
-        parent = {(sx, sy): None}
-
-        while queue:
-            cx, cy = queue.popleft()
-            if cx == gx and cy == gy:
-                path, node = [], (cx, cy)
-                while node is not None:
-                    path.append(node)
-                    node = parent[node]
-                path.reverse()
-                return path
-            for dx, dy in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
-                nx, ny = cx + dx, cy + dy
-                if (0 <= nx < WINDOW_WIDTH // SNAKE_SIZE and
-                        0 <= ny < (WINDOW_HEIGHT - HEADER_HEIGHT) // SNAKE_SIZE and
-                        (nx, ny) not in wall_set and
-                        (nx, ny) not in parent):
-                    parent[(nx, ny)] = (cx, cy)
-                    queue.append((nx, ny))
-        return []
-
     def startup(self):
         pass
 
@@ -346,9 +261,6 @@ class Game:
         self.snake              = Snake()
         self.food               = Food()
         self.score              = 0
-        self._waiting_for_input = False
-        self._show_tip          = False
-        self._tip_path          = []
         self._food_pops         = []
         self.score_pop_timer    = 0
 
@@ -367,22 +279,6 @@ class Game:
                 self.powerup_mgr.reset()
                 self.obstacle_mgr.reset(spawn_every=2)   # obstacles spawn faster
                 self.time_left = 0
-
-            case Mode.MAZE:
-                self.powerup_mgr.reset()
-                self.obstacle_mgr.reset(dynamic=False)
-                self.obstacle_mgr.preload(generate_maze())
-                # Re-spawn food now that maze walls are known
-                occupied = list(self.snake.body) + self.obstacle_mgr.positions
-                self.food.position = self.food._spawn_position(occupied)
-                self.time_left          = 0
-                self._waiting_for_input = True
-                self.snake.move_interval = 20   # start at slowest speed
-                # Place snake at the maze start passage tile
-                sx = MAZE_START_CELL[0] * SNAKE_SIZE * 2
-                sy = HEADER_HEIGHT + MAZE_START_CELL[1] * SNAKE_SIZE * 2
-                self.snake.body   = [Vector2(float(sx), float(sy))]
-                self.snake.length = 1
 
         self.screens.transition_to(Screen.GAMEPLAY)
         log.info(f"Game started — mode: {self.mode.name}")

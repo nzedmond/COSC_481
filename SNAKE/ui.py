@@ -6,7 +6,6 @@ _MODE_LABELS = {
     Mode.CLASSIC:     "CLASSIC",
     Mode.TIME_ATTACK: "TIME ATTACK",
     Mode.SURVIVAL:    "SURVIVAL",
-    Mode.MAZE:        "MAZE",
 }
 
 _CELL          = SNAKE_SIZE
