@@ -3,17 +3,17 @@ import os
 from pyray import *
 from settings import *
 
-_BASE      = os.path.join(os.path.dirname(__file__), "Game_Assets")
-_MUSIC_DIR = os.path.join(_BASE, "bg_music ")   # folder name has a trailing space
-_SFX_DIR   = os.path.join(_BASE, "sfx")
+BASE = os.path.join(os.path.dirname(__file__), "Game_Assets")
+MUSIC_DIR = os.path.join(BASE, "bg_music")
+SFX_DIR = os.path.join(BASE, "sfx")
 
-_GAMEPLAY_TRACK = {
-    Mode.CLASSIC:     "classic",
+GAMEPLAY_TRACK = {
+    Mode.CLASSIC: "classic",
     Mode.TIME_ATTACK: "attack",
-    Mode.SURVIVAL:    "survival",
+    Mode.SURVIVAL: "survival",
 }
 
-_SFX_FILE = {
+SFX_FILE = {
     FoodType.NORMAL: "hit-01.wav",
     FoodType.GOLDEN: "hit-02.wav",
     FoodType.POISON: "hit-03.wav",
@@ -23,22 +23,22 @@ _SFX_FILE = {
 
 class AudioManager:
     def __init__(self):
-        self._music   = {}
-        self._sfx     = {}
+        self._music = {}
+        self._sfx = {}
         self._current = None
-        self._loaded  = False
+        self._loaded = False
 
     def load(self):
         init_audio_device()
         self._music = {
-            "menu":     load_music_stream(os.path.join(_MUSIC_DIR, "menu.mp3")),
-            "classic":  load_music_stream(os.path.join(_MUSIC_DIR, "classic.mp3")),
-            "attack":   load_music_stream(os.path.join(_MUSIC_DIR, "attack.mp3")),
-            "survival": load_music_stream(os.path.join(_MUSIC_DIR, "survival.mp3")),
+            "menu": load_music_stream(os.path.join(MUSIC_DIR, "menu.mp3")),
+            "classic": load_music_stream(os.path.join(MUSIC_DIR, "classic.mp3")),
+            "attack": load_music_stream(os.path.join(MUSIC_DIR, "attack.mp3")),
+            "survival": load_music_stream(os.path.join(MUSIC_DIR, "survival.mp3")),
         }
         self._sfx = {
-            ft: load_sound(os.path.join(_SFX_DIR, fname))
-            for ft, fname in _SFX_FILE.items()
+            ft: load_sound(os.path.join(SFX_DIR, fname))
+            for ft, fname in SFX_FILE.items()
         }
         self._loaded = True
 
@@ -53,7 +53,7 @@ class AudioManager:
         self._loaded = False
 
     def update(self, screen, mode):
-        track = "menu" if screen != Screen.GAMEPLAY else _GAMEPLAY_TRACK[mode]
+        track = "menu" if screen != Screen.GAMEPLAY else GAMEPLAY_TRACK[mode]
         if track != self._current:
             if self._current is not None:
                 stop_music_stream(self._music[self._current])

@@ -11,11 +11,11 @@ class Powerup:
     LABEL = "?"
 
     def __init__(self, kind, duration):
-        self.kind     = kind
+        self.kind = kind
         self.duration = duration
-        self.timer    = 0
-        self.color    = self.__class__.COLOR
-        self.label    = self.__class__.LABEL
+        self.timer = 0
+        self.color = self.__class__.COLOR
+        self.label = self.__class__.LABEL
 
     def apply(self, snake):  pass
     def remove(self, snake): pass
@@ -74,11 +74,11 @@ _POWERUP_CLASSES = {
 
 class PowerupPickup:
     def __init__(self, occupied):
-        self.size     = POWERUP_SIZE
-        self.kind     = random.choice(list(PowerupType))
-        cls           = _POWERUP_CLASSES[self.kind]
-        self.color    = cls.COLOR
-        self.label    = cls.LABEL
+        self.size = POWERUP_SIZE
+        self.kind = random.choice(list(PowerupType))
+        cls = _POWERUP_CLASSES[self.kind]
+        self.color = cls.COLOR
+        self.label = cls.LABEL
         self.position = self._spawn(occupied)
 
     def _spawn(self, occupied):
@@ -109,11 +109,11 @@ class PowerupPickup:
 
 class PowerupManager:
     def __init__(self):
-        self.pickup      = None   # one pickup on the field at a time
+        self.pickup = None   # one pickup on the field at a time
         self.spawn_timer = 0
 
     def reset(self):
-        self.pickup      = None
+        self.pickup = None
         self.spawn_timer = 0
 
     def update(self, snake, food, extra_occupied=None):
@@ -128,7 +128,7 @@ class PowerupManager:
             effect.apply(snake)
             if effect.duration > 1:          # instant effects (Shrink) need no tracking
                 snake.active_powerups.append(effect)
-            self.pickup      = None
+            self.pickup = None
             self.spawn_timer = 0             # brief pause before next spawn
 
         snake.active_powerups = [p for p in snake.active_powerups if not p.update(snake)]

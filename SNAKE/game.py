@@ -47,30 +47,30 @@ class ScreenManager:
 
 class Game:
     def __init__(self):
-        self.screens       = ScreenManager()
-        self.snake         = Snake()
-        self.food          = Food()
-        self.ui            = UI()
-        self.powerup_mgr   = PowerupManager()
-        self.obstacle_mgr  = ObstacleManager()
-        self.score         = 0
-        self.high_score    = load_high_score()
-        self.mode               = Mode.CLASSIC
-        self.selected_mode      = 0       # index into _MODES list
-        self.time_left          = 0       # frames remaining (Time Attack only)
-        self._food_pops         = []      # active eat animations: [Vector2, Color, timer]
-        self.score_pop_timer    = 0       # frames remaining for score text pop
-        self.debug              = False
-        self.god_mode           = False
-        self.audio_mgr          = AudioManager()
+        self.screens = ScreenManager()
+        self.snake = Snake()
+        self.food = Food()
+        self.ui = UI()
+        self.powerup_mgr = PowerupManager()
+        self.obstacle_mgr = ObstacleManager()
+        self.score = 0
+        self.high_score = load_high_score()
+        self.mode = Mode.CLASSIC
+        self.selected_mode = 0       # index into _MODES list
+        self.time_left = 0       # frames remaining (Time Attack only)
+        self._food_pops = []      # active eat animations: [Vector2, Color, timer]
+        self.score_pop_timer = 0       # frames remaining for score text pop
+        self.debug = False
+        self.god_mode = False
+        self.audio_mgr = AudioManager()
 
     def update(self):
         self.audio_mgr.update(self.screens.current, self.mode)
         match self.screens.current:
-            case Screen.MENU:         self._update_menu()
-            case Screen.GAMEPLAY:     self._update_gameplay()
-            case Screen.PAUSED:       self._update_paused()
-            case Screen.GAME_OVER:    self._update_game_over()
+            case Screen.MENU: self._update_menu()
+            case Screen.GAMEPLAY: self._update_gameplay()
+            case Screen.PAUSED: self._update_paused()
+            case Screen.GAME_OVER: self._update_game_over()
             case Screen.INSTRUCTIONS: self._update_instructions()
 
     _MODES = [Mode.CLASSIC, Mode.TIME_ATTACK, Mode.SURVIVAL]
@@ -216,10 +216,10 @@ class Game:
 
     def draw(self):
         match self.screens.current:
-            case Screen.MENU:         self._draw_menu()
-            case Screen.GAMEPLAY:     self._draw_gameplay()
-            case Screen.PAUSED:       self._draw_paused()
-            case Screen.GAME_OVER:    self._draw_game_over()
+            case Screen.MENU: self._draw_menu()
+            case Screen.GAMEPLAY: self._draw_gameplay()
+            case Screen.PAUSED: self._draw_paused()
+            case Screen.GAME_OVER: self._draw_game_over()
             case Screen.INSTRUCTIONS: self._draw_instructions()
 
     def _draw_menu(self):
@@ -271,11 +271,11 @@ class Game:
 
     def _start_game(self):
         """Set up a fresh round for the current mode and transition to gameplay."""
-        self.snake              = Snake()
-        self.food               = Food()
-        self.score              = 0
-        self._food_pops         = []
-        self.score_pop_timer    = 0
+        self.snake = Snake()
+        self.food = Food()
+        self.score = 0
+        self._food_pops = []
+        self.score_pop_timer = 0
 
         match self.mode:
             case Mode.CLASSIC:

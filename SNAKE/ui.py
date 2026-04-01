@@ -3,15 +3,15 @@ from raylib import *
 from settings import *
 
 _MODE_LABELS = {
-    Mode.CLASSIC:     "CLASSIC",
+    Mode.CLASSIC: "CLASSIC",
     Mode.TIME_ATTACK: "TIME ATTACK",
-    Mode.SURVIVAL:    "SURVIVAL",
+    Mode.SURVIVAL: "SURVIVAL",
 }
 
-_CELL          = SNAKE_SIZE
-_OFF_X         = WINDOW_WIDTH % _CELL
-_PLAYABLE_H    = WINDOW_HEIGHT - HEADER_HEIGHT
-_OFF_Y         = _PLAYABLE_H % _CELL
+_CELL = SNAKE_SIZE
+_OFF_X = WINDOW_WIDTH % _CELL
+_PLAYABLE_H = WINDOW_HEIGHT - HEADER_HEIGHT
+_OFF_Y = _PLAYABLE_H % _CELL
 
 # Header bar geometry — change these to reposition everything at once
 HDR_PAD  = 10   # inner padding from header edges
@@ -30,7 +30,7 @@ class UI:
         draw_rectangle(0, 0, WINDOW_WIDTH, HEADER_HEIGHT, DARKGRAY)
         draw_line(0, HEADER_HEIGHT, WINDOW_WIDTH, HEADER_HEIGHT, BLACK)
         if score_pop_timer > 0:
-            ratio      = score_pop_timer / SCORE_POP_DURATION
+            ratio = score_pop_timer / SCORE_POP_DURATION
             score_size = int(18 + 8 * ratio)
             score_col  = Color(255, int(255 * (1 - ratio * 0.5)), 0, 255)
         else:
@@ -48,7 +48,7 @@ class UI:
                 color = ORANGE
             else:
                 color = SKYBLUE
-            draw_text(tag, WINDOW_WIDTH // 2 - 20, HDR_PAD, 16, color)
+            draw_text(tag, WINDOW_WIDTH // 2 - 100, HDR_PAD, 16, color)
         draw_text("Arrow Keys  |  [ ] Speed  |  P Pause",
                   WINDOW_WIDTH - 290, HDR_PAD + 2, 14, GRAY)
 
@@ -186,7 +186,7 @@ class UI:
             draw_text(line, X, Y + i * LH, 12, LIME)
 
     def draw_game_over(self, score, high_score):
-        draw_rectangle_gradient_v(210, 180, 380, 230, GRAY, RAYWHITE)
+        draw_rectangle_gradient_v(210, 180, 380, 230, BLUE, BLACK)
         draw_text("GAME OVER", WINDOW_WIDTH // 2 - 115, WINDOW_HEIGHT // 3, 48, RED)
         draw_text(f"Score: {score}", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 2, 24, BLACK)
         draw_text(f"Best:  {high_score}", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 2 + 32, 24, DARKGRAY)

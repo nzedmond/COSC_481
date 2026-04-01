@@ -20,15 +20,15 @@ class Obstacle:
 class ObstacleManager:
     def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
         self._spawn_every = spawn_every
-        self._dynamic     = dynamic
-        self.obstacles    = []
-        self._last_score  = 0
+        self._dynamic = dynamic
+        self.obstacles = []
+        self._last_score = 0
 
     def reset(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
         self._spawn_every = spawn_every
-        self._dynamic     = dynamic
-        self.obstacles    = []
-        self._last_score  = 0
+        self._dynamic = dynamic
+        self.obstacles = []
+        self._last_score = 0
 
     @property
     def positions(self):

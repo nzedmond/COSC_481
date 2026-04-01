@@ -13,12 +13,12 @@ class Food:
         self.position = self._spawn_position([])
 
     def _init_type(self):
-        r = random.random()
-        if r < FOOD_GOLDEN_CHANCE:
+        food_chance = random.random()
+        if food_chance < FOOD_GOLDEN_CHANCE:
             self.food_type = FoodType.GOLDEN
-        elif r < FOOD_GOLDEN_CHANCE + FOOD_POISON_CHANCE:
+        elif food_chance < FOOD_GOLDEN_CHANCE + FOOD_POISON_CHANCE:
             self.food_type = FoodType.POISON
-        elif r < FOOD_GOLDEN_CHANCE + FOOD_POISON_CHANCE + FOOD_MOVING_CHANCE:
+        elif FOOD_POISON_CHANCE < FOOD_GOLDEN_CHANCE + FOOD_POISON_CHANCE + FOOD_MOVING_CHANCE:
             self.food_type = FoodType.MOVING
         else:
             self.food_type = FoodType.NORMAL
@@ -28,14 +28,15 @@ class Food:
             case FoodType.GOLDEN: self.color = FOOD_GOLDEN_COLOR
             case FoodType.POISON: self.color = FOOD_POISON_COLOR
             case FoodType.MOVING: self.color = FOOD_MOVING_COLOR
-
+            
+        # Try do it in the same match/case block
         match self.food_type:
             case FoodType.NORMAL: self.score_value = FOOD_NORMAL_SCORE
             case FoodType.GOLDEN: self.score_value = FOOD_GOLDEN_SCORE
             case FoodType.POISON: self.score_value = FOOD_POISON_SCORE
             case FoodType.MOVING: self.score_value = FOOD_MOVING_SCORE
 
-        if self.food_type == FoodType.MOVING:
+        if self.food_type == FoodType.MOVING: # random direction for moving food
             self.velocity = Vector2(
                 random.choice([-1, 1]) * FOOD_MOVING_SPEED,
                 random.choice([-1, 1]) * FOOD_MOVING_SPEED,
@@ -60,7 +61,7 @@ class Food:
         self.position.x += self.velocity.x
         self.position.y += self.velocity.y
         # Bounce off play-area boundaries
-        if self.position.x < 0 or self.position.x + self.size > WINDOW_WIDTH:
+        if self.position.x < 0 or self.position.x + self.size > WINDOW_WIDTH: # use the same logic for snake-wall collision and maybe put it in a helper in settings.py
             self.velocity.x *= -1
             self.position.x = max(0.0, min(self.position.x, float(WINDOW_WIDTH - self.size)))
         if self.position.y < HEADER_HEIGHT or self.position.y + self.size > WINDOW_HEIGHT:
@@ -86,7 +87,7 @@ class Food:
     def update(self, snake, extra_occupied=None):
         """Move food (if moving type) and check collision. Returns score delta.
 
-        extra_occupied: optional list of Vector2 positions (e.g. obstacle tiles)
+        extra_occupied: optional list of Vector2 positions (obstacle tiles)
         that the new food must not spawn on.
         """
         if not self.isActive:

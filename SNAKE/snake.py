@@ -13,9 +13,9 @@ class Snake:
         self.allow_move = True
         self.frames_counter = 0
         self.move_interval = SNAKE_MOVE_INTERVAL
-        self.body            = [Vector2(100 - i * self.size, 100) for i in range(self.length)]
+        self.body = [Vector2(100 - i * self.size, 100) for i in range(self.length)]
         self.active_powerups = []
-        self.shielded        = False
+        self.shielded = False
 
     def handle_input(self):
         if is_key_pressed(KEY_RIGHT) and self.direction.x == 0 and self.allow_move:
