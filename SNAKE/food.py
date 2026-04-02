@@ -18,7 +18,7 @@ class Food:
             self.food_type = FoodType.GOLDEN
         elif food_chance < FOOD_GOLDEN_CHANCE + FOOD_POISON_CHANCE:
             self.food_type = FoodType.POISON
-        elif FOOD_POISON_CHANCE < FOOD_GOLDEN_CHANCE + FOOD_POISON_CHANCE + FOOD_MOVING_CHANCE:
+        elif food_chance < FOOD_GOLDEN_CHANCE + FOOD_POISON_CHANCE + FOOD_MOVING_CHANCE:
             self.food_type = FoodType.MOVING
         else:
             self.food_type = FoodType.NORMAL
@@ -65,6 +65,7 @@ class Food:
         if self.position.x < 0 or self.position.x + self.size > WINDOW_WIDTH: 
             self.velocity.x *= -1
             self.position.x = max(0.0, min(self.position.x, float(WINDOW_WIDTH - self.size)))
+            
         if self.position.y < HEADER_HEIGHT or self.position.y + self.size > WINDOW_HEIGHT:
             self.velocity.y *= -1
             self.position.y = max(float(HEADER_HEIGHT), min(self.position.y, float(WINDOW_HEIGHT - self.size)))

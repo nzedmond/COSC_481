@@ -196,18 +196,18 @@ class UI:
             draw_text(line, X, Y + i * LH, 12, LIME)
 
     def draw_paused(self, selected):
-        ox = WINDOW_WIDTH // 2 - 100
-        oy = WINDOW_HEIGHT // 2 - 60
-        draw_rectangle(ox, oy, 200, 120, Color(0, 0, 0, 200))
-        draw_rectangle_lines(ox, oy, 200, 120, DARKGRAY)
-        draw_text("GAME PAUSED", ox + 10, oy + 12, 24, WHITE)
-        draw_line(ox + 10, oy + 42, ox + 190, oy + 42, DARKGRAY)
+        overlay_x = WINDOW_WIDTH // 2 - 100
+        overlay_y = WINDOW_HEIGHT // 2 - 60
+        draw_rectangle(overlay_x, overlay_y, 200, 120, Color(0, 0, 0, 200))
+        draw_rectangle_lines(overlay_x, overlay_y, 200, 120, DARKGRAY)
+        draw_text("GAME PAUSED", overlay_x + 10, overlay_y + 12, 24, WHITE)
+        draw_line(overlay_x + 10, overlay_y + 42, overlay_x + 190, overlay_y + 42, DARKGRAY)
         options = ["RESUME", "EXIT"]
         
         for i, label in enumerate(options):
             color = GREEN if i == selected else LIGHTGRAY
             prefix = "> " if i == selected else "  "
-            draw_text(prefix + label, ox + 30, oy + 54 + i * 30, 20, color)
+            draw_text(prefix + label, overlay_x + 30, overlay_y + 54 + i * 30, 20, color)
 
     def draw_game_over(self, score, high_score):
         draw_rectangle_gradient_v(210, 180, 380, 230, BLUE, BLACK)
