@@ -195,23 +195,27 @@ class UI:
         for i, line in enumerate(lines):
             draw_text(line, X, Y + i * LH, 12, LIME)
 
+    def _draw_overlay_box(self, w, h):
+        ox = WINDOW_WIDTH // 2 - w // 2
+        oy = WINDOW_HEIGHT // 2 - h // 2
+        draw_rectangle(ox, oy, w, h, Color(0, 0, 0, 200))
+        draw_rectangle_lines(ox, oy, w, h, DARKGRAY)
+        return ox, oy
+
     def draw_paused(self, selected):
-        overlay_x = WINDOW_WIDTH // 2 - 100
-        overlay_y = WINDOW_HEIGHT // 2 - 60
-        draw_rectangle(overlay_x, overlay_y, 200, 120, Color(0, 0, 0, 200))
-        draw_rectangle_lines(overlay_x, overlay_y, 200, 120, DARKGRAY)
-        draw_text("GAME PAUSED", overlay_x + 10, overlay_y + 12, 24, WHITE)
-        draw_line(overlay_x + 10, overlay_y + 42, overlay_x + 190, overlay_y + 42, DARKGRAY)
+        ox, oy = self._draw_overlay_box(200, 120)
+        draw_text("GAME PAUSED", ox + 10, oy + 12, 24, WHITE)
+        draw_line(ox + 10, oy + 42, ox + 190, oy + 42, DARKGRAY)
         options = ["RESUME", "EXIT"]
-        
         for i, label in enumerate(options):
             color = GREEN if i == selected else LIGHTGRAY
             prefix = "> " if i == selected else "  "
-            draw_text(prefix + label, overlay_x + 30, overlay_y + 54 + i * 30, 20, color)
+            draw_text(prefix + label, ox + 30, oy + 54 + i * 30, 20, color)
 
     def draw_game_over(self, score, high_score):
-        draw_rectangle_gradient_v(210, 180, 380, 230, BLUE, BLACK)
-        draw_text("GAME OVER", WINDOW_WIDTH // 2 - 115, WINDOW_HEIGHT // 3, 48, RED)
-        draw_text(f"Score: {score}", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 2, 24, BLACK)
-        draw_text(f"Best:  {high_score}", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 2 + 32, 24, DARKGRAY)
-        draw_text("ENTER - Play Again  |  M - Menu", WINDOW_WIDTH // 2 - 165, WINDOW_HEIGHT // 2 + 80, 20, DARKGRAY)
+        ox, oy = self._draw_overlay_box(380, 230)
+        draw_text("GAME OVER", ox + 80, oy + 20, 48, RED)
+        draw_line(ox + 10, oy + 75, ox + 370, oy + 75, DARKGRAY)
+        draw_text(f"Score: {score}",   ox + 130, oy + 90,  24, WHITE)
+        draw_text(f"Best:  {high_score}", ox + 130, oy + 122, 24, LIGHTGRAY)
+        draw_text("ENTER - Play Again  |  M - Menu", ox + 20, oy + 175, 20, DARKGRAY)
