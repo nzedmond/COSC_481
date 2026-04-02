@@ -961,3 +961,136 @@
 2026-04-01 14:09:41,704  INFO  Game over — score: 0, best: 26
 2026-04-01 14:15:18,285  INFO  Game started — mode: CLASSIC
 2026-04-01 14:15:19,587  INFO  Game over — score: 0, best: 26
+2026-04-01 14:32:54,938  INFO  Game started — mode: SURVIVAL
+2026-04-01 14:32:59,664  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-01 14:33:03,886  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-04-01 14:33:08,953  INFO  Food eaten (GOLDEN) — delta: 3, score: 6
+2026-04-01 14:33:10,371  INFO  Food eaten (POISON) — delta: -1, score: 5
+2026-04-01 14:33:18,137  INFO  Food eaten (POISON) — delta: -1, score: 4
+2026-04-01 14:33:21,354  INFO  Food eaten (MOVING) — delta: 2, score: 6
+2026-04-01 14:33:30,076  INFO  Food eaten (MOVING) — delta: 2, score: 8
+2026-04-01 14:33:33,517  INFO  Food eaten (MOVING) — delta: 2, score: 10
+2026-04-01 14:33:35,344  INFO  Food eaten (MOVING) — delta: 2, score: 12
+2026-04-01 14:33:49,493  INFO  Food eaten (GOLDEN) — delta: 3, score: 15
+2026-04-01 14:33:49,764  INFO  Shield absorbed a collision
+2026-04-01 14:33:50,102  INFO  Game over — score: 15, best: 26
+2026-04-01 14:34:00,119  INFO  Game started — mode: SURVIVAL
+2026-04-01 14:34:03,919  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-01 14:34:10,572  INFO  God mode ON
+2026-04-01 14:34:19,042  INFO  Food eaten (MOVING) — delta: 2, score: 4
+2026-04-01 14:34:21,494  INFO  Food eaten (MOVING) — delta: 2, score: 6
+2026-04-01 14:34:24,671  INFO  Food eaten (MOVING) — delta: 2, score: 8
+2026-04-01 14:34:28,456  INFO  Food eaten (MOVING) — delta: 2, score: 10
+2026-04-01 14:34:32,052  INFO  Food eaten (MOVING) — delta: 2, score: 12
+2026-04-01 14:34:37,169  INFO  Food eaten (MOVING) — delta: 2, score: 14
+2026-04-01 14:34:45,180  INFO  Food eaten (POISON) — delta: -1, score: 13
+2026-04-01 14:34:45,584  INFO  Food eaten (MOVING) — delta: 2, score: 15
+2026-04-01 14:34:55,662  INFO  Food eaten (MOVING) — delta: 2, score: 17
+2026-04-01 14:35:02,191  INFO  Food eaten (MOVING) — delta: 2, score: 19
+2026-04-01 14:35:04,421  INFO  Food eaten (MOVING) — delta: 2, score: 21
+2026-04-01 14:35:50,066  INFO  Game started — mode: TIME_ATTACK
+2026-04-01 14:35:52,426  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-01 14:35:55,295  INFO  Food eaten (MOVING) — delta: 2, score: 4
+2026-04-01 14:35:58,588  INFO  Food eaten (MOVING) — delta: 2, score: 6
+2026-04-01 14:36:00,614  INFO  Food eaten (MOVING) — delta: 2, score: 8
+2026-04-01 14:36:02,811  INFO  Food eaten (GOLDEN) — delta: 3, score: 11
+2026-04-01 14:36:04,583  INFO  Food eaten (MOVING) — delta: 2, score: 13
+2026-04-01 14:36:05,763  INFO  Food eaten (MOVING) — delta: 2, score: 15
+2026-04-01 14:36:11,005  INFO  Food eaten (GOLDEN) — delta: 3, score: 18
+2026-04-01 14:36:12,864  INFO  Food eaten (MOVING) — delta: 2, score: 20
+2026-04-01 14:36:21,312  INFO  Shield absorbed a collision
+2026-04-01 14:36:25,370  INFO  Game over — score: 20, best: 26
+2026-04-02 11:44:26,523  INFO  Game started — mode: CLASSIC
+2026-04-02 11:44:30,101  INFO  Game over — score: 0, best: 26
+2026-04-02 11:44:34,877  INFO  Game started — mode: CLASSIC
+2026-04-02 11:44:35,975  INFO  Game over — score: 0, best: 26
+2026-04-02 11:44:54,477  INFO  Game started — mode: CLASSIC
+2026-04-02 11:44:56,587  INFO  Game over — score: 0, best: 26
+2026-04-02 11:45:06,625  INFO  Game started — mode: CLASSIC
+2026-04-02 11:45:09,741  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-02 11:45:11,178  INFO  Food eaten (MOVING) — delta: 2, score: 4
+2026-04-02 11:45:14,048  INFO  Food eaten (POISON) — delta: -1, score: 3
+2026-04-02 11:45:18,861  INFO  Game over — score: 3, best: 26
+2026-04-02 11:55:53,036  INFO  Game started — mode: CLASSIC
+2026-04-02 11:55:54,401  INFO  Game over — score: 0, best: 26
+2026-04-02 11:55:57,901  INFO  Game started — mode: CLASSIC
+2026-04-02 11:55:59,504  INFO  Game over — score: 0, best: 26
+2026-04-02 11:56:00,588  INFO  Game started — mode: CLASSIC
+2026-04-02 11:56:03,635  INFO  Game over — score: 0, best: 26
+2026-04-02 11:56:05,192  INFO  Game started — mode: CLASSIC
+2026-04-02 11:56:16,163  INFO  Game over — score: 0, best: 26
+2026-04-02 11:59:53,896  INFO  Game started — mode: CLASSIC
+2026-04-02 11:59:54,929  INFO  Game over — score: 0, best: 26
+2026-04-02 11:59:56,164  INFO  Game started — mode: CLASSIC
+2026-04-02 11:59:57,429  INFO  Game over — score: 0, best: 26
+2026-04-02 12:00:01,131  INFO  Game started — mode: CLASSIC
+2026-04-02 12:00:02,058  INFO  Game over — score: 0, best: 26
+2026-04-02 12:00:03,342  INFO  Game started — mode: CLASSIC
+2026-04-02 12:00:05,029  INFO  Game over — score: 0, best: 26
+2026-04-02 12:00:06,231  INFO  Game started — mode: CLASSIC
+2026-04-02 12:00:11,211  INFO  Game over — score: 0, best: 26
+2026-04-02 12:00:15,030  INFO  Game started — mode: CLASSIC
+2026-04-02 12:00:16,380  INFO  Game over — score: 0, best: 26
+2026-04-02 12:00:17,412  INFO  Game started — mode: CLASSIC
+2026-04-02 12:00:18,173  INFO  Game over — score: 0, best: 26
+2026-04-02 12:02:00,867  INFO  Game started — mode: CLASSIC
+2026-04-02 12:02:01,629  INFO  Game over — score: 0, best: 26
+2026-04-02 12:02:10,310  INFO  Game started — mode: CLASSIC
+2026-04-02 12:02:13,603  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-02 12:02:15,376  INFO  Game over — score: 2, best: 26
+2026-04-02 12:02:16,674  INFO  Game started — mode: CLASSIC
+2026-04-02 12:02:21,568  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-02 12:02:24,943  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-02 12:02:29,332  INFO  Food eaten (POISON) — delta: -1, score: 1
+2026-04-02 12:02:32,710  INFO  Food eaten (MOVING) — delta: 2, score: 3
+2026-04-02 12:02:34,486  INFO  Food eaten (MOVING) — delta: 2, score: 5
+2026-04-02 12:02:35,922  INFO  Food eaten (MOVING) — delta: 2, score: 7
+2026-04-02 12:02:37,692  INFO  Food eaten (POISON) — delta: -1, score: 6
+2026-04-02 12:02:39,467  INFO  Food eaten (POISON) — delta: -1, score: 5
+2026-04-02 12:02:42,511  INFO  Food eaten (MOVING) — delta: 2, score: 7
+2026-04-02 12:02:43,440  INFO  Food eaten (MOVING) — delta: 2, score: 9
+2026-04-02 12:02:49,094  INFO  Food eaten (MOVING) — delta: 2, score: 11
+2026-04-02 12:02:53,233  INFO  Food eaten (MOVING) — delta: 2, score: 13
+2026-04-02 12:02:56,447  INFO  Food eaten (POISON) — delta: -1, score: 12
+2026-04-02 12:02:58,727  INFO  Food eaten (MOVING) — delta: 2, score: 14
+2026-04-02 12:03:00,756  INFO  Food eaten (MOVING) — delta: 2, score: 16
+2026-04-02 12:03:05,235  INFO  Food eaten (POISON) — delta: -1, score: 15
+2026-04-02 12:03:06,419  INFO  Food eaten (GOLDEN) — delta: 3, score: 18
+2026-04-02 12:03:09,379  INFO  Food eaten (MOVING) — delta: 2, score: 20
+2026-04-02 12:03:13,511  INFO  Shield absorbed a collision
+2026-04-02 12:03:13,595  INFO  Game over — score: 20, best: 26
+2026-04-02 12:04:57,016  INFO  Game started — mode: CLASSIC
+2026-04-02 12:04:58,449  INFO  Game over — score: 0, best: 26
+2026-04-02 12:08:26,590  INFO  Game started — mode: CLASSIC
+2026-04-02 12:08:27,348  INFO  Game over — score: 0, best: 26
+2026-04-02 12:08:28,735  INFO  Game started — mode: CLASSIC
+2026-04-02 12:08:29,661  INFO  Game over — score: 0, best: 26
+2026-04-02 12:08:30,778  INFO  Game started — mode: CLASSIC
+2026-04-02 12:08:32,044  INFO  Game over — score: 0, best: 26
+2026-04-02 12:08:32,924  INFO  Game started — mode: CLASSIC
+2026-04-02 12:08:33,682  INFO  Game over — score: 0, best: 26
+2026-04-02 12:09:20,552  INFO  Game started — mode: CLASSIC
+2026-04-02 12:09:21,317  INFO  Game over — score: 0, best: 26
+2026-04-02 12:09:23,481  INFO  Game started — mode: CLASSIC
+2026-04-02 12:09:28,123  INFO  Game over — score: 0, best: 26
+2026-04-02 12:09:28,916  INFO  Game started — mode: CLASSIC
+2026-04-02 12:09:39,984  INFO  Game over — score: 0, best: 26
+2026-04-02 12:09:42,065  INFO  Game started — mode: CLASSIC
+2026-04-02 12:09:43,671  INFO  Game over — score: 0, best: 26
+2026-04-02 12:09:44,751  INFO  Game started — mode: CLASSIC
+2026-04-02 12:09:45,511  INFO  Game over — score: 0, best: 26
+2026-04-02 12:09:46,289  INFO  Game started — mode: CLASSIC
+2026-04-02 12:09:48,313  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-02 12:09:51,271  INFO  Food eaten (MOVING) — delta: 2, score: 4
+2026-04-02 12:09:55,066  INFO  Food eaten (MOVING) — delta: 2, score: 6
+2026-04-02 12:09:58,021  INFO  Food eaten (MOVING) — delta: 2, score: 8
+2026-04-02 12:09:59,542  INFO  Game over — score: 8, best: 26
+2026-04-02 12:10:02,229  INFO  Game started — mode: CLASSIC
+2026-04-02 12:10:05,181  INFO  Game over — score: 0, best: 26
+2026-04-02 12:10:05,891  INFO  Game started — mode: CLASSIC
+2026-04-02 12:10:08,088  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-02 12:10:10,282  INFO  Game over — score: 2, best: 26
+2026-04-02 12:10:11,127  INFO  Game started — mode: CLASSIC
+2026-04-02 12:10:14,082  INFO  Game over — score: 0, best: 26
+2026-04-02 12:10:14,843  INFO  Game started — mode: CLASSIC
+2026-04-02 12:10:17,714  INFO  Food eaten (POISON) — delta: -1, score: 0

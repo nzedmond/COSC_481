@@ -18,6 +18,7 @@ if __name__ == '__main__':
         clear_background(RAYWHITE)
         current_game.draw()
         end_drawing()
+        
 
     close_window()
 

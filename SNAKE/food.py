@@ -24,19 +24,20 @@ class Food:
             self.food_type = FoodType.NORMAL
 
         match self.food_type:
-            case FoodType.NORMAL: self.color = FOOD_NORMAL_COLOR
-            case FoodType.GOLDEN: self.color = FOOD_GOLDEN_COLOR
-            case FoodType.POISON: self.color = FOOD_POISON_COLOR
-            case FoodType.MOVING: self.color = FOOD_MOVING_COLOR
-            
-        # Try do it in the same match/case block
-        match self.food_type:
-            case FoodType.NORMAL: self.score_value = FOOD_NORMAL_SCORE
-            case FoodType.GOLDEN: self.score_value = FOOD_GOLDEN_SCORE
-            case FoodType.POISON: self.score_value = FOOD_POISON_SCORE
-            case FoodType.MOVING: self.score_value = FOOD_MOVING_SCORE
+            case FoodType.NORMAL: 
+                self.color = FOOD_NORMAL_COLOR
+                self.score_value = FOOD_NORMAL_SCORE
+            case FoodType.GOLDEN: 
+                self.color = FOOD_GOLDEN_COLOR
+                self.score_value = FOOD_GOLDEN_SCORE
+            case FoodType.POISON: 
+                self.color = FOOD_POISON_COLOR
+                self.score_value = FOOD_POISON_SCORE
+            case FoodType.MOVING: 
+                self.color = FOOD_MOVING_COLOR
+                self.score_value = FOOD_MOVING_SCORE
 
-        if self.food_type == FoodType.MOVING: # random direction for moving food
+        if self.food_type == FoodType.MOVING: 
             self.velocity = Vector2(
                 random.choice([-1, 1]) * FOOD_MOVING_SPEED,
                 random.choice([-1, 1]) * FOOD_MOVING_SPEED,
@@ -60,8 +61,8 @@ class Food:
     def _move(self):
         self.position.x += self.velocity.x
         self.position.y += self.velocity.y
-        # Bounce off play-area boundaries
-        if self.position.x < 0 or self.position.x + self.size > WINDOW_WIDTH: # use the same logic for snake-wall collision and maybe put it in a helper in settings.py
+        
+        if self.position.x < 0 or self.position.x + self.size > WINDOW_WIDTH: 
             self.velocity.x *= -1
             self.position.x = max(0.0, min(self.position.x, float(WINDOW_WIDTH - self.size)))
         if self.position.y < HEADER_HEIGHT or self.position.y + self.size > WINDOW_HEIGHT:

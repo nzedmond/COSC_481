@@ -84,3 +84,5 @@ OBSTACLE_SIZE = 20
 OBSTACLE_COLOR = BROWN
 OBSTACLE_SPAWN_EVERY = 3    # new wall segment every N points scored
 OBSTACLE_MAX = 20   # cap so the board never fills up
+
+# --------------------GAME COLORS-------------------

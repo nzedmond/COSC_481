@@ -56,14 +56,14 @@ class UI:
         draw_text("SNAKE", WINDOW_WIDTH // 2 - 55, WINDOW_HEIGHT // 4, 50, DARKGREEN)
 
         # Mode selector
-        modes      = list(_MODE_LABELS.values())
-        item_h     = 32
-        start_y    = WINDOW_HEIGHT // 2 - (len(modes) * item_h) // 2
+        modes = list(_MODE_LABELS.values())
+        item_h = 32
+        start_y = WINDOW_HEIGHT // 2 - (len(modes) * item_h) // 2
         for i, label in enumerate(modes):
-            y       = start_y + i * item_h
-            active  = (i == selected_mode)
-            color   = GREEN if active else DARKGRAY
-            prefix  = "> " if active else "  "
+            y = start_y + i * item_h
+            active = (i == selected_mode)
+            color = GREEN if active else DARKGRAY
+            prefix = "> " if active else "  "
             draw_text(prefix + label, WINDOW_WIDTH // 2 - 90, y, 22, color)
 
         draw_text("Up/Down to select  |  ENTER to play",
@@ -153,9 +153,9 @@ class UI:
     def draw_food_pops(self, pops):
         """Expanding + fading square at each recently eaten food position."""
         for pos, color, timer in pops:
-            ratio  = timer / FOOD_POP_DURATION
-            size   = int(FOOD_SIZE * (1 + ratio))
-            alpha  = int(255 * (1 - ratio))
+            ratio = timer / FOOD_POP_DURATION
+            size = int(FOOD_SIZE * (1 + ratio))
+            alpha = int(255 * (1 - ratio))
             offset = (size - FOOD_SIZE) // 2
             draw_rectangle(
                 int(pos.x) - offset,
@@ -168,9 +168,9 @@ class UI:
         X, Y = 6, HEADER_HEIGHT + 6
         LH, PAD = 15, 5
         head = game.snake.body[0]
-        tx   = int(head.x) // SNAKE_SIZE
-        ty   = int(head.y - HEADER_HEIGHT) // SNAKE_SIZE
-        pu   = [p.label for p in game.snake.active_powerups]
+        tx = int(head.x) // SNAKE_SIZE
+        ty = int(head.y - HEADER_HEIGHT) // SNAKE_SIZE
+        pu = [p.label for p in game.snake.active_powerups]
         lines = [
             f"FPS {get_fps()}",
             f"mode={game.mode.name}  score={game.score}  time={game.time_left}",

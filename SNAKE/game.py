@@ -56,10 +56,10 @@ class Game:
         self.score = 0
         self.high_score = load_high_score()
         self.mode = Mode.CLASSIC
-        self.selected_mode = 0       # index into _MODES list
-        self.time_left = 0       # frames remaining (Time Attack only)
-        self._food_pops = []      # active eat animations: [Vector2, Color, timer]
-        self.score_pop_timer = 0       # frames remaining for score text pop
+        self.selected_mode = 0   
+        self.time_left = 0 
+        self._food_pops = []
+        self.score_pop_timer = 0
         self.debug = False
         self.god_mode = False
         self.audio_mgr = AudioManager()
@@ -154,6 +154,7 @@ class Game:
         eaten_color = self.food.color
         eaten_type  = self.food.food_type
         score_delta = self.food.update(self.snake, obs_positions)
+        
         if score_delta != 0:
             self.audio_mgr.play_hit(eaten_type)
             self._food_pops.append([eaten_pos, eaten_color, 0])
@@ -179,9 +180,9 @@ class Game:
     def check_wall_collision(self):
         head = self.snake.body[0]
         if (
-            head.x + SNAKE_SIZE >= WINDOW_WIDTH
-            or head.y + SNAKE_SIZE >= WINDOW_HEIGHT
-            or head.x < 0
+            head.x < 0
+            or head.x >= WINDOW_WIDTH
+            or head.y >= WINDOW_HEIGHT
             or head.y < HEADER_HEIGHT
         ):
             self._trigger_game_over()
@@ -207,7 +208,9 @@ class Game:
             ]
             log.info("Shield absorbed a collision")
             return
+        
         log.info(f"Game over — score: {self.score}, best: {self.high_score}")
+        
         if self.score > self.high_score:
             self.high_score = self.score
             save_high_score(self.high_score)
@@ -233,11 +236,14 @@ class Game:
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
+        
         if self.food.isActive:
             self.food.draw()
+            
         self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
+        
         if self.debug:
             self.ui.draw_debug_overlay(self)
 
@@ -246,12 +252,15 @@ class Game:
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
+        
         if self.food.isActive:
             self.food.draw()
+            
         self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
         draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
+        
         if self.debug:
             self.ui.draw_debug_overlay(self)
 
@@ -259,9 +268,11 @@ class Game:
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
         self.ui.draw_grid()
         self.obstacle_mgr.draw()
-        self.snake.draw()
+        # self.snake.draw()
+        
         if self.food.isActive:
             self.food.draw()
+            
         self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_game_over(self.score, self.high_score)
