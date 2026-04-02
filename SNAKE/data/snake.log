@@ -1094,3 +1094,9 @@
 2026-04-02 12:10:14,082  INFO  Game over — score: 0, best: 26
 2026-04-02 12:10:14,843  INFO  Game started — mode: CLASSIC
 2026-04-02 12:10:17,714  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-02 12:16:31,192  INFO  Game started — mode: CLASSIC
+2026-04-02 12:16:40,395  INFO  Game started — mode: CLASSIC
+2026-04-02 12:16:43,954  INFO  Game started — mode: TIME_ATTACK
+2026-04-02 12:16:48,265  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-02 12:17:25,805  INFO  Game started — mode: CLASSIC
+2026-04-02 12:17:53,995  INFO  Game started — mode: CLASSIC

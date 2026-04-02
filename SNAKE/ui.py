@@ -38,6 +38,7 @@ class UI:
             score_col  = WHITE
         draw_text(f"Score: {score}",      HDR_PAD,       HDR_PAD, score_size, score_col)
         draw_text(f"Best:  {high_score}", HDR_PAD + 130, HDR_PAD, 18,         LIGHTGRAY)
+        
         if mode is not None and mode != Mode.CLASSIC:
             tag = _MODE_LABELS[mode]
             if mode == Mode.TIME_ATTACK:
@@ -49,6 +50,7 @@ class UI:
             else:
                 color = SKYBLUE
             draw_text(tag, WINDOW_WIDTH // 2 - 100, HDR_PAD, 16, color)
+            
         draw_text("Arrow Keys  |  [ ] Speed  |  P Pause",
                   WINDOW_WIDTH - 290, HDR_PAD + 2, 14, GRAY)
 
@@ -59,6 +61,7 @@ class UI:
         modes = list(_MODE_LABELS.values())
         item_h = 32
         start_y = WINDOW_HEIGHT // 2 - (len(modes) * item_h) // 2
+        
         for i, label in enumerate(modes):
             y = start_y + i * item_h
             active = (i == selected_mode)
@@ -86,6 +89,7 @@ class UI:
             ("M",             "Return to menu (game over)"),
             ("I / BACKSPACE", "Open / close this screen"),
         ]
+        
         for i, (key, desc) in enumerate(rows):
             y = cy + 28 + i * 26
             draw_text(key,  cx,       y, 16, YELLOW)
@@ -99,6 +103,7 @@ class UI:
             (PURPLE, "Poison",  "-1 score,  shrink  (fades in 5 s)"),
             (ORANGE, "Moving",  "+2 score,  bounces around"),
         ]
+        
         for i, (color, name, effect) in enumerate(foods):
             y = fy + 28 + i * 36
             draw_rectangle(fx, y, 16, 16, color)
@@ -113,6 +118,7 @@ class UI:
             (YELLOW,  "H  Shield",  "Absorbs the next lethal collision (10 s)"),
             (LIME,    "Z  Shrink",  "Instantly removes 3 tail segments"),
         ]
+        
         cols = [(50, 322), (430, 322)]
         for i, (color, name, effect) in enumerate(powerups):
             px, py = cols[i % 2]
@@ -141,6 +147,7 @@ class UI:
             return
         x = WINDOW_WIDTH - 28
         y = HEADER_HEIGHT + 6
+        
         for p in active_powerups:
             draw_rectangle(x, y, 18, 18, p.color)
             draw_text(p.label, x + 4, y + 3, 12, BLACK)
@@ -171,6 +178,7 @@ class UI:
         tx = int(head.x) // SNAKE_SIZE
         ty = int(head.y - HEADER_HEIGHT) // SNAKE_SIZE
         pu = [p.label for p in game.snake.active_powerups]
+        
         lines = [
             f"FPS {get_fps()}",
             f"mode={game.mode.name}  score={game.score}  time={game.time_left}",
@@ -179,11 +187,27 @@ class UI:
             f"powerups=[{', '.join(pu) if pu else 'none'}]",
             ("GOD  " if game.god_mode else "") + "DEBUG ON  |  D=toggle  G=god  F=eat  N=spawn power-up",
         ]
+        
         W = 400
         H = len(lines) * LH + PAD * 2
         draw_rectangle(X - PAD, Y - PAD, W, H, Color(0, 0, 0, 180))
+        
         for i, line in enumerate(lines):
             draw_text(line, X, Y + i * LH, 12, LIME)
+
+    def draw_paused(self, selected):
+        ox = WINDOW_WIDTH // 2 - 100
+        oy = WINDOW_HEIGHT // 2 - 60
+        draw_rectangle(ox, oy, 200, 120, Color(0, 0, 0, 200))
+        draw_rectangle_lines(ox, oy, 200, 120, DARKGRAY)
+        draw_text("GAME PAUSED", ox + 10, oy + 12, 24, WHITE)
+        draw_line(ox + 10, oy + 42, ox + 190, oy + 42, DARKGRAY)
+        options = ["RESUME", "EXIT"]
+        
+        for i, label in enumerate(options):
+            color = GREEN if i == selected else LIGHTGRAY
+            prefix = "> " if i == selected else "  "
+            draw_text(prefix + label, ox + 30, oy + 54 + i * 30, 20, color)
 
     def draw_game_over(self, score, high_score):
         draw_rectangle_gradient_v(210, 180, 380, 230, BLUE, BLACK)

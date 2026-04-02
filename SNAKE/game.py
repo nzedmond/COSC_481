@@ -94,6 +94,7 @@ class Game:
         if is_key_pressed(KEY_D):
             self.debug = not self.debug
         if is_key_pressed(KEY_P):
+            self._paused_selection = 0
             self.screens.transition_to(Screen.PAUSED)
             return
 
@@ -167,8 +168,13 @@ class Game:
     def _update_paused(self):
         if is_key_pressed(KEY_D):
             self.debug = not self.debug
-        if is_key_pressed(KEY_P):
+        if is_key_pressed(KEY_UP) or is_key_pressed(KEY_DOWN):
+            self._paused_selection = 1 - self._paused_selection
+        if is_key_pressed(KEY_P) or (is_key_pressed(KEY_ENTER) and self._paused_selection == 0):
             self.screens.transition_to(Screen.GAMEPLAY)
+        if is_key_pressed(KEY_ENTER) and self._paused_selection == 1:
+            self.reset()
+            self.screens.transition_to(Screen.MENU)
 
     def _update_game_over(self):
         if is_key_pressed(KEY_ENTER):
@@ -259,7 +265,7 @@ class Game:
         self.ui.draw_food_pops(self._food_pops)
         self.powerup_mgr.draw()
         self.ui.draw_active_powerups(self.snake.active_powerups)
-        draw_text("GAME PAUSED!", WINDOW_WIDTH // 4, WINDOW_HEIGHT // 2, 50, BLACK)
+        self.ui.draw_paused(self._paused_selection)
         
         if self.debug:
             self.ui.draw_debug_overlay(self)
