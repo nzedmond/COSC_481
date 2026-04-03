@@ -2,8 +2,8 @@ import random
 from pyray import *
 from settings import WINDOW_WIDTH, WINDOW_HEIGHT
 
-_LAYER_DEFS = [
-    # Far background — large cave-wall slabs
+LAYER_DEFS = [
+    # Far background — large 
     {
         "speed": 0.15,
         "color": Color(18, 12, 28, 255),
@@ -11,7 +11,7 @@ _LAYER_DEFS = [
         "min_w": 60, "max_w": 150,
         "min_h": 80, "max_h": 200,
     },
-    # Mid layer — medium pillars
+    # Mid layer — medium
     {
         "speed": 0.35,
         "color": Color(28, 20, 45, 255),
@@ -19,7 +19,7 @@ _LAYER_DEFS = [
         "min_w": 30, "max_w": 80,
         "min_h": 40, "max_h": 120,
     },
-    # Near foreground — small details
+    # Near foreground — small 
     {
         "speed": 0.65,
         "color": Color(40, 30, 65, 255),
@@ -29,20 +29,20 @@ _LAYER_DEFS = [
     },
 ]
 
-_BG_COLOR = Color(8, 6, 16, 255)
+BG_COLOR = Color(8, 6, 16, 255)
 
 
 class ParallaxBackground:
-    """Procedural parallax background built from randomised rectangles.
+    """Parallax background built from randomised rectangles.
 
     Rectangles are generated once with a fixed seed so they look the same
-    every run. Pass scroll_x=0 for a static decorative background.
+    every run.
     """
 
     def __init__(self, seed=42):
         rng = random.Random(seed)
         self._layers = []
-        for cfg in _LAYER_DEFS:
+        for cfg in LAYER_DEFS:
             rects = []
             for _ in range(cfg["count"]):
                 wx = rng.randint(0, WINDOW_WIDTH)
@@ -58,7 +58,7 @@ class ParallaxBackground:
 
     def draw(self, scroll_x=0):
         """Render all layers. Clears the screen first."""
-        clear_background(_BG_COLOR)
+        clear_background(BG_COLOR)
         for layer in self._layers:
             offset = int(scroll_x * layer["speed"])
             for wx, wy, w, h in layer["rects"]:

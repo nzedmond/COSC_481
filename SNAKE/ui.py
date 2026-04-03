@@ -8,24 +8,11 @@ _MODE_LABELS = {
     Mode.SURVIVAL: "SURVIVAL",
 }
 
-_CELL = SNAKE_SIZE
-_OFF_X = WINDOW_WIDTH % _CELL
-_PLAYABLE_H = WINDOW_HEIGHT - HEADER_HEIGHT
-_OFF_Y = _PLAYABLE_H % _CELL
-
 # Header bar geometry — change these to reposition everything at once
 HDR_PAD  = 10   # inner padding from header edges
 
 
 class UI:
-    def draw_grid(self):
-        for i in range(WINDOW_WIDTH // _CELL + 1):
-            x = int(_CELL * i + _OFF_X / 2)
-            draw_line(x, HEADER_HEIGHT, x, WINDOW_HEIGHT, LIGHTGRAY)
-        for i in range(_PLAYABLE_H // _CELL + 1):
-            y = HEADER_HEIGHT + int(_CELL * i + _OFF_Y / 2)
-            draw_line(0, y, WINDOW_WIDTH, y, LIGHTGRAY)
-
     def draw_header(self, score, high_score, mode=None, time_left=0, score_pop_timer=0):
         draw_rectangle(0, 0, WINDOW_WIDTH, HEADER_HEIGHT, DARKGRAY)
         draw_line(0, HEADER_HEIGHT, WINDOW_WIDTH, HEADER_HEIGHT, BLACK)
