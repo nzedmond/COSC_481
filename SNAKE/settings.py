@@ -12,7 +12,6 @@ class Screen(Enum):
     GAME_OVER = 3
     INSTRUCTIONS = 4
 
-
 # ------------------HEADER / PLAYABLE AREA-----------------
 HEADER_HEIGHT = 40   # px reserved at the top for HUD + instructions (2 grid cells)
 
@@ -76,6 +75,7 @@ class Mode(Enum):
     CLASSIC = 0
     TIME_ATTACK = 1
     SURVIVAL = 2
+    
 TIME_ATTACK_DURATION = 3600  # 60 s at 60 fps
 SURVIVAL_SPEED_INTERVAL = 5     # every N points, move_interval drops by 1
 

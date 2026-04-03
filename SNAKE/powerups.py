@@ -106,7 +106,6 @@ class PowerupPickup:
                 head.y < self.position.y + self.size and
                 head.y + snake.size > self.position.y)
 
-
 class PowerupManager:
     def __init__(self):
         self.pickup = None   # one pickup on the field at a time

@@ -15,7 +15,6 @@ if __name__ == '__main__':
         current_game.update()
 
         begin_drawing()
-        clear_background(RAYWHITE)
         current_game.draw()
         end_drawing()
         

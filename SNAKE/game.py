@@ -10,6 +10,7 @@ from ui import UI
 from powerups import PowerupManager, Shield
 from obstacles import ObstacleManager
 from audio import AudioManager
+from parallax import ParallaxBackground
 
 
 os.makedirs("data", exist_ok=True)
@@ -63,6 +64,7 @@ class Game:
         self.debug = False
         self.god_mode = False
         self.audio_mgr = AudioManager()
+        self.parallax = ParallaxBackground()
 
     def update(self):
         self.audio_mgr.update(self.screens.current, self.mode)
@@ -232,14 +234,15 @@ class Game:
             case Screen.INSTRUCTIONS: self._draw_instructions()
 
     def _draw_menu(self):
+        self.parallax.draw()
         self.ui.draw_menu(self.selected_mode)
 
     def _draw_instructions(self):
         self.ui.draw_instructions()
 
     def _draw_gameplay(self):
+        self.parallax.draw()
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left, self.score_pop_timer)
-        self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
         
@@ -254,8 +257,8 @@ class Game:
             self.ui.draw_debug_overlay(self)
 
     def _draw_paused(self):
+        self.parallax.draw()
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left, self.score_pop_timer)
-        self.ui.draw_grid()
         self.obstacle_mgr.draw()
         self.snake.draw()
         
@@ -271,8 +274,8 @@ class Game:
             self.ui.draw_debug_overlay(self)
 
     def _draw_game_over(self):
+        self.parallax.draw()
         self.ui.draw_header(self.score, self.high_score, self.mode, self.time_left)
-        self.ui.draw_grid()
         self.obstacle_mgr.draw()
         # self.snake.draw()
         

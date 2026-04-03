@@ -1106,3 +1106,60 @@
 2026-04-02 12:56:39,492  INFO  Game started — mode: CLASSIC
 2026-04-02 12:56:43,275  INFO  Game over — score: 0, best: 26
 2026-04-02 12:57:05,237  INFO  Game started — mode: CLASSIC
+2026-04-03 16:40:45,482  INFO  Game started — mode: CLASSIC
+2026-04-03 16:40:48,375  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-03 16:40:50,908  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-03 16:40:52,769  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-04-03 16:40:55,898  INFO  Game over — score: 3, best: 26
+2026-04-03 16:40:57,586  INFO  Game started — mode: CLASSIC
+2026-04-03 16:41:00,543  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-03 16:41:05,104  INFO  Food eaten (MOVING) — delta: 2, score: 3
+2026-04-03 16:41:12,620  INFO  Game over — score: 3, best: 26
+2026-04-03 16:41:19,037  INFO  Game started — mode: CLASSIC
+2026-04-03 16:41:21,400  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-03 16:41:23,428  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-03 16:41:25,115  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-04-03 16:41:31,024  INFO  Food eaten (POISON) — delta: -1, score: 2
+2026-04-03 16:41:35,500  INFO  Food eaten (MOVING) — delta: 2, score: 4
+2026-04-03 16:41:37,609  INFO  Food eaten (NORMAL) — delta: 1, score: 5
+2026-04-03 16:41:38,793  INFO  Food eaten (GOLDEN) — delta: 3, score: 8
+2026-04-03 16:41:44,370  INFO  Game over — score: 8, best: 26
+2026-04-03 16:41:49,676  INFO  Game started — mode: CLASSIC
+2026-04-03 16:41:55,669  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-03 16:41:57,955  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-04-03 16:42:00,572  INFO  Food eaten (NORMAL) — delta: 1, score: 3
+2026-04-03 16:42:03,106  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-03 16:42:06,231  INFO  Food eaten (NORMAL) — delta: 1, score: 5
+2026-04-03 16:42:09,862  INFO  Food eaten (GOLDEN) — delta: 3, score: 8
+2026-04-03 16:42:14,423  INFO  Food eaten (MOVING) — delta: 2, score: 10
+2026-04-03 16:42:17,548  INFO  Food eaten (NORMAL) — delta: 1, score: 11
+2026-04-03 16:42:34,100  INFO  Food eaten (NORMAL) — delta: 1, score: 12
+2026-04-03 16:42:36,039  INFO  Game over — score: 12, best: 26
+2026-04-03 16:42:48,844  INFO  Game started — mode: CLASSIC
+2026-04-03 16:42:58,321  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 16:43:03,299  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-04-03 16:43:06,679  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-03 16:43:13,435  INFO  Food eaten (NORMAL) — delta: 1, score: 5
+2026-04-03 16:43:17,569  INFO  Food eaten (GOLDEN) — delta: 3, score: 8
+2026-04-03 16:43:18,666  INFO  Food eaten (POISON) — delta: -1, score: 7
+2026-04-03 16:43:23,723  INFO  Food eaten (POISON) — delta: -1, score: 6
+2026-04-03 16:43:26,842  INFO  Food eaten (NORMAL) — delta: 1, score: 7
+2026-04-03 16:43:28,023  INFO  Food eaten (GOLDEN) — delta: 3, score: 10
+2026-04-03 16:43:30,722  INFO  Food eaten (NORMAL) — delta: 1, score: 11
+2026-04-03 16:43:37,394  INFO  Food eaten (MOVING) — delta: 2, score: 13
+2026-04-03 16:43:41,283  INFO  Food eaten (NORMAL) — delta: 1, score: 14
+2026-04-03 16:43:45,588  INFO  Food eaten (NORMAL) — delta: 1, score: 15
+2026-04-03 16:43:50,148  INFO  Food eaten (NORMAL) — delta: 1, score: 16
+2026-04-03 16:43:54,371  INFO  Game over — score: 16, best: 26
+2026-04-03 16:44:04,849  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 16:44:06,101  INFO  Game started — mode: SURVIVAL
+2026-04-03 16:44:29,837  INFO  Game started — mode: SURVIVAL
+2026-04-03 16:45:04,200  INFO  Game started — mode: CLASSIC
+2026-04-03 16:45:05,907  INFO  God mode ON
+2026-04-03 16:45:09,626  INFO  Debug: forced powerup spawn
+2026-04-03 16:45:11,112  INFO  Debug: forced powerup spawn
+2026-04-03 16:45:12,345  INFO  Debug: forced powerup spawn
+2026-04-03 16:45:14,087  INFO  Debug: forced powerup spawn
+2026-04-03 16:45:16,704  INFO  Debug: forced powerup spawn
+2026-04-03 16:45:18,512  INFO  Debug: forced powerup spawn
+2026-04-03 16:45:55,694  INFO  Game started — mode: CLASSIC

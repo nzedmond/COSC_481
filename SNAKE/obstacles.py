@@ -16,7 +16,6 @@ class Obstacle:
         draw_rectangle_lines(int(self.position.x), int(self.position.y),
                              self.size, self.size, BLACK)
 
-
 class ObstacleManager:
     def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
         self._spawn_every = spawn_every
