@@ -1163,3 +1163,43 @@
 2026-04-03 16:45:16,704  INFO  Debug: forced powerup spawn
 2026-04-03 16:45:18,512  INFO  Debug: forced powerup spawn
 2026-04-03 16:45:55,694  INFO  Game started — mode: CLASSIC
+2026-04-03 16:54:52,209  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 16:54:55,667  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-03 16:54:58,456  INFO  Food eaten (MOVING) — delta: 2, score: 3
+2026-04-03 16:55:00,399  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-03 16:55:09,856  INFO  Food eaten (POISON) — delta: -1, score: 3
+2026-04-03 16:55:15,853  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-03 16:55:17,965  INFO  Food eaten (MOVING) — delta: 2, score: 6
+2026-04-03 16:55:27,081  INFO  Food eaten (NORMAL) — delta: 1, score: 7
+2026-04-03 16:55:32,235  INFO  Food eaten (POISON) — delta: -1, score: 6
+2026-04-03 16:55:36,379  INFO  Food eaten (NORMAL) — delta: 1, score: 7
+2026-04-03 16:55:40,176  INFO  Food eaten (NORMAL) — delta: 1, score: 8
+2026-04-03 16:55:45,579  INFO  Food eaten (POISON) — delta: -1, score: 7
+2026-04-03 16:55:49,297  INFO  Food eaten (NORMAL) — delta: 1, score: 8
+2026-04-03 16:55:50,142  INFO  Food eaten (POISON) — delta: -1, score: 7
+2026-04-03 16:55:53,017  INFO  Game over — score: 7, best: 26
+2026-04-03 16:56:13,392  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 16:56:16,764  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-03 16:56:20,228  INFO  Food eaten (MOVING) — delta: 2, score: 3
+2026-04-03 16:56:25,040  INFO  Game over — score: 3, best: 26
+2026-04-03 16:56:26,510  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 16:56:30,311  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-04-03 16:56:32,423  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-03 16:56:38,670  INFO  Food eaten (NORMAL) — delta: 1, score: 5
+2026-04-03 16:56:44,495  INFO  Food eaten (NORMAL) — delta: 1, score: 6
+2026-04-03 16:56:52,943  INFO  Food eaten (POISON) — delta: -1, score: 5
+2026-04-03 16:56:56,237  INFO  Food eaten (NORMAL) — delta: 1, score: 6
+2026-04-03 16:56:59,278  INFO  Food eaten (NORMAL) — delta: 1, score: 7
+2026-04-03 16:57:15,577  INFO  Food eaten (NORMAL) — delta: 1, score: 8
+2026-04-03 16:57:19,126  INFO  Food eaten (NORMAL) — delta: 1, score: 9
+2026-04-03 16:57:21,578  INFO  Food eaten (NORMAL) — delta: 1, score: 10
+2026-04-03 16:57:25,381  INFO  Food eaten (NORMAL) — delta: 1, score: 11
+2026-04-03 16:57:27,322  INFO  Game over — score: 11, best: 26
+2026-04-03 16:57:47,370  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 17:03:39,733  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 17:03:43,276  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-04-03 17:03:45,136  INFO  Food eaten (GOLDEN) — delta: 3, score: 6
+2026-04-03 17:03:46,824  INFO  Food eaten (GOLDEN) — delta: 3, score: 9
+2026-04-03 17:03:52,148  INFO  Game over — score: 9, best: 26
+2026-04-03 17:04:01,811  INFO  Game started — mode: TIME_ATTACK
+2026-04-03 17:04:03,936  INFO  Game started — mode: SURVIVAL
