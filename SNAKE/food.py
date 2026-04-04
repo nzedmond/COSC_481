@@ -3,14 +3,23 @@ import random
 from raylib import *
 from pyray import *
 from settings import *
+from sprite_animator import SpriteAnimator
 
 
 class Food:
     def __init__(self):
         self.size = FOOD_SIZE
         self.isActive = True
+        self._animators = {}   # FoodType → SpriteAnimator
         self._init_type()
         self.position = self._spawn_position([])
+
+    def set_sprites(self, sprites):
+        """sprites: dict of FoodType → (texture, num_frames, fps)"""
+        self._animators = {
+            ft: SpriteAnimator(tex, frames, fps)
+            for ft, (tex, frames, fps) in sprites.items()
+        }
 
     def _init_type(self):
         food_chance = random.random()
@@ -70,14 +79,23 @@ class Food:
             self.velocity.y *= -1
             self.position.y = max(float(HEADER_HEIGHT), min(self.position.y, float(WINDOW_HEIGHT - self.size)))
 
+    def update_anim(self):
+        anim = self._animators.get(self.food_type)
+        if anim:
+            anim.update()
+
     def draw(self):
-        draw_rectangle(int(self.position.x), int(self.position.y), self.size, self.size, self.color)
-        # Small label for non-normal types so the player can read the field at a glance
-        match self.food_type:
-            case FoodType.GOLDEN: draw_text("G", int(self.position.x) + 5, int(self.position.y) + 3, 12, BLACK)
-            case FoodType.POISON: draw_text("!", int(self.position.x) + 7, int(self.position.y) + 3, 12, WHITE)
-            case FoodType.MOVING: draw_text("~", int(self.position.x) + 4, int(self.position.y) + 3, 12, WHITE)
-            case _: pass
+        anim = self._animators.get(self.food_type)
+        if anim:
+            anim.draw(self.position, self.size)
+        else:
+            draw_rectangle(int(self.position.x), int(self.position.y), self.size, self.size, self.color)
+            # Small label for non-normal types so the player can read the field at a glance
+            match self.food_type:
+                case FoodType.GOLDEN: draw_text("G", int(self.position.x) + 5, int(self.position.y) + 3, 12, BLACK)
+                case FoodType.POISON: draw_text("!", int(self.position.x) + 7, int(self.position.y) + 3, 12, WHITE)
+                case FoodType.MOVING: draw_text("~", int(self.position.x) + 4, int(self.position.y) + 3, 12, WHITE)
+                case _: pass
 
         # Lifespan timer bar drawn above poison food (full = white, empty = gone)
         if self.life_timer >= 0:

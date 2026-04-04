@@ -12,6 +12,8 @@ from obstacles import ObstacleManager
 from audio import AudioManager
 from parallax import ParallaxBackground
 
+_SPRITES_DIR = os.path.join(os.path.dirname(__file__), "Game_Assets", "sprites")
+
 
 os.makedirs("data", exist_ok=True)
 logging.basicConfig(
@@ -104,6 +106,7 @@ class Game:
             if is_key_pressed(KEY_G):
                 self.god_mode = not self.god_mode
                 log.info(f"God mode {'ON' if self.god_mode else 'OFF'}")
+                
             if is_key_pressed(KEY_F):
                 snake = self.snake
                 snake.body.append(Vector2(snake.body[-1].x, snake.body[-1].y))
@@ -113,6 +116,7 @@ class Game:
                 self.food._init_type()
                 self.food.position = self.food._spawn_position(occupied)
                 log.info(f"Debug: force-ate food, score={self.score}")
+                
             if is_key_pressed(KEY_N):
                 self.powerup_mgr.spawn_timer = POWERUP_SPAWN_INTERVAL
                 log.info("Debug: forced powerup spawn")
@@ -139,6 +143,9 @@ class Game:
         self._food_pops = [p for p in self._food_pops if p[2] < FOOD_POP_DURATION]
         if self.score_pop_timer > 0:
             self.score_pop_timer -= 1
+
+        self.food.update_anim()
+        self.obstacle_mgr.update_anims()
 
         if not moved:
             return  # Skip collision checks if the snake didn't move this frame
@@ -288,6 +295,12 @@ class Game:
 
     def startup(self):
         self.audio_mgr.load()
+        self._devil_tex  = load_texture(os.path.join(_SPRITES_DIR, "devil.png"))
+        self._killer_tex = load_texture(os.path.join(_SPRITES_DIR, "kkiller.png"))
+        self.food.set_sprites({
+            FoodType.POISON: (self._devil_tex,  5, 8),
+        })
+        self.obstacle_mgr.set_sprites(self._killer_tex, num_frames=8, fps=8)
 
     def _start_game(self):
         """Set up a fresh round for the current mode and transition to gameplay."""
@@ -322,4 +335,6 @@ class Game:
 
     def shutdown(self):
         self.audio_mgr.unload()
+        unload_texture(self._devil_tex)
+        unload_texture(self._killer_tex)
 

@@ -36,12 +36,12 @@ screenHeight = 450
 # num = 5
 
 # # --------------KILLER CONSTANTS------------
-# fname = "resources/kkiller.png"
+# fname = "Game_Assets/sprites/killer.png"
 # scale = 1.32
 # num = 8
 
 # Devil constants
-fname = "resources/devil.png"
+fname = "Game_Assets/sprites/devil.png"
 scale = 0.2
 num = 5
 
@@ -104,6 +104,7 @@ while not window_should_close():  # Detect window close button or ESC key
     
     clear_background(RAYWHITE)
     
+    
     # -------------------------DRAW SPRITE ----------------------------------
     draw_texture_ex(SPRITE, SPRITE_TEXTURE_POSITION, 0.0, SPRITE_SCALE, WHITE)
     draw_rectangle_lines(int(SPRITE_TEXTURE_POSITION.x), int(SPRITE_TEXTURE_POSITION.y), int(SPRITE.width * SPRITE_SCALE), int(SPRITE.height * SPRITE_SCALE), LIME)
@@ -118,8 +119,8 @@ while not window_should_close():  # Detect window close button or ESC key
         if i < framesSpeed:
             draw_rectangle(250 + 21*i, 205, 20, 20, RED)
         #draw_rectangle_lines(250 + 21*i, 205, 20, 20, MAROON)
-        
-     
+
+
     # Draw part of the texture 
     draw_texture_rec(SPRITE, frameRec, SPRITE_POSITION, WHITE)
     # draw_texture_rec(boy, boy_frameRec, boy_position, WHITE)

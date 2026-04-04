@@ -39,6 +39,7 @@ class ParallaxBackground:
     def __init__(self, seed=42):
         rand_num = random.Random(seed)
         self._layers = []
+        
         for layer in LAYER_DEFS:
             rects = []
             for _ in range(layer["count"]):
