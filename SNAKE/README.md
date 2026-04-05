@@ -132,6 +132,8 @@ The best score is saved to `data/highscore.json` and persists between sessions.
 
 ## Resources
 
+>NOTE: I MADE ALL THE MUSIC AND SOUND EFFECT BY HITTING RANDOM KEYS ON THE PIANO AND DRUMS IN COLGATE MEMORIAL CHAPEL BASEMENT (SOME MIGHT NOT HAVE GOOD MELODY). I THEN USED DAVINCI RESOLVE SOFTWARE TO ADJUST VOLUMES AND CONVERT TO THE FORMATS SUPPORTED BY RAYLIB.
+
 ### Music
 | File | Used in |
 |---|---|
@@ -155,7 +157,7 @@ The best score is saved to `data/highscore.json` and persists between sessions.
 | `kkiller.png` | Obstacle animated tile (8-frame spritesheet) |
 
 ### Some Code Snippets
-**sprite_animator.py**: Recycled from LAB_04, `text_anim.py`
+`sprite_animator.py`: Recycled from LAB_04, `text_anim.py`
 
 ---
 
