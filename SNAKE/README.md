@@ -130,6 +130,26 @@ The best score is saved to `data/highscore.json` and persists between sessions.
 
 ---
 
+## Screenshots
+
+| Menu | Instructions |
+|---|---|
+| ![Menu](screenshots/menu.png) | ![Instructions](screenshots/instructions.png) |
+
+| Classic Mode | Survival Mode |
+|---|---|
+| ![Classic](screenshots/classic.png) | ![Survival](screenshots/survival.png) |
+
+| Time Attack | Paused |
+|---|---|
+| ![Time Attack](screenshots/time_attack.png) | ![Paused](screenshots/pause.png) |
+
+| Game Over | Debug Overlay |
+|---|---|
+| ![Game Over](screenshots/gameover.png) | ![Debug](screenshots/debug.png) |
+
+---
+
 ## Resources
 
 >NOTE: I MADE ALL THE MUSIC AND SOUND EFFECT BY HITTING RANDOM KEYS ON THE PIANO AND DRUMS IN COLGATE MEMORIAL CHAPEL BASEMENT (SOME MIGHT NOT HAVE GOOD MELODY). I THEN USED DAVINCI RESOLVE SOFTWARE TO ADJUST VOLUMES AND CONVERT TO THE FORMATS SUPPORTED BY RAYLIB.
@@ -159,8 +179,8 @@ The best score is saved to `data/highscore.json` and persists between sessions.
 **SOURCES:** `https://www.freepik.com/vectors/demon-sprite-sheet`, `https://www.spriters-resource.com/arcade/kingofdragons/asset/522706/`
 
 ### Some Code Snippets
-`sprite_animator.py`: Recycled from LAB_04, `text_anim.py`
-`parallax.py`: Inspired by the lecture on `Camera+background`
+- `sprite_animator.py`: Recycled from LAB_04, `text_anim.py`
+- `parallax.py`: Inspired by the lecture on `Camera+background`
 
 ---
 

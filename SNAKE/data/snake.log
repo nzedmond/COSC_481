@@ -1483,3 +1483,158 @@
 2026-04-05 00:01:52,079  INFO  Food eaten (GOLDEN) — delta: 3, score: 17
 2026-04-05 00:01:56,133  INFO  Food eaten (GOLDEN) — delta: 3, score: 20
 2026-04-05 00:01:59,682  INFO  Game over — score: 20, best: 26
+2026-04-05 18:44:49,840  INFO  Game started — mode: TIME_ATTACK
+2026-04-05 18:44:53,383  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-05 18:45:00,401  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-05 18:45:19,975  INFO  Game over — score: 0, best: 26
+2026-04-05 18:45:34,697  INFO  Game started — mode: TIME_ATTACK
+2026-04-05 18:47:25,758  INFO  Game started — mode: CLASSIC
+2026-04-05 18:47:30,400  INFO  Game over — score: 0, best: 26
+2026-04-05 18:47:34,117  INFO  Game started — mode: CLASSIC
+2026-04-05 18:47:36,567  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-05 18:47:36,820  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-04-05 18:47:37,920  INFO  Food eaten (GOLDEN) — delta: 3, score: 5
+2026-04-05 18:47:40,879  INFO  Food eaten (NORMAL) — delta: 1, score: 6
+2026-04-05 18:47:43,076  INFO  Food eaten (MOVING) — delta: 2, score: 8
+2026-04-05 18:47:45,442  INFO  Food eaten (NORMAL) — delta: 1, score: 9
+2026-04-05 18:47:47,553  INFO  Food eaten (MOVING) — delta: 2, score: 11
+2026-04-05 18:47:48,567  INFO  Food eaten (MOVING) — delta: 2, score: 13
+2026-04-05 18:47:50,004  INFO  Food eaten (NORMAL) — delta: 1, score: 14
+2026-04-05 18:47:52,285  INFO  Food eaten (MOVING) — delta: 2, score: 16
+2026-04-05 18:47:55,416  INFO  Food eaten (NORMAL) — delta: 1, score: 17
+2026-04-05 18:47:57,107  INFO  Food eaten (NORMAL) — delta: 1, score: 18
+2026-04-05 18:47:59,727  INFO  Food eaten (NORMAL) — delta: 1, score: 19
+2026-04-05 18:48:03,363  INFO  Food eaten (MOVING) — delta: 2, score: 21
+2026-04-05 18:48:11,397  INFO  Food eaten (NORMAL) — delta: 1, score: 22
+2026-04-05 18:48:27,725  INFO  Shield absorbed a collision
+2026-04-05 18:48:54,712  INFO  Food eaten (POISON) — delta: -1, score: 21
+2026-04-05 18:49:58,638  INFO  Game started — mode: TIME_ATTACK
+2026-04-05 18:50:02,267  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-05 18:50:04,379  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-04-05 18:50:16,295  INFO  Food eaten (POISON) — delta: -1, score: 1
+2026-04-05 18:50:20,608  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-04-05 18:50:23,311  INFO  Food eaten (NORMAL) — delta: 1, score: 3
+2026-04-05 18:50:26,015  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-05 18:50:34,544  INFO  Game over — score: 4, best: 26
+2026-04-05 18:50:36,219  INFO  Game started — mode: TIME_ATTACK
+2026-04-05 18:50:39,512  INFO  Food eaten (GOLDEN) — delta: 3, score: 3
+2026-04-05 18:50:43,653  INFO  Food eaten (GOLDEN) — delta: 3, score: 6
+2026-04-05 18:50:46,103  INFO  Food eaten (NORMAL) — delta: 1, score: 7
+2026-04-05 18:51:14,977  INFO  Game over — score: 7, best: 26
+2026-04-05 18:51:40,464  INFO  Game started — mode: TIME_ATTACK
+2026-04-05 18:51:42,356  INFO  Game started — mode: SURVIVAL
+2026-04-05 18:51:45,991  INFO  Food eaten (MOVING) — delta: 2, score: 2
+2026-04-05 18:51:49,623  INFO  Food eaten (POISON) — delta: -1, score: 1
+2026-04-05 18:51:52,413  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-05 18:51:55,540  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-05 18:51:56,892  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-04-05 18:51:58,583  INFO  Food eaten (NORMAL) — delta: 1, score: 3
+2026-04-05 18:51:58,752  INFO  Food eaten (MOVING) — delta: 2, score: 5
+2026-04-05 18:52:03,681  INFO  Food eaten (NORMAL) — delta: 1, score: 6
+2026-04-05 18:52:05,577  INFO  Food eaten (NORMAL) — delta: 1, score: 7
+2026-04-05 18:52:09,366  INFO  Game over — score: 7, best: 26
+2026-04-05 18:52:10,414  INFO  Game started — mode: SURVIVAL
+2026-04-05 18:52:14,894  INFO  Food eaten (POISON) — delta: -1, score: 0
+2026-04-05 18:52:17,935  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-05 18:52:21,401  INFO  Food eaten (NORMAL) — delta: 1, score: 2
+2026-04-05 18:52:23,259  INFO  Food eaten (NORMAL) — delta: 1, score: 3
+2026-04-05 18:52:24,022  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-05 18:52:24,612  INFO  Food eaten (POISON) — delta: -1, score: 3
+2026-04-05 18:52:25,796  INFO  Food eaten (NORMAL) — delta: 1, score: 4
+2026-04-05 18:52:28,415  INFO  Food eaten (GOLDEN) — delta: 3, score: 7
+2026-04-05 18:52:29,294  INFO  Food eaten (NORMAL) — delta: 1, score: 8
+2026-04-05 18:52:36,395  INFO  Food eaten (NORMAL) — delta: 1, score: 9
+2026-04-05 18:53:33,588  INFO  Game started — mode: SURVIVAL
+2026-04-05 18:53:38,672  INFO  Game started — mode: CLASSIC
+2026-04-05 18:53:40,600  INFO  God mode ON
+2026-04-05 18:53:45,429  INFO  Food eaten (NORMAL) — delta: 1, score: 1
+2026-04-05 18:53:46,712  INFO  Debug: forced powerup spawn
+2026-04-05 18:53:46,864  INFO  Debug: forced powerup spawn
+2026-04-05 18:53:47,675  INFO  Debug: force-ate food, score=2
+2026-04-05 18:53:48,857  INFO  Debug: force-ate food, score=3
+2026-04-05 18:53:49,651  INFO  Debug: force-ate food, score=4
+2026-04-05 18:53:50,393  INFO  Debug: force-ate food, score=5
+2026-04-05 18:53:50,749  INFO  Debug: force-ate food, score=6
+2026-04-05 18:53:51,053  INFO  Debug: force-ate food, score=7
+2026-04-05 18:53:51,322  INFO  Debug: force-ate food, score=8
+2026-04-05 18:53:51,593  INFO  Debug: force-ate food, score=9
+2026-04-05 18:53:51,897  INFO  Debug: force-ate food, score=10
+2026-04-05 18:53:52,134  INFO  Debug: force-ate food, score=11
+2026-04-05 18:53:52,893  INFO  Debug: force-ate food, score=12
+2026-04-05 18:53:53,114  INFO  Debug: force-ate food, score=13
+2026-04-05 18:53:53,418  INFO  Debug: force-ate food, score=14
+2026-04-05 18:53:53,690  INFO  Debug: force-ate food, score=15
+2026-04-05 18:53:53,926  INFO  Debug: force-ate food, score=16
+2026-04-05 18:53:54,213  INFO  Debug: force-ate food, score=17
+2026-04-05 18:53:54,483  INFO  Debug: force-ate food, score=18
+2026-04-05 18:53:54,737  INFO  Debug: force-ate food, score=19
+2026-04-05 18:53:54,990  INFO  Debug: force-ate food, score=20
+2026-04-05 18:53:55,396  INFO  Debug: force-ate food, score=21
+2026-04-05 18:53:55,700  INFO  Debug: force-ate food, score=22
+2026-04-05 18:53:56,073  INFO  Debug: force-ate food, score=23
+2026-04-05 18:53:56,343  INFO  Debug: force-ate food, score=24
+2026-04-05 18:53:56,580  INFO  Debug: force-ate food, score=25
+2026-04-05 18:53:56,867  INFO  Debug: force-ate food, score=26
+2026-04-05 18:53:57,172  INFO  Debug: force-ate food, score=27
+2026-04-05 18:53:57,579  INFO  Debug: force-ate food, score=28
+2026-04-05 18:53:57,883  INFO  Debug: force-ate food, score=29
+2026-04-05 18:53:58,154  INFO  Debug: force-ate food, score=30
+2026-04-05 18:53:58,425  INFO  Debug: force-ate food, score=31
+2026-04-05 18:53:59,610  INFO  Debug: force-ate food, score=32
+2026-04-05 18:53:59,932  INFO  Debug: force-ate food, score=33
+2026-04-05 18:54:00,237  INFO  Debug: force-ate food, score=34
+2026-04-05 18:54:01,338  INFO  Debug: force-ate food, score=35
+2026-04-05 18:54:01,558  INFO  Debug: force-ate food, score=36
+2026-04-05 18:54:01,845  INFO  Debug: force-ate food, score=37
+2026-04-05 18:54:02,081  INFO  Debug: force-ate food, score=38
+2026-04-05 18:54:03,062  INFO  Debug: force-ate food, score=39
+2026-04-05 18:54:03,297  INFO  Debug: force-ate food, score=40
+2026-04-05 18:54:03,939  INFO  Debug: force-ate food, score=41
+2026-04-05 18:54:04,125  INFO  Debug: force-ate food, score=42
+2026-04-05 18:54:04,362  INFO  Debug: force-ate food, score=43
+2026-04-05 18:54:04,581  INFO  Debug: force-ate food, score=44
+2026-04-05 18:54:05,192  INFO  Debug: force-ate food, score=45
+2026-04-05 18:54:05,427  INFO  Debug: force-ate food, score=46
+2026-04-05 18:54:05,715  INFO  Debug: force-ate food, score=47
+2026-04-05 18:54:05,951  INFO  Debug: force-ate food, score=48
+2026-04-05 18:54:06,222  INFO  Debug: force-ate food, score=49
+2026-04-05 18:54:06,712  INFO  Debug: force-ate food, score=50
+2026-04-05 18:54:06,933  INFO  Debug: force-ate food, score=51
+2026-04-05 18:54:07,170  INFO  Debug: force-ate food, score=52
+2026-04-05 18:54:07,679  INFO  Debug: force-ate food, score=53
+2026-04-05 18:54:08,000  INFO  Debug: force-ate food, score=54
+2026-04-05 18:54:08,220  INFO  Debug: force-ate food, score=55
+2026-04-05 18:54:08,491  INFO  Debug: force-ate food, score=56
+2026-04-05 18:54:09,286  INFO  Debug: force-ate food, score=57
+2026-04-05 18:54:09,540  INFO  Debug: force-ate food, score=58
+2026-04-05 18:54:09,777  INFO  Debug: force-ate food, score=59
+2026-04-05 18:54:10,233  INFO  Debug: force-ate food, score=60
+2026-04-05 18:54:10,335  INFO  Debug: force-ate food, score=61
+2026-04-05 18:54:10,894  INFO  Debug: force-ate food, score=62
+2026-04-05 18:54:11,165  INFO  Debug: force-ate food, score=63
+2026-04-05 18:54:11,791  INFO  Debug: force-ate food, score=64
+2026-04-05 18:54:12,012  INFO  Debug: force-ate food, score=65
+2026-04-05 18:54:12,893  INFO  Debug: force-ate food, score=66
+2026-04-05 18:54:13,095  INFO  Debug: force-ate food, score=67
+2026-04-05 18:54:13,871  INFO  Debug: force-ate food, score=68
+2026-04-05 18:54:14,076  INFO  Debug: force-ate food, score=69
+2026-04-05 18:54:15,228  INFO  Debug: force-ate food, score=70
+2026-04-05 18:54:17,489  INFO  Debug: force-ate food, score=71
+2026-04-05 18:54:17,676  INFO  Debug: force-ate food, score=72
+2026-04-05 18:54:17,879  INFO  Debug: force-ate food, score=73
+2026-04-05 18:54:18,065  INFO  Debug: force-ate food, score=74
+2026-04-05 18:54:19,439  INFO  Debug: force-ate food, score=75
+2026-04-05 18:54:20,507  INFO  Debug: force-ate food, score=76
+2026-04-05 18:54:20,693  INFO  Debug: force-ate food, score=77
+2026-04-05 18:54:20,863  INFO  Debug: force-ate food, score=78
+2026-04-05 18:54:21,083  INFO  Debug: force-ate food, score=79
+2026-04-05 18:54:21,287  INFO  Debug: force-ate food, score=80
+2026-04-05 18:54:21,610  INFO  Debug: force-ate food, score=81
+2026-04-05 18:54:21,880  INFO  Debug: force-ate food, score=82
+2026-04-05 18:54:22,895  INFO  Debug: force-ate food, score=83
+2026-04-05 18:54:23,115  INFO  Debug: force-ate food, score=84
+2026-04-05 18:54:23,301  INFO  Debug: force-ate food, score=85
+2026-04-05 18:54:23,521  INFO  Debug: force-ate food, score=86
+2026-04-05 18:54:23,724  INFO  Debug: force-ate food, score=87
+2026-04-05 18:54:23,927  INFO  Debug: force-ate food, score=88
+2026-04-05 18:54:24,214  INFO  Debug: force-ate food, score=89
