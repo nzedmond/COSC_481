@@ -63,8 +63,6 @@ class Shrink(Powerup):
                 snake.body.pop()
                 snake.length -= 1
 
-    def remove(self, snake): pass
-
 
 _POWERUP_CLASSES = {
     PowerupType.SHIELD:  Shield,

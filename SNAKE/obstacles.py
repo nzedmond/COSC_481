@@ -26,9 +26,8 @@ class Obstacle:
                                  self.size, self.size, BLACK)
 
 class ObstacleManager:
-    def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
+    def __init__(self, spawn_every=OBSTACLE_SPAWN_EVERY):
         self._spawn_every = spawn_every
-        self._dynamic = dynamic
         self.obstacles = []
         self._last_score = 0
         self._texture = None
@@ -40,9 +39,8 @@ class ObstacleManager:
         self._num_frames = num_frames
         self._fps = fps
 
-    def reset(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
+    def reset(self, spawn_every=OBSTACLE_SPAWN_EVERY):
         self._spawn_every = spawn_every
-        self._dynamic = dynamic
         self.obstacles = []
         self._last_score = 0
 
@@ -52,8 +50,6 @@ class ObstacleManager:
         return [obs.position for obs in self.obstacles]
 
     def update(self, score, snake, food):
-        if not self._dynamic:
-            return
         while (score - self._last_score >= self._spawn_every
                and len(self.obstacles) < OBSTACLE_MAX):
             self._last_score += self._spawn_every
