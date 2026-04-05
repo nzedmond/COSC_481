@@ -156,8 +156,11 @@ The best score is saved to `data/highscore.json` and persists between sessions.
 | `devil.png` | Poison food animated tile (5-frame spritesheet) |
 | `kkiller.png` | Obstacle animated tile (8-frame spritesheet) |
 
+**SOURCES:** `https://www.freepik.com/vectors/demon-sprite-sheet`, `https://www.spriters-resource.com/arcade/kingofdragons/asset/522706/`
+
 ### Some Code Snippets
 `sprite_animator.py`: Recycled from LAB_04, `text_anim.py`
+`parallax.py`: Inspired by the lecture on `Camera+background`
 
 ---
 
