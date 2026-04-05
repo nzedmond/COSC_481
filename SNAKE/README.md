@@ -4,6 +4,8 @@
 
 Snake is a single-player arcade game where you guide a growing snake around a grid, eating food to score points while avoiding walls, obstacles, and your own tail. This improved edition layers on top of that foundation with four food variants (including a bouncing moving food and a timed poison), two power-up effects, progressively spawning wall obstacles, three distinct game modes with unique difficulty curves, and real-time audio and visual feedback for every game event.
 
+`LINK TO TRAILER:` `https://drive.google.com/file/d/125PUJ6MfiUI89Q9bZc6HSMHs-hWdgYK1/view?usp=sharing`
+
 ---
 
 ## Key Features
