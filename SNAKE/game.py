@@ -121,14 +121,14 @@ class Game:
                 self.powerup_mgr.spawn_timer = POWERUP_SPAWN_INTERVAL
                 log.info("Debug: forced powerup spawn")
 
-        # Time Attack: count down every frame (not just on snake moves)
+        # Time Attack count down on every frame regardless of snake movement
         if self.mode == Mode.TIME_ATTACK:
             self.time_left -= 1
             if self.time_left <= 0:
                 self._trigger_game_over()
                 return
 
-        # Survival: override speed based on current score
+        # Survival mode: adjust snake speed based on current score
         if self.mode == Mode.SURVIVAL:
             self.snake.move_interval = max(
                 1, SNAKE_MOVE_INTERVAL - self.score // SURVIVAL_SPEED_INTERVAL
@@ -163,14 +163,14 @@ class Game:
         eaten_pos   = Vector2(self.food.position.x, self.food.position.y)
         eaten_color = self.food.color
         eaten_type  = self.food.food_type
-        score_delta = self.food.update(self.snake, obs_positions)
+        score_change = self.food.update(self.snake, obs_positions)
         
-        if score_delta != 0:
+        if score_change != 0:
             self.audio_mgr.play_hit(eaten_type)
-            self._food_pops.append([eaten_pos, eaten_color, 0, score_delta])
+            self._food_pops.append([eaten_pos, eaten_color, 0, score_change])
             self.score_pop_timer = SCORE_POP_DURATION
-            self.score = max(0, self.score + score_delta)
-            log.info(f"Food eaten ({eaten_type.name}) — delta: {score_delta}, score: {self.score}")
+            self.score = max(0, self.score + score_change)
+            log.info(f"Food eaten ({eaten_type.name}) — delta: {score_change}, score: {self.score}")
 
         self.obstacle_mgr.update(self.score, self.snake, self.food)
 

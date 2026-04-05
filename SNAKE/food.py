@@ -10,15 +10,15 @@ class Food:
     def __init__(self):
         self.size = FOOD_SIZE
         self.isActive = True
-        self._animators = {}   # FoodType → SpriteAnimator
+        self._animators = {}   # sprite per FoodType
         self._init_type()
         self.position = self._spawn_position([])
 
     def set_sprites(self, sprites):
-        """sprites: dict of FoodType → (texture, num_frames, fps)"""
+        """sprites: dict of FoodType -> (texture, num_frames, fps)"""
         self._animators = {
-            ft: SpriteAnimator(tex, frames, fps)
-            for ft, (tex, frames, fps) in sprites.items()
+            foodType: SpriteAnimator(tex, frames, fps)
+            for foodType, (tex, frames, fps) in sprites.items()
         }
 
     def _init_type(self):
@@ -90,14 +90,15 @@ class Food:
             anim.draw(self.position, self.size)
         else:
             draw_rectangle(int(self.position.x), int(self.position.y), self.size, self.size, self.color)
-            # Small label for non-normal types so the player can read the field at a glance
+            
+            # Small label for non-normal types
             match self.food_type:
                 case FoodType.GOLDEN: draw_text("G", int(self.position.x) + 5, int(self.position.y) + 3, 12, BLACK)
                 case FoodType.POISON: draw_text("!", int(self.position.x) + 7, int(self.position.y) + 3, 12, WHITE)
                 case FoodType.MOVING: draw_text("~", int(self.position.x) + 4, int(self.position.y) + 3, 12, WHITE)
                 case _: pass
 
-        # Lifespan timer bar drawn above poison food (full = white, empty = gone)
+        # Lifespan timer bar above poison food
         if self.life_timer >= 0:
             ratio = max(0.0, 1.0 - self.life_timer / FOOD_POISON_LIFESPAN)
             bar_w = int(self.size * ratio)
@@ -105,10 +106,10 @@ class Food:
             draw_rectangle(int(self.position.x), int(self.position.y) - 4, bar_w, 3, WHITE)
 
     def update(self, snake, extra_occupied=None):
-        """Move food (if moving type) and check collision. Returns score delta.
+        """Move the moving food type if applicable and check for collisions.
+        Returns the score change resulting from the collision (if any).
 
-        extra_occupied: optional list of Vector2 positions (obstacle tiles)
-        that the new food must not spawn on.
+        extra_occupied: optional list of Vector2 positions of obstacle tiles that the new food must not spawn on.
         """
         if not self.isActive:
             return 0
@@ -143,7 +144,7 @@ class Food:
             snake.body.append(Vector2(snake.body[-1].x, snake.body[-1].y))
             snake.length += 1
 
-        # Spawn a new food of a random type, avoiding obstacles
+        # Spawn a new food of a random type in free space
         self.isActive = False
         self._init_type()
         occupied = list(snake.body) + (extra_occupied or [])

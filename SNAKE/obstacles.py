@@ -46,7 +46,7 @@ class ObstacleManager:
 
     @property
     def positions(self):
-        """Vector2 list for spawn-exclusion checks in food and powerup code."""
+        """returns a list of Vector2 positions for all obstacles."""
         return [obs.position for obs in self.obstacles]
 
     def update(self, score, snake, food):

@@ -36,7 +36,7 @@ FOOD_GOLDEN_COLOR = GOLD
 FOOD_POISON_COLOR = PURPLE
 FOOD_MOVING_COLOR = ORANGE
 
-# Score delta per food type
+# Score change per food type
 FOOD_NORMAL_SCORE = 1
 FOOD_GOLDEN_SCORE = 3
 FOOD_POISON_SCORE = -1
@@ -50,12 +50,11 @@ FOOD_MOVING_CHANCE = 0.10
 # Moving food pixel speed per frame
 FOOD_MOVING_SPEED = 2
 
-# Poison food lifespan in frames (300 = 5 seconds at 60 fps)
-FOOD_POISON_LIFESPAN = 300
+FOOD_POISON_LIFESPAN = 300   # frames (5 seconds at 60 fps)
 
 # Eat animation: expanding + fading square at the eaten food's position
 FOOD_POP_DURATION  = 20   # frames
-SCORE_POP_DURATION = 20   # frames the score text stays enlarged
+SCORE_POP_DURATION = 20   # frames 
 
 # ------------------POWER-UPS---------------------
 POWERUP_SIZE = 20

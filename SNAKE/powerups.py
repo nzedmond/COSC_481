@@ -74,7 +74,7 @@ class PowerupPickup:
     def __init__(self, occupied):
         self.size = POWERUP_SIZE
         self.kind = random.choice(list(PowerupType))
-        cls = _POWERUP_CLASSES[self.kind]
+        cls = _POWERUP_CLASSES[self.kind] 
         self.color = cls.COLOR
         self.label = cls.LABEL
         self.position = self._spawn(occupied)
@@ -90,7 +90,7 @@ class PowerupPickup:
                 return candidate
 
     def draw(self):
-        # White border distinguishes pickups from food at a glance
+        # White border distinguishes pickups from food
         draw_rectangle(int(self.position.x) - 2, int(self.position.y) - 2,
                        self.size + 4, self.size + 4, WHITE)
         draw_rectangle(int(self.position.x), int(self.position.y),
@@ -126,7 +126,7 @@ class PowerupManager:
             if effect.duration > 1:          # instant effects (Shrink) need no tracking
                 snake.active_powerups.append(effect)
             self.pickup = None
-            self.spawn_timer = 0             # brief pause before next spawn
+            self.spawn_timer = 0             # pause a little before next spawn
 
         snake.active_powerups = [p for p in snake.active_powerups if not p.update(snake)]
 

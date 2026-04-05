@@ -1,6 +1,44 @@
 # SNAKE — Improved Edition
 
-A feature-rich Snake game built with Python and [raylib](https://github.com/electronstudio/raylib-python-cffi).
+> A modern take on the classic Snake game — built in Python with raylib, featuring multiple game modes, dynamic obstacles, power-ups, animated sprites, a procedural parallax background, and per-mode music.
+
+Snake is a single-player arcade game where you guide a growing snake around a grid, eating food to score points while avoiding walls, obstacles, and your own tail. This improved edition layers on top of that foundation with four food variants (including a bouncing moving food and a timed poison), two power-up effects, progressively spawning wall obstacles, three distinct game modes with unique difficulty curves, and real-time audio and visual feedback for every game event.
+
+---
+
+## Key Features
+
+### Multiple Food Types with Distinct Mechanics
+Food is not a single item — each of the four types has different behaviour, score value, and spawn probability. Poison food has a **5-second lifespan** tracked by an on-tile timer bar; if ignored it expires and re-randomises. Moving food bounces around the play area using per-frame velocity with wall reflection, forcing the player to intercept a moving target.
+
+### Three Game Modes
+- **Classic** — standard Snake with progressively spawning wall obstacles.
+- **Time Attack** — fixed 60-second window; score as much as possible before time runs out.
+- **Survival** — speed escalates every 5 points using `move_interval = max(1, BASE - score // 5)`, approaching 60 moves/second. Designed to always end eventually.
+
+### Power-up System
+Power-ups use a base class / subclass pattern with `apply()` and `remove()` hooks. A pickup spawns every 5 seconds; collecting it either triggers an instant effect (Shrink: removes 3 tail segments) or a timed effect (Shield: absorbs the next lethal collision). Active timed effects are shown as a labelled duration bar in the header — intentionally separated from the play field to avoid confusion with collectible items.
+
+### Floating Score Popups
+Each food collision spawns a floating `+1` / `+3` / `-1` label at the eaten tile's position. It rises upward and fades out over 20 frames, coloured green for gains and red for losses, giving spatially-grounded feedback without interrupting gameplay.
+
+### Animated Sprites via Spritesheet
+A `SpriteAnimator` class steps through frames of a single-row spritesheet using `draw_texture_pro`, scaling each frame to fit the tile size regardless of source resolution. The Poison food and obstacle tiles use animated sprites; other types fall back to coloured rectangles with letter labels.
+
+### Procedural Parallax Background
+The background is generated from three layers of randomly placed rectangles (far, mid, near) with different colours, densities, and size ranges. A fixed random seed (`42`) ensures it looks identical every session without needing an image asset.
+
+### Collision-Safe Spawning
+Food, power-ups, and obstacles all use the same pattern: build a set of occupied `(x, y)` coordinates from the snake body + existing obstacles, then retry random grid candidates until a clear cell is found. This guarantees nothing ever spawns on top of something else, even on a crowded board.
+
+### Per-Mode Music and Per-Food Sound Effects
+Each game mode plays a distinct background track. Each food type triggers its own sound effect on collision. The `AudioManager` tracks the currently playing track and only switches when the screen or mode actually changes, avoiding unnecessary restarts.
+
+### High Score Persistence and Event Logging
+The best score is saved to `data/highscore.json` and restored on startup. Every significant event (mode start, food eaten, shield absorbed, game over, new record) is appended to `data/snake.log` via Python's `logging` module.
+
+### Debug Mode
+Press `D` during gameplay to reveal an overlay with FPS, head tile coordinates, snake length, move interval, food type, and active power-ups. `G` toggles collision immunity (god mode); `F` / `N` force-eat food or spawn a power-up instantly — useful for testing any mechanic without playing through naturally.
 
 ---
 
@@ -89,6 +127,32 @@ Food and power-up pickups never spawn on top of wall tiles.
 | Eat moving food | +2 |
 
 The best score is saved to `data/highscore.json` and persists between sessions.
+
+---
+
+## Resources
+
+### Music
+| File | Used in |
+|---|---|
+| `menu.mp3` | Main menu and all non-gameplay screens |
+| `classic.mp3` | Classic mode |
+| `attack.mp3` | Time Attack mode |
+| `survival.mp3` | Survival mode |
+
+### Sound Effects
+| File | Triggered by |
+|---|---|
+| `hit-01.wav` | Eating Normal food |
+| `hit-02.wav` | Eating Golden food |
+| `hit-03.wav` | Eating Poison food |
+| `hit-04.wav` | Eating Moving food |
+
+### Sprites
+| File | Used for |
+|---|---|
+| `devil.png` | Poison food animated tile (5-frame spritesheet) |
+| `kkiller.png` | Obstacle animated tile (8-frame spritesheet) |
 
 ---
 

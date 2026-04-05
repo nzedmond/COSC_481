@@ -8,7 +8,6 @@ _MODE_LABELS = {
     Mode.SURVIVAL: "SURVIVAL",
 }
 
-# Header bar geometry — change these to reposition everything at once
 HDR_PAD  = 10   # inner padding from header edges
 
 
