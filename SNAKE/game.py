@@ -296,7 +296,9 @@ class Game:
     def startup(self):
         self.audio_mgr.load()
         self._devil_tex  = load_texture(os.path.join(_SPRITES_DIR, "devil.png"))
+        # https://www.freepik.com/vectors/demon-sprite-sheet
         self._killer_tex = load_texture(os.path.join(_SPRITES_DIR, "kkiller.png"))
+        # https://www.spriters-resource.com/arcade/kingofdragons/asset/522706/
         self.obstacle_mgr.set_sprites(self._killer_tex, num_frames=8, fps=8)
 
     def _start_game(self):
