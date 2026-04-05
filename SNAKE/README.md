@@ -29,7 +29,6 @@ python main.py
 | `ENTER` | Start game / restart after game over |
 | `M` | Return to menu (game over screen only) |
 | `I` / `BACKSPACE` | Open / close instructions screen |
-| `T` | Show / hide path hint (Maze mode only — pause first or use before moving) |
 
 ---
 
@@ -42,13 +41,12 @@ Select a mode from the main menu using **Up/Down** then **ENTER**.
 | **Classic** | Standard snake. Obstacles appear every 3 points (max 20). |
 | **Time Attack** | Score as many points as possible within **60 seconds**. Timer shown in the header; turns red when ≤ 10 s remain. |
 | **Survival** | Snake speeds up every 5 points. Obstacles spawn every 2 points. Designed to end — survive as long as you can. |
-| **Maze** | A randomly generated perfect maze fills the board. Snake starts frozen at the slowest speed; press any arrow key to begin. No additional obstacles spawn. Press `T` before moving (or while paused) to reveal the shortest path to the food. |
 
 ---
 
 ## Food
 
-One food item is active at all times. When eaten, a new one of a random type spawns immediately.
+One food item is active at all times. When eaten, a floating score label appears briefly at the collision point, and a new food of a random type spawns immediately.
 
 | Colour | Type | Score | Effect |
 |---|---|---|---|
@@ -61,14 +59,12 @@ One food item is active at all times. When eaten, a new one of a random type spa
 
 ## Power-ups
 
-A white-bordered pickup appears on the field every **5 seconds**. Collecting it activates the effect immediately. Active effects are shown as a column of icons with timer bars on the right edge of the screen.
+A white-bordered pickup appears on the field every **5 seconds**. Collecting it activates the effect immediately. Active effects are shown as a text label with a duration bar in the header.
 
-| Icon | Colour | Effect | Duration |
-|---|---|---|---|
-| **S** Speed Boost | Cyan | Move interval −3 (snake moves faster) | 5 s |
-| **H** Shield | Yellow | Absorbs the next lethal collision (wall, self, or obstacle) | 10 s or 1 hit |
-| **M** Magnet | Pink | Food item is pulled toward the snake head each frame | 5 s |
-| **Z** Shrink | Lime | Instantly removes 3 tail segments — useful in tight spots | Instant |
+| Colour | Effect | Duration |
+|---|---|---|
+| **Yellow** Shield | Absorbs the next lethal collision (wall, self, or obstacle) | 10 s or 1 hit |
+| **Lime** Shrink | Instantly removes 3 tail segments — useful in tight spots | Instant |
 
 ---
 
@@ -78,7 +74,6 @@ Brown wall segments that kill the snake on contact (Shield absorbs one hit).
 
 - **Classic / Time Attack**: one new wall every 3 points, up to a maximum of 20.
 - **Survival**: one new wall every 2 points, up to 20.
-- **Maze**: the entire board is a pre-generated maze; no additional walls spawn.
 
 Food and power-up pickups never spawn on top of wall tiles.
 
@@ -101,14 +96,17 @@ The best score is saved to `data/highscore.json` and persists between sessions.
 
 ```
 SNAKE/
-├── main.py        # Window init, game loop
-├── game.py        # Game class, screen routing, collision, mode logic
-├── snake.py       # Snake movement, input, speed control
-├── food.py        # Food types, movement, lifespan
-├── powerups.py    # Powerup effects, pickup spawning, manager
-├── obstacles.py   # Wall obstacles, maze generation, manager
-├── ui.py          # All rendering (header, grid, menus, HUD)
-├── settings.py    # All constants and enums (single source of truth)
+├── main.py             # Window init, game loop
+├── game.py             # Game class, screen routing, collision, mode logic
+├── snake.py            # Snake movement, input, speed control
+├── food.py             # Food types, movement, lifespan
+├── powerups.py         # Powerup effects, pickup spawning, manager
+├── obstacles.py        # Wall obstacles, manager
+├── ui.py               # All rendering (header, menus, HUD, popups)
+├── sprite_animator.py  # Spritesheet animation helper
+├── audio.py            # Music and sound effect management
+├── parallax.py         # Scrolling parallax background
+├── settings.py         # All constants and enums (single source of truth)
 └── data/
     ├── highscore.json
     └── snake.log
