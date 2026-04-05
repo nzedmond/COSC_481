@@ -133,7 +133,7 @@ class Food:
                 head.y + snake.size > self.position.y):
             return 0
 
-        score_delta = self.score_value
+        curr_score = self.score_value
 
         if self.food_type == FoodType.POISON:
             if snake.length > 1:
@@ -150,4 +150,4 @@ class Food:
         self.position = self._spawn_position(occupied)
         self.isActive = True
 
-        return score_delta
+        return curr_score

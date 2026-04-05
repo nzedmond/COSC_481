@@ -129,27 +129,29 @@ class UI:
                   WINDOW_WIDTH // 2 - 150, WINDOW_HEIGHT - 26, 16, DARKGRAY)
 
     def draw_active_powerups(self, active_powerups):
-        """Draw a column of icons on the right edge of the play area."""
+        """Draw active powerup name and duration bar in the header bar."""
         if not active_powerups:
             return
-        x = WINDOW_WIDTH - 28
-        y = HEADER_HEIGHT + 6
-        
+        x = HDR_PAD + 260
+        ty = (HEADER_HEIGHT - 14) // 2
+        by = (HEADER_HEIGHT - 6) // 2
         for p in active_powerups:
-            draw_rectangle(x, y, 18, 18, p.color)
-            draw_text(p.label, x + 4, y + 3, 12, BLACK)
-            draw_rectangle(x + 20, y, 4, 18, DARKGRAY)
-            bar_h = int(18 * p.ratio)
-            if bar_h > 0:
-                draw_rectangle(x + 20, y + (18 - bar_h), 4, bar_h, p.color)
-            y += 26
+            name = p.kind.name.title()
+            draw_text(name, x, ty, 14, p.color)
+            text_w = measure_text(name, 14)
+            bar_x = x + text_w + 6
+            draw_rectangle(bar_x, by, 40, 6, DARKGRAY)
+            bar_w = int(40 * p.ratio)
+            if bar_w > 0:
+                draw_rectangle(bar_x, by, bar_w, 6, p.color)
+            x += text_w + 6 + 40 + 10
 
     def draw_food_pops(self, pops):
-        """Expanding + fading square at each recently eaten food position."""
-        for pos, color, timer in pops:
+        """Expanding square and floating score label at each recently eaten food position."""
+        for pos, color, timer, score_delta in pops:
             ratio = timer / FOOD_POP_DURATION
-            size = int(FOOD_SIZE * (1 + ratio))
             alpha = int(255 * (1 - ratio))
+            size = int(FOOD_SIZE * (1 + ratio))
             offset = (size - FOOD_SIZE) // 2
             draw_rectangle(
                 int(pos.x) - offset,
@@ -157,6 +159,10 @@ class UI:
                 size, size,
                 color,
             )
+            label = f"+{score_delta}" if score_delta > 0 else str(score_delta)
+            text_color = Color(100, 255, 100, alpha) if score_delta > 0 else Color(255, 80, 80, alpha)
+            float_y = int(pos.y) - int(24 * ratio)
+            draw_text(label, int(pos.x) + 2, float_y, 18, text_color)
 
     def draw_debug_overlay(self, game):
         X, Y = 6, HEADER_HEIGHT + 6

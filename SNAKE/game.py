@@ -167,7 +167,7 @@ class Game:
         
         if score_delta != 0:
             self.audio_mgr.play_hit(eaten_type)
-            self._food_pops.append([eaten_pos, eaten_color, 0])
+            self._food_pops.append([eaten_pos, eaten_color, 0, score_delta])
             self.score_pop_timer = SCORE_POP_DURATION
             self.score = max(0, self.score + score_delta)
             log.info(f"Food eaten ({eaten_type.name}) — delta: {score_delta}, score: {self.score}")
@@ -297,15 +297,15 @@ class Game:
         self.audio_mgr.load()
         self._devil_tex  = load_texture(os.path.join(_SPRITES_DIR, "devil.png"))
         self._killer_tex = load_texture(os.path.join(_SPRITES_DIR, "kkiller.png"))
-        self.food.set_sprites({
-            FoodType.POISON: (self._devil_tex,  5, 8),
-        })
         self.obstacle_mgr.set_sprites(self._killer_tex, num_frames=8, fps=8)
 
     def _start_game(self):
         """Set up a fresh round for the current mode and transition to gameplay."""
         self.snake = Snake()
         self.food = Food()
+        self.food.set_sprites({
+            FoodType.POISON: (self._devil_tex, 5, 8),
+        })
         self.score = 0
         self._food_pops = []
         self.score_pop_timer = 0

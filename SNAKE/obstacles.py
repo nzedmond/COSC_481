@@ -9,8 +9,8 @@ from sprite_animator import SpriteAnimator
 class Obstacle:
     def __init__(self, position, texture=None, num_frames=1, fps=8):
         self.position = position
-        self.size     = OBSTACLE_SIZE
-        self._anim    = SpriteAnimator(texture, num_frames, fps) if texture else None
+        self.size = OBSTACLE_SIZE
+        self._anim = SpriteAnimator(texture, num_frames, fps) if texture else None
 
     def update_anim(self):
         if self._anim:
@@ -31,14 +31,14 @@ class ObstacleManager:
         self._dynamic = dynamic
         self.obstacles = []
         self._last_score = 0
-        self._texture    = None
+        self._texture = None
         self._num_frames = 1
-        self._fps        = 8
+        self._fps = 8
 
     def set_sprites(self, texture, num_frames, fps=8):
-        self._texture    = texture
+        self._texture = texture
         self._num_frames = num_frames
-        self._fps        = fps
+        self._fps = fps
 
     def reset(self, spawn_every=OBSTACLE_SPAWN_EVERY, dynamic=True):
         self._spawn_every = spawn_every
