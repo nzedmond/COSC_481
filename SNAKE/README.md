@@ -154,6 +154,9 @@ The best score is saved to `data/highscore.json` and persists between sessions.
 | `devil.png` | Poison food animated tile (5-frame spritesheet) |
 | `kkiller.png` | Obstacle animated tile (8-frame spritesheet) |
 
+### Some Code Snippets
+**sprite_animator.py**: Recycled from LAB_04, `text_anim.py`
+
 ---
 
 ## Project structure
