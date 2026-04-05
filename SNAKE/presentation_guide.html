@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SNAKE — Presentation Guide</title>
+  <style>
+    :root {
+      --bg:        #0e0b1a;
+      --surface:   #1a1530;
+      --border:    #2e2550;
+      --accent:    #5a3fff;
+      --green:     #3ddc84;
+      --gold:      #ffd700;
+      --red:       #ff4f4f;
+      --orange:    #ff8c00;
+      --purple:    #b97fff;
+      --lime:      #aaff55;
+      --text:      #e8e0ff;
+      --muted:     #8a80aa;
+      --code-bg:   #13102a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── Layout ── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    nav {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 28px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    nav h2 {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 20px 12px;
+    }
+
+    nav a {
+      display: block;
+      padding: 7px 20px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      border-left: 3px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text);
+      border-left-color: var(--accent);
+      background: rgba(90, 63, 255, 0.08);
+    }
+
+    nav .section-label {
+      margin-top: 18px;
+      padding: 4px 20px 2px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--border);
+    }
+
+    main {
+      flex: 1;
+      max-width: 860px;
+      padding: 48px 52px;
+    }
+
+    /* ── Typography ── */
+    h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: var(--accent);
+      margin: 52px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      color: var(--gold);
+      margin: 28px 0 10px;
+    }
+
+    h4 {
+      font-size: 0.9rem;
+      color: var(--purple);
+      margin: 20px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    p { margin-bottom: 12px; }
+
+    a { color: var(--accent); }
+
+    /* ── Code ── */
+    code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.88em;
+      background: var(--code-bg);
+      color: var(--green);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      overflow-x: auto;
+      margin: 14px 0 20px;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.86em;
+      line-height: 1.6;
+      color: #c9c0f0;
+    }
+
+    pre .kw  { color: #9b7fff; }
+    pre .fn  { color: #3ddc84; }
+    pre .st  { color: #ffb347; }
+    pre .cm  { color: #5a5070; font-style: italic; }
+    pre .num { color: #ffd700; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 20px;
+      font-size: 0.93em;
+    }
+
+    th {
+      background: var(--surface);
+      color: var(--muted);
+      text-align: left;
+      padding: 9px 14px;
+      font-size: 0.8em;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: rgba(90, 63, 255, 0.07);
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      margin: 16px 0;
+    }
+
+    .callout.green  { border-color: var(--green);  background: rgba(61,220,132,0.06); }
+    .callout.gold   { border-color: var(--gold);   background: rgba(255,215,0,0.06); }
+    .callout.red    { border-color: var(--red);    background: rgba(255,79,79,0.06); }
+
+    .callout strong { display: block; margin-bottom: 4px; }
+
+    /* ── Colour swatches ── */
+    .swatch {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 2px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    /* ── Flow diagram ── */
+    .flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 16px 0;
+    }
+
+    .flow-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.88em;
+      color: var(--text);
+    }
+
+    .flow-arrow {
+      color: var(--muted);
+      font-size: 1.1em;
+    }
+
+    /* ── File tree ── */
+    .tree {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.86em;
+      line-height: 1.8;
+    }
+
+    .tree .dir  { color: var(--gold); }
+    .tree .file { color: var(--text); }
+    .tree .note { color: var(--muted); margin-left: 8px; font-style: italic; }
+
+    /* ── Section anchors ── */
+    section { scroll-margin-top: 24px; }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0 0;
+    }
+
+    ul, ol {
+      padding-left: 22px;
+      margin-bottom: 12px;
+    }
+
+    li { margin-bottom: 5px; }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.75em;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .tag.green  { background: rgba(61,220,132,0.15); color: var(--green); }
+    .tag.gold   { background: rgba(255,215,0,0.15);  color: var(--gold);  }
+    .tag.purple { background: rgba(185,127,255,0.15);color: var(--purple);}
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <nav>
+    <h2>SNAKE Guide</h2>
+    <a href="#overview">Overview</a>
+    <a href="#architecture">Architecture</a>
+
+    <div class="section-label">Game Loop</div>
+    <a href="#game-loop">Main Loop</a>
+    <a href="#screen-manager">Screen Manager</a>
+
+    <div class="section-label">Core Systems</div>
+    <a href="#snake">Snake</a>
+    <a href="#food">Food</a>
+    <a href="#powerups">Power-ups</a>
+    <a href="#obstacles">Obstacles</a>
+    <a href="#scoring">Scoring & Feedback</a>
+
+    <div class="section-label">Presentation</div>
+    <a href="#ui">UI & HUD</a>
+    <a href="#audio">Audio</a>
+    <a href="#background">Background</a>
+    <a href="#sprites">Sprites</a>
+
+    <div class="section-label">Design</div>
+    <a href="#design-choices">Design Choices</a>
+    <a href="#settings">Settings Module</a>
+    <a href="#modes">Game Modes</a>
+  </nav>
+
+  <!-- ── Main content ── -->
+  <main>
+
+    <h1>SNAKE — Improved Edition</h1>
+    <p class="subtitle">A detailed presentation guide covering mechanics, architecture, and design decisions.</p>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="overview">
+      <h2>Overview</h2>
+      <p>
+        This is a feature-rich Python Snake game built on top of
+        <strong>raylib</strong> (via the <code>raylib-python-cffi</code> bindings).
+        It extends the classic Snake concept with multiple food types, power-ups,
+        dynamic obstacles, three game modes, per-mode music, animated sprites, and
+        a parallax background.
+      </p>
+      <p>
+        The game runs at a fixed <strong>60 FPS</strong>. The snake does not move
+        every frame — it moves on a configurable interval, giving the game a
+        deliberate, grid-aligned feel while still allowing smooth UI animations.
+      </p>
+
+      <h3>Tech Stack</h3>
+      <table>
+        <tr><th>Concern</th><th>Library / Approach</th></tr>
+        <tr><td>Window, input, drawing</td><td><code>raylib</code> / <code>pyray</code></td></tr>
+        <tr><td>Game logic</td><td>Pure Python classes</td></tr>
+        <tr><td>Audio</td><td>raylib audio device + music streams + sound effects</td></tr>
+        <tr><td>Persistence</td><td>JSON file (<code>data/highscore.json</code>)</td></tr>
+        <tr><td>Logging</td><td>Python <code>logging</code> module → <code>data/snake.log</code></td></tr>
+      </table>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="architecture">
+      <h2>Architecture</h2>
+      <p>
+        The project is split into single-responsibility modules. No module imports
+        another game module except <code>game.py</code>, which acts as the
+        coordinator. All shared constants live in <code>settings.py</code>.
+      </p>
+
+      <div class="tree">
+        <span class="dir">SNAKE/</span><br>
+        &nbsp;&nbsp;<span class="file">main.py</span><span class="note">— entry point, window init, game loop</span><br>
+        &nbsp;&nbsp;<span class="file">game.py</span><span class="note">— central coordinator; owns all subsystems</span><br>
+        &nbsp;&nbsp;<span class="file">snake.py</span><span class="note">— movement, input, speed, body segments</span><br>
+        &nbsp;&nbsp;<span class="file">food.py</span><span class="note">— food types, spawning, lifespan, collision</span><br>
+        &nbsp;&nbsp;<span class="file">powerups.py</span><span class="note">— effect classes, pickup, manager</span><br>
+        &nbsp;&nbsp;<span class="file">obstacles.py</span><span class="note">— wall segments, spawn logic, manager</span><br>
+        &nbsp;&nbsp;<span class="file">ui.py</span><span class="note">— all rendering: header, menus, HUD, popups</span><br>
+        &nbsp;&nbsp;<span class="file">audio.py</span><span class="note">— music streams + sound effects per food type</span><br>
+        &nbsp;&nbsp;<span class="file">parallax.py</span><span class="note">— procedural layered background</span><br>
+        &nbsp;&nbsp;<span class="file">sprite_animator.py</span><span class="note">— single-row spritesheet animation helper</span><br>
+        &nbsp;&nbsp;<span class="file">settings.py</span><span class="note">— all constants and enums (single source of truth)</span><br>
+        &nbsp;&nbsp;<span class="dir">data/</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">highscore.json</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">snake.log</span>
+      </div>
+
+      <div class="callout green">
+        <strong>Design principle — single source of truth</strong>
+        Every magic number (sizes, speeds, durations, colours, spawn rates) lives
+        in <code>settings.py</code>. Tuning gameplay never requires touching logic
+        files.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="game-loop">
+      <h2>Main Loop</h2>
+      <p>
+        <code>main.py</code> owns the window and drives the loop. It calls
+        <code>update()</code> then <code>draw()</code> on the <code>Game</code>
+        object every frame. The game object is created before
+        <code>if __name__ == '__main__'</code> so that <code>shutdown()</code>
+        (texture unloading) runs even if the window is never opened.
+      </p>
+      <pre><span class="kw">while not</span> <span class="fn">window_should_close</span>():
+    current_game.<span class="fn">update</span>()        <span class="cm"># logic tick</span>
+    <span class="fn">begin_drawing</span>()
+    current_game.<span class="fn">draw</span>()          <span class="cm"># render</span>
+    <span class="fn">end_drawing</span>()</pre>
+
+      <p>
+        <code>Game.update()</code> and <code>Game.draw()</code> both dispatch on
+        the current screen via a <code>match</code> statement, keeping each screen's
+        logic and rendering isolated.
+      </p>
+
+      <div class="flow">
+        <div class="flow-box">MENU</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">GAMEPLAY</div>
+        <div class="flow-arrow">↔</div>
+        <div class="flow-box">PAUSED</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">GAME OVER</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">MENU</div>
+      </div>
+      <p style="color:var(--muted); font-size:0.87em;">INSTRUCTIONS can be reached from MENU and returns to MENU.</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="screen-manager">
+      <h2>Screen Manager</h2>
+      <p>
+        <code>ScreenManager</code> is a thin wrapper around a single
+        <code>Screen</code> enum value. It provides <code>transition_to()</code>
+        and <code>is_on()</code> helpers, making state transitions readable and
+        preventing direct enum manipulation scattered across <code>game.py</code>.
+      </p>
+      <pre><span class="kw">class</span> <span class="fn">ScreenManager</span>:
+    <span class="kw">def</span> <span class="fn">transition_to</span>(self, screen: Screen):
+        self.current = screen
+
+    <span class="kw">def</span> <span class="fn">is_on</span>(self, screen: Screen) -> bool:
+        <span class="kw">return</span> self.current == screen</pre>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="snake">
+      <h2>Snake</h2>
+
+      <h3>Body Representation</h3>
+      <p>
+        The snake is a <strong>list of <code>Vector2</code> positions</strong>,
+        one per segment. The head is always <code>body[0]</code>. Segments are
+        20 × 20 px, matching the grid cell size.
+      </p>
+      <pre><span class="cm"># Initialise a snake of length 1 starting at (100, 100)</span>
+self.body = [<span class="fn">Vector2</span>(<span class="num">100</span> - i * self.size, <span class="num">100</span>) <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(self.length)]</pre>
+
+      <h3>Movement — Frame-Rate Independent Ticking</h3>
+      <p>
+        The snake does <em>not</em> move every frame. A <code>frames_counter</code>
+        increments each frame; the snake only moves when
+        <code>frames_counter % move_interval == 0</code>.
+        <code>move_interval</code> defaults to <strong>5</strong> (moves 12 times
+        per second at 60 FPS) and can be adjusted with <code>[</code> / <code>]</code>.
+      </p>
+      <pre><span class="kw">def</span> <span class="fn">update</span>(self):
+    self.frames_counter += <span class="num">1</span>
+    <span class="kw">if</span> (self.frames_counter % self.move_interval) != <span class="num">0</span>:
+        <span class="kw">return False</span>   <span class="cm"># no move this frame</span>
+
+    <span class="cm"># Shift segments: each takes the position of the one ahead</span>
+    <span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="fn">len</span>(self.body) - <span class="num">1</span>, <span class="num">0</span>, -<span class="num">1</span>):
+        self.body[i] = <span class="fn">Vector2</span>(self.body[i-<span class="num">1</span>].x, self.body[i-<span class="num">1</span>].y)
+
+    self.body[<span class="num">0</span>].x += self.direction.x * self.speed
+    self.body[<span class="num">0</span>].y += self.direction.y * self.speed
+    <span class="kw">return True</span></pre>
+
+      <p>
+        The method returns <code>True</code> only when the snake actually moved.
+        <code>game.py</code> skips all collision checks on frames where the snake
+        did not move — avoiding false positives from stale head positions.
+      </p>
+
+      <h3>Input Guard — Preventing 180° Reversal</h3>
+      <p>
+        <code>allow_move</code> is set to <code>False</code> immediately after any
+        direction key is accepted, and restored to <code>True</code> only after the
+        next actual movement tick. This means only <strong>one direction change
+        is registered per move</strong>, preventing the snake from reversing into
+        itself by pressing two keys rapidly in one tick.
+      </p>
+
+      <h3>Growth and Shrinking</h3>
+      <p>
+        When food is eaten, a new segment is appended at the tail's current
+        position before the next move displaces it:
+      </p>
+      <pre>snake.body.<span class="fn">append</span>(<span class="fn">Vector2</span>(snake.body[-<span class="num">1</span>].x, snake.body[-<span class="num">1</span>].y))
+snake.length += <span class="num">1</span></pre>
+      <p>
+        Shrinking (poison food or Shrink power-up) simply pops the last element
+        and decrements <code>length</code>.
+      </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="food">
+      <h2>Food</h2>
+
+      <h3>Food Types</h3>
+      <table>
+        <tr>
+          <th>Type</th><th>Colour</th><th>Score</th><th>Effect</th><th>Spawn Chance</th>
+        </tr>
+        <tr>
+          <td>Normal</td>
+          <td><span class="swatch" style="background:#e63946"></span>Red</td>
+          <td>+1</td><td>Snake grows</td><td>~60%</td>
+        </tr>
+        <tr>
+          <td>Golden</td>
+          <td><span class="swatch" style="background:#ffd700"></span>Gold</td>
+          <td>+3</td><td>Snake grows</td><td>15%</td>
+        </tr>
+        <tr>
+          <td>Poison</td>
+          <td><span class="swatch" style="background:#9b59b6"></span>Purple</td>
+          <td>−1</td><td>Snake shrinks, score floor 0</td><td>15%</td>
+        </tr>
+        <tr>
+          <td>Moving</td>
+          <td><span class="swatch" style="background:#ff8c00"></span>Orange</td>
+          <td>+2</td><td>Snake grows, food bounces</td><td>10%</td>
+        </tr>
+      </table>
+
+      <h3>Spawning — Collision-Safe Placement</h3>
+      <p>
+        Food spawns on a random grid cell that does not overlap any snake segment
+        or obstacle tile. The occupied set is built fresh on each spawn call, and
+        candidates are retried until a clear cell is found.
+      </p>
+      <pre>occupied_set = {(s.x, s.y) <span class="kw">for</span> s <span class="kw">in</span> occupied}
+<span class="kw">while True</span>:
+    candidate = <span class="fn">Vector2</span>(
+        <span class="fn">randint</span>(...) * self.size,
+        <span class="fn">randint</span>(...) * self.size,
+    )
+    <span class="kw">if</span> (candidate.x, candidate.y) <span class="kw">not in</span> occupied_set:
+        <span class="kw">return</span> candidate</pre>
+
+      <h3>Poison Lifespan</h3>
+      <p>
+        Poison food has a <strong>300-frame (5 second) lifespan</strong>. A
+        <code>life_timer</code> counts up each frame; when it reaches
+        <code>FOOD_POISON_LIFESPAN</code> the food re-randomises its type and
+        respawns without awarding any score. A shrinking white bar drawn above
+        the tile shows the remaining time visually.
+      </p>
+
+      <h3>Moving Food</h3>
+      <p>
+        Moving food has a <code>velocity</code> vector with a random
+        horizontal/vertical sign. Each frame its position is offset by the velocity,
+        and when it hits a wall it reflects the appropriate component — classic
+        billiard-ball bouncing.
+      </p>
+
+      <h3>Collision Detection</h3>
+      <p>
+        Collision is an axis-aligned bounding box (AABB) test between the snake
+        head and the food tile. Because both are grid-aligned squares of the same
+        size, this is equivalent to a single grid-cell equality check but written
+        as a full AABB to handle the Moving food, which moves in sub-grid pixel
+        increments.
+      </p>
+
+      <h3>Animated Sprites</h3>
+      <p>
+        The Poison food tile can display an animated spritesheet instead of a
+        plain coloured rectangle. The sprite is loaded once in <code>startup()</code>
+        and assigned via <code>food.set_sprites()</code>. If no sprite is
+        registered for a type, the fallback coloured rectangle with a letter label
+        is drawn.
+      </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="powerups">
+      <h2>Power-ups</h2>
+
+      <h3>Class Hierarchy</h3>
+      <p>
+        Power-up effects share a common <code>Powerup</code> base class that
+        handles timer tracking and expiry. Subclasses only need to override
+        <code>apply()</code> and, if needed, <code>remove()</code>.
+      </p>
+      <pre><span class="kw">class</span> <span class="fn">Powerup</span>:
+    <span class="kw">def</span> <span class="fn">apply</span>(self, snake):  <span class="kw">pass</span>   <span class="cm"># called on pickup</span>
+    <span class="kw">def</span> <span class="fn">remove</span>(self, snake): <span class="kw">pass</span>   <span class="cm"># called on expiry</span>
+
+    <span class="kw">def</span> <span class="fn">update</span>(self, snake) -> bool:
+        self.timer += <span class="num">1</span>
+        <span class="kw">if</span> self.timer >= self.duration:
+            self.<span class="fn">remove</span>(snake)
+            <span class="kw">return True</span>   <span class="cm"># expired</span>
+        <span class="kw">return False</span></pre>
+
+      <h3>Available Effects</h3>
+      <table>
+        <tr><th>Class</th><th>Colour</th><th>Effect</th><th>Duration</th></tr>
+        <tr>
+          <td><code>Shield</code></td>
+          <td><span class="swatch" style="background:#ffd700"></span>Yellow</td>
+          <td>Sets <code>snake.shielded = True</code>. The next lethal collision is absorbed instead of triggering game over.</td>
+          <td>600 frames (10 s) or 1 hit</td>
+        </tr>
+        <tr>
+          <td><code>Shrink</code></td>
+          <td><span class="swatch" style="background:#aaff55"></span>Lime</td>
+          <td>Instantly removes 3 tail segments on <code>apply()</code>. Never added to <code>active_powerups</code> (instant — no tracking needed).</td>
+          <td>Instant</td>
+        </tr>
+      </table>
+
+      <h3>Pickup Spawning</h3>
+      <p>
+        <code>PowerupManager</code> maintains a single pickup on the field.
+        After the pickup is collected (or at game start), a frame counter begins.
+        Once it reaches <code>POWERUP_SPAWN_INTERVAL</code> (300 frames ≈ 5 s),
+        a new <code>PowerupPickup</code> of a random type appears. Pickups are
+        visually distinguished from food by a white border.
+      </p>
+
+      <h3>Active Effect Display</h3>
+      <p>
+        Effects with a duration greater than 1 frame are pushed into
+        <code>snake.active_powerups</code>. Each frame, the manager calls
+        <code>p.update(snake)</code> on every active effect and removes those
+        that return <code>True</code> (expired). The UI renders the effect name
+        and a shrinking duration bar in the header — clearly separated from the
+        play field to avoid confusion with collectible items.
+      </p>
+
+      <div class="callout gold">
+        <strong>Design choice — instant vs. timed effects</strong>
+        Shrink's <code>duration</code> is set to <code>1</code>. The manager
+        checks <code>if effect.duration &gt; 1</code> before tracking it,
+        so instant effects apply and disappear in the same frame without
+        cluttering the active-effects list.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="obstacles">
+      <h2>Obstacles</h2>
+      <p>
+        Brown wall segments spawn progressively as the player scores, making the
+        board increasingly dangerous over time. <code>ObstacleManager</code>
+        tracks the last score at which an obstacle spawned and triggers a new
+        one whenever the score has advanced by <code>spawn_every</code> points.
+      </p>
+      <pre><span class="kw">while</span> (score - self._last_score >= self._spawn_every
+       <span class="kw">and</span> <span class="fn">len</span>(self.obstacles) < OBSTACLE_MAX):
+    self._last_score += self._spawn_every
+    self.<span class="fn">_spawn</span>(snake, food)</pre>
+
+      <p>
+        The <code>while</code> loop (rather than <code>if</code>) handles the
+        edge case where two score thresholds are crossed in a single tick —
+        for example, eating golden food (+3) when only 1 point away from the
+        next spawn.
+      </p>
+
+      <h3>Safe Spawning</h3>
+      <p>
+        Obstacles spawn on a random cell that is not occupied by the snake body,
+        food, or any existing obstacle. Up to 200 candidates are tried; if none
+        are found the spawn is silently skipped to prevent an infinite loop on a
+        nearly-full board.
+      </p>
+
+      <h3>Mode Differences</h3>
+      <table>
+        <tr><th>Mode</th><th>Spawn rate</th></tr>
+        <tr><td>Classic / Time Attack</td><td>Every 3 points (up to 20 walls)</td></tr>
+        <tr><td>Survival</td><td>Every 2 points (up to 20 walls)</td></tr>
+      </table>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="scoring">
+      <h2>Scoring &amp; Feedback</h2>
+
+      <h3>Score Delta Pattern</h3>
+      <p>
+        <code>food.update()</code> returns a <strong>score delta</strong> — the
+        change in score caused by that food interaction. Returning a value instead
+        of mutating the score directly keeps <code>Food</code> decoupled from
+        <code>Game</code>. The game applies the delta and enforces the score floor:
+      </p>
+      <pre>score_delta = self.food.<span class="fn">update</span>(self.snake, obs_positions)
+<span class="kw">if</span> score_delta != <span class="num">0</span>:
+    self.score = <span class="fn">max</span>(<span class="num">0</span>, self.score + score_delta)</pre>
+
+      <h3>Score Popups</h3>
+      <p>
+        When food is eaten, a floating label (<code>+1</code>, <code>+3</code>,
+        <code>-1</code>, etc.) is spawned at the food's position. It rises
+        upward and fades out over <code>FOOD_POP_DURATION</code> frames (20).
+        Green for positive deltas, red for negative. This gives immediate,
+        spatially-grounded feedback without interrupting gameplay.
+      </p>
+      <pre><span class="cm"># Each pop entry: [position, color, timer, score_delta]</span>
+self._food_pops.<span class="fn">append</span>([eaten_pos, eaten_color, <span class="num">0</span>, score_delta])</pre>
+
+      <h3>Score Enlargement</h3>
+      <p>
+        For <code>SCORE_POP_DURATION</code> frames after an eat event, the score
+        text in the header scales from 18 px up to 26 px and shifts from white
+        toward orange — a subtle but clear visual pulse that reinforces the
+        feedback.
+      </p>
+
+      <h3>High Score Persistence</h3>
+      <p>
+        The high score is written to <code>data/highscore.json</code> whenever a
+        new record is set. It is loaded once at startup so it persists across
+        sessions.
+      </p>
+
+      <h3>Event Logging</h3>
+      <p>
+        Every meaningful game event (mode start, food eaten, shield absorbed,
+        game over, new high score) is written to <code>data/snake.log</code> via
+        Python's <code>logging</code> module. This enables post-session analysis
+        without affecting gameplay.
+      </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="ui">
+      <h2>UI &amp; HUD</h2>
+      <p>
+        All rendering is delegated to the <code>UI</code> class in
+        <code>ui.py</code>. <code>Game</code> never calls raylib drawing functions
+        directly — it passes data to <code>UI</code> methods. This keeps
+        presentation logic out of game logic.
+      </p>
+
+      <h3>Header Bar</h3>
+      <p>
+        A 40 px strip at the top of the window is reserved for the HUD. The play
+        area begins at <code>y = HEADER_HEIGHT</code>. The header contains:
+      </p>
+      <ul>
+        <li><strong>Score</strong> — pulses on eat events</li>
+        <li><strong>Best</strong> — always visible high score</li>
+        <li><strong>Mode / Timer</strong> — shown for Time Attack and Survival</li>
+        <li><strong>Active power-up</strong> — name + shrinking duration bar</li>
+        <li><strong>Controls reminder</strong> — right-aligned key hint</li>
+      </ul>
+
+      <div class="callout">
+        <strong>Why the power-up indicator is in the header</strong>
+        The original design placed active power-up icons on the right edge of the
+        play field. This was confusing — players could mistake the status icons for
+        collectible pickups. Moving them into the header (a clearly non-playable UI
+        zone) removes that ambiguity entirely.
+      </div>
+
+      <h3>Food Pop Animation</h3>
+      <p>
+        <code>draw_food_pops()</code> renders two things per eaten food:
+      </p>
+      <ul>
+        <li>An <strong>expanding coloured square</strong> at the eaten position that grows and fades over 20 frames.</li>
+        <li>A <strong>floating score label</strong> that rises upward while fading, coloured green or red based on the sign of the delta.</li>
+      </ul>
+
+      <h3>Overlay Screens</h3>
+      <p>
+        Pause, Game Over, and Instructions are semi-transparent overlay boxes
+        drawn on top of the game world. The game world (snake, food, obstacles)
+        is still rendered beneath them for visual context.
+      </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="audio">
+      <h2>Audio</h2>
+      <p>
+        <code>AudioManager</code> handles all sound. It tracks which music track
+        is currently playing (<code>_current</code>) and switches tracks when the
+        screen or mode changes — avoiding restarts when nothing has changed.
+      </p>
+
+      <h3>Music Tracks</h3>
+      <table>
+        <tr><th>Context</th><th>File</th></tr>
+        <tr><td>Menu / any non-gameplay screen</td><td><code>menu.mp3</code></td></tr>
+        <tr><td>Classic mode</td><td><code>classic.mp3</code></td></tr>
+        <tr><td>Time Attack mode</td><td><code>attack.mp3</code></td></tr>
+        <tr><td>Survival mode</td><td><code>survival.mp3</code></td></tr>
+      </table>
+
+      <h3>Sound Effects</h3>
+      <p>
+        Each food type has its own eat sound (<code>hit-01</code> through
+        <code>hit-04</code>), played immediately on collision via
+        <code>audio_mgr.play_hit(eaten_type)</code>.
+      </p>
+
+      <div class="callout green">
+        <strong>Load / unload lifecycle</strong>
+        Audio resources are loaded in <code>startup()</code> after the raylib
+        window (and thus OpenGL context) is initialised, and unloaded in
+        <code>shutdown()</code> after the main loop exits. This matches raylib's
+        requirement that all resource operations occur within the window's
+        lifetime.
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="background">
+      <h2>Parallax Background</h2>
+      <p>
+        The background is a procedurally generated set of layered rectangles,
+        simulating a depth effect. Three layers are defined with different colours,
+        densities, and size ranges — far, mid, and near.
+      </p>
+      <table>
+        <tr><th>Layer</th><th>Colour</th><th>Count</th><th>Size range</th></tr>
+        <tr><td>Far</td><td><span class="swatch" style="background:#12081c"></span>Very dark purple</td><td>25</td><td>60–150 × 80–200 px</td></tr>
+        <tr><td>Mid</td><td><span class="swatch" style="background:#1c142d"></span>Dark purple</td><td>20</td><td>30–80 × 40–120 px</td></tr>
+        <tr><td>Near</td><td><span class="swatch" style="background:#281e41"></span>Mid purple</td><td>30</td><td>10–30 × 20–60 px</td></tr>
+      </table>
+      <p>
+        Rectangles are generated once with a <strong>fixed random seed</strong>
+        (<code>seed=42</code>), so the background looks identical every session —
+        consistent and predictable without being animated.
+      </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="sprites">
+      <h2>Sprite Animation</h2>
+      <p>
+        <code>SpriteAnimator</code> wraps a single-row spritesheet texture. It
+        advances through frames at a configurable FPS by updating a
+        <code>Rectangle</code> source region each tick.
+      </p>
+      <pre><span class="kw">def</span> <span class="fn">draw</span>(self, position, size):
+    dest = <span class="fn">Rectangle</span>(position.x, position.y, size, size)
+    <span class="fn">draw_texture_pro</span>(self._texture, self._frame_rec, dest,
+                     <span class="fn">Vector2</span>(<span class="num">0</span>, <span class="num">0</span>), <span class="num">0.0</span>, WHITE)</pre>
+      <p>
+        Using <code>draw_texture_pro</code> allows the sprite to be scaled to
+        exactly the food tile size (<code>FOOD_SIZE</code>) regardless of the
+        original texture dimensions. Currently the Poison food and obstacle tiles
+        use animated sprites; other food types fall back to coloured rectangles.
+      </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="design-choices">
+      <h2>Key Design Choices</h2>
+
+      <h3>Grid Alignment via Pixel Math</h3>
+      <p>
+        Rather than maintaining a logical grid array, positions are stored as raw
+        pixel coordinates that are always multiples of the cell size (20 px).
+        Collision checks are pure coordinate comparisons. This keeps the data
+        model simple while still being grid-correct.
+      </p>
+
+      <h3>Skip Collisions on Non-Move Frames</h3>
+      <p>
+        Collision checks only run when <code>snake.update()</code> returns
+        <code>True</code>. This is a correctness decision, not just an
+        optimisation — the head's pixel position does not change between move
+        ticks, so checking every frame would produce repeated false positives.
+      </p>
+
+      <h3>One Food Item at All Times</h3>
+      <p>
+        There is always exactly one food tile on the board. When eaten, it
+        re-randomises its type and respawns in the same frame. This design avoids
+        edge cases around multiple food items and keeps spawning logic simple.
+      </p>
+
+      <h3>Score Floor at Zero</h3>
+      <p>
+        <code>self.score = max(0, self.score + score_delta)</code> prevents the
+        score from going negative. Poison food can hurt the player but never
+        creates an absurd negative score, which would feel punishing rather than
+        challenging.
+      </p>
+
+      <h3>Separation of Logic and Rendering</h3>
+      <p>
+        <code>UI</code> is a stateless renderer — it receives data and draws it.
+        It holds no game state. <code>Game</code> holds state and calls
+        <code>UI</code> methods with the values to display. This means UI changes
+        never risk touching game logic.
+      </p>
+
+      <h3>Debug Mode</h3>
+      <p>
+        Pressing <code>D</code> during gameplay toggles a debug overlay showing
+        FPS, snake head tile coordinates, active powerups, food type, and mode
+        state. <code>G</code> toggles god mode (collision immunity) and
+        <code>F</code> / <code>N</code> force-eat food or spawn a power-up. This
+        lets any mechanic be tested instantly without playing through naturally.
+      </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="settings">
+      <h2>Settings Module</h2>
+      <p>
+        <code>settings.py</code> is the single source of truth for every
+        configurable value in the game. Nothing is hard-coded in logic files.
+      </p>
+      <table>
+        <tr><th>Category</th><th>Examples</th></tr>
+        <tr><td>Window</td><td><code>WINDOW_WIDTH</code>, <code>WINDOW_HEIGHT</code>, <code>HEADER_HEIGHT</code></td></tr>
+        <tr><td>Snake</td><td><code>SNAKE_SIZE</code>, <code>SNAKE_MOVE_INTERVAL</code>, <code>SNAKE_COLOR</code></td></tr>
+        <tr><td>Food</td><td><code>FOOD_*_SCORE</code>, <code>FOOD_*_CHANCE</code>, <code>FOOD_POISON_LIFESPAN</code></td></tr>
+        <tr><td>Power-ups</td><td><code>POWERUP_SPAWN_INTERVAL</code>, <code>POWERUP_SHIELD_DURATION</code>, <code>POWERUP_SHRINK_SEGMENTS</code></td></tr>
+        <tr><td>Obstacles</td><td><code>OBSTACLE_SPAWN_EVERY</code>, <code>OBSTACLE_MAX</code></td></tr>
+        <tr><td>Modes</td><td><code>TIME_ATTACK_DURATION</code>, <code>SURVIVAL_SPEED_INTERVAL</code></td></tr>
+        <tr><td>Enums</td><td><code>Screen</code>, <code>FoodType</code>, <code>PowerupType</code>, <code>Mode</code></td></tr>
+      </table>
+    </section>
+
+    <!-- ══════════════════════════════════════════ -->
+    <section id="modes">
+      <h2>Game Modes</h2>
+
+      <h3>Classic</h3>
+      <p>
+        Standard Snake. Obstacles spawn every 3 points (max 20). There is no time
+        pressure and no speed escalation. The intended entry-level experience.
+      </p>
+
+      <h3>Time Attack</h3>
+      <p>
+        The player has <strong>60 seconds</strong> to score as many points as
+        possible. The countdown is shown in the header and turns red when 10 or
+        fewer seconds remain. The time counter decrements every frame (not per
+        snake tick), so it is independent of the player's chosen speed.
+      </p>
+
+      <h3>Survival</h3>
+      <p>
+        Speed escalates as the score increases:
+        <code>move_interval = max(1, SNAKE_MOVE_INTERVAL - score // SURVIVAL_SPEED_INTERVAL)</code>.
+        This means every 5 points the snake moves one frame faster, approaching
+        the minimum interval of 1 (60 moves per second). Obstacles also spawn
+        every 2 points instead of 3. The mode is designed to always end eventually
+        — the question is how long the player can survive.
+      </p>
+
+      <div class="callout red">
+        <strong>Mode initialisation</strong>
+        Each mode resets the <code>PowerupManager</code>, <code>ObstacleManager</code>,
+        score, and snake on start. Time Attack sets <code>time_left</code>;
+        Survival sets a faster obstacle spawn rate. Classic uses all defaults.
+      </div>
+    </section>
+
+    <hr>
+    <p style="margin-top: 28px; color: var(--muted); font-size: 0.85em;">
+      SNAKE — Improved Edition &nbsp;·&nbsp; Built with Python &amp; raylib
+    </p>
+
+  </main>
+</div>
+
+<script>
+  // Highlight active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -75% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
