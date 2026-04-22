@@ -43,10 +43,11 @@ class Utils:
     @staticmethod
     def lerp_color(c1: rl.Color, c2: rl.Color, ratio: float) -> rl.Color:
         return rl.Color(
-            int((1.0 - ratio) * c1.r + ratio * c2.r),
-            int((1.0 - ratio) * c1.g + ratio * c2.g),
-            int((1.0 - ratio) * c1.b + ratio * c2.b),
-            255)
+            int((1.0 - ratio) * c1[0] + ratio * c2[0]),
+            int((1.0 - ratio) * c1[1] + ratio * c2[1]),
+            int((1.0 - ratio) * c1[2] + ratio * c2[2]),
+            int((1.0 - ratio) * c1[3] + ratio * c2[3])
+        )
 
 class Obstacle:
     def __init__(self, rect: rl.Rectangle, end_pos: rl.Vector2 = None, speed: float = 0.0):
